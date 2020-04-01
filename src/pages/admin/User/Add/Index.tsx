@@ -54,9 +54,8 @@ const Add: React.FC<FormComponentProps> = props => {
       note: '',
     }))
   }
-  const validateUserName= async (i: number, rule: any, value: any, callback: any) => {
+  const validateUserName= async (i: number, _rule?: any, value?: any, _callback?: any) => {
     const { userMessage } = getFieldsValue();
-    console.log(999, userMessage)
     if (value) {
       userMessage.forEach((user: UserMessage, index: number) => {
         if (user.userName === value && i !== index) {
@@ -102,7 +101,11 @@ const Add: React.FC<FormComponentProps> = props => {
                     initialValue: userMessage[index].userName,
                     rules: [
                       { required: true, message: '需要创建用户名'},
-                      { validator: (...args) => validateUserName(index, ...args) }
+                      { validator: (...args) => {
+                          const newArgs = args.slice(0, 4);
+                          validateUserName(index, ...newArgs)
+                        }
+                      }
                     ],
                   })(<Input placeholder="请输入用户名" />)}
                 </FormItem>
