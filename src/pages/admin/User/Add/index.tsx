@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { Form } from '@ant-design/compatible';
-import { Input, Button, Col, Row, message, Breadcrumb, Checkbox } from 'antd';
+import { Input, Button, Col, Row, message, Breadcrumb, Checkbox, Table } from 'antd';
+import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { FormComponentProps } from '@ant-design/compatible/es/form';
 
+import EditTable from './EditTable';
 import styles from './index.less';
 
 const FormItem = Form.Item;
 
-interface IUserMessage {
+export interface IUserMessage {
   nickName: string;
   userName: string;
   phone?: string;
@@ -27,10 +29,16 @@ const newUser: () => IUserMessage = () => {
   }
 }
 
+const userRoleOptions = [
+  { label: 'User', value: 'User' },
+  { label: 'Admin', value: 'Admin' },
+]
+
 
 const Add: React.FC<FormComponentProps> = props => {
   const { form: { getFieldDecorator, validateFields, getFieldsValue, setFieldsValue } } = props;
   const [userMessage, setUserMessage] = useState<IUserMessage[]>([newUser()]);
+  const [selectedUserRole, setSelectedUserRole] = useState<string[]>([]);
   const [step, setStep] = useState<number>(1);
   const formItemLayout = {
     labelCol: {
@@ -45,9 +53,20 @@ const Add: React.FC<FormComponentProps> = props => {
   const submit = () => {
     validateFields((err, result) => {
       if (!err) {
-        const { userMessage } = result;
-        setUserMessage(userMessage);
-        setStep(step + 1);
+        if (step === 1) {
+          const { userMessage } = result;
+          setUserMessage(userMessage);
+          setStep(step + 1);
+        } else if (step === 2) {
+          const { role } = result;
+          setSelectedUserRole(role);
+          setStep(step + 1)
+        } else if (step === 3) {
+          console.log('userMessage', userMessage)
+          console.log('userRole', selectedUserRole)
+          setStep(step + 1)
+        } 
+        
       }
     })
   };
@@ -83,6 +102,9 @@ const Add: React.FC<FormComponentProps> = props => {
     callback();
   }
   return (
+    <PageHeaderWrapper>
+
+    
     <div className={styles.add}>
       <Breadcrumb style={{marginBottom: '16px'}}>
         { step >= 1 && <Breadcrumb.Item>
@@ -166,20 +188,32 @@ const Add: React.FC<FormComponentProps> = props => {
             </div>
           ))
         }
-        
-        
-        <Button onClick={addUser}>新增用户</Button><span>每次最多创建 10 个用户</span>
-        <div style={{marginTop: '40px'}}>
-          <Button onClick={submit} type="primary">下一步</Button>
-        </div>
+        <Button onClick={addUser}>新增用户</Button><span style={{display: 'inline-block', marginLeft: '10px'}}>每次最多创建 10 个用户</span>
       </div> }
       {
-        step === 2 && <div className="step-2">
-          
+        <div className="step-2">
+          {
+            getFieldDecorator('role', {
+              initialValue: ['User'],
+              rules: [
+                { required: true, message: 'Need choose at least one role' }
+              ]
+            })(<Checkbox.Group
+              options={userRoleOptions}
+            />)
+          }
         </div>
       }
+      {
+        <div className="step-3">
+          <EditTable  dataSource={userMessage}/>
+        </div>
+      }
+      <div style={{marginTop: '40px'}}>
+        <Button onClick={submit} type="primary">下一步</Button>
+      </div>
     </div>
-    
+    </PageHeaderWrapper>
   );
 };
 
