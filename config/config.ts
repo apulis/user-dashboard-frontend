@@ -70,6 +70,7 @@ if (isAntDesignProPreview) {
 export default {
   plugins,
   hash: true,
+  base: '/custom-user-dashboard',
   targets: {
     ie: 11,
   },
@@ -215,11 +216,11 @@ export default {
   manifest: {
     basePath: '/',
   },
+  publicPath: '/custom-user-dashboard/',
   // chainWebpack: webpackPlugin,
   proxy: {
-    '/server/api/': {
+    '/api/custom-user-dashboard': {
       target: 'http://localhost:7001/',
-      //代理到我们刚才写的后端接口上
       changeOrigin: true,
       pathRewrite: {
         '^/server': '',
