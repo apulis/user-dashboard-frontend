@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form } from '@ant-design/compatible';
 import { Input, Button, Col, Row, message } from 'antd';
-import { FormComponentProps, ValidationRule } from '@ant-design/compatible/es/form';
+import { FormComponentProps } from '@ant-design/compatible/es/form';
 
 import styles from './index.less';
 
@@ -16,17 +16,21 @@ interface IUserMessage {
   createTime: number;
 }
 
-
-const Add: React.FC<FormComponentProps> = props => {
-  const { form: { getFieldDecorator, validateFields, getFieldsValue, setFieldsValue } } = props;
-  const [userMessage, setUserMessage] = useState<IUserMessage[]>([{
+const newUser: () => IUserMessage = () => {
+  return {
     nickName: '',
     userName: '',
     phone: '',
     email: '',
     note: '',
     createTime: new Date().getTime(),
-  }]);
+  }
+}
+
+
+const Add: React.FC<FormComponentProps> = props => {
+  const { form: { getFieldDecorator, validateFields, getFieldsValue, setFieldsValue } } = props;
+  const [userMessage, setUserMessage] = useState<IUserMessage[]>([newUser()]);
   const formItemLayout = {
     labelCol: {
       xs: { span: 21 },
@@ -38,7 +42,9 @@ const Add: React.FC<FormComponentProps> = props => {
     },
   };
   const submit = () => {
+    console.log(1123123)
     validateFields((err, result) => {
+      console.log(err, result)
       if (!err) {
         console.log('result', result);
       }
@@ -60,24 +66,20 @@ const Add: React.FC<FormComponentProps> = props => {
       message.warn('每次最多创建 10 个用户');
       return;
     }
-    setUserMessage([...userMessage].concat({
-      nickName: '',
-      userName: '',
-      phone: '',
-      email: '',
-      note: '',
-      createTime: new Date().getTime(),
-    }))
+    setUserMessage([...userMessage].concat(newUser()))
   }
-  const validateUserName= async (i: number, _rule?: any, value?: any, _callback?: any) => {
-    const { userMessage } = getFieldsValue<IUserMessage[]>();
+  const validateUserName= async (i: number, _rule?: any, value?: any, callback?: any) => {
+    const { userMessage } = getFieldsValue();
     if (value) {
-      userMessage.forEach((user, index) => {
+      userMessage.forEach((user: IUserMessage, index: number) => {
         if (user.userName === value && i !== index) {
-          _callback('用户名需要唯一');
+          callback('用户名需要唯一');
+        } else {
+          callback();
         }
       })
     }
+    callback();
   }
   return (
     <div className={styles.add}>
