@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Form } from '@ant-design/compatible';
-import { Input, Button, Col, Row } from 'antd';
+import { Input, Button, Col, Row, message } from 'antd';
 import { FormComponentProps, ValidationRule } from '@ant-design/compatible/es/form';
 
 import styles from './index.less';
@@ -55,7 +55,11 @@ const Add: React.FC<FormComponentProps> = props => {
       userMessage: restUserMessage,
     });
   }
-  const addUser = () => { 
+  const addUser = () => {
+    if (userMessage.length >= 10) {
+      message.warn('每次最多创建 10 个用户');
+      return;
+    }
     setUserMessage([...userMessage].concat({
       nickName: '',
       userName: '',
