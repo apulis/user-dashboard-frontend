@@ -13,17 +13,19 @@ interface UserMessage {
   phone?: string;
   email?: string;
   note?: string; 
+  createTime?: number;
 }
 
 
 const Add: React.FC<FormComponentProps> = props => {
-  const { form: { getFieldDecorator, validateFields, getFieldsValue } } = props;
+  const { form: { getFieldDecorator, validateFields, getFieldsValue, setFieldsValue } } = props;
   const [userMessage, setUserMessage] = useState<UserMessage[]>([{
     nickName: '',
     userName: '',
     phone: '',
     email: '',
     note: '',
+    createTime: new Date().getTime(),
   }]);
   const formItemLayout = {
     labelCol: {
@@ -42,8 +44,16 @@ const Add: React.FC<FormComponentProps> = props => {
       }
     })
   };
-  const removeUser = (index: number) => {
-    //
+  const removeUser = (createTime: number) => {
+    const currentFormUserMessage = getFieldsValue().userMessage;
+    currentFormUserMessage.forEach((item, index) => {
+      item.createTime = userMessage[index].createTime;
+    })
+    const restUserMessage = currentFormUserMessage.filter((user, i) => user.createTime !== createTime);
+    setUserMessage(restUserMessage);
+    setFieldsValue({
+      userMessage: restUserMessage,
+    });
   }
   const addUser = () => {
     setUserMessage([...userMessage].concat({
@@ -52,6 +62,7 @@ const Add: React.FC<FormComponentProps> = props => {
       phone: '',
       email: '',
       note: '',
+      createTime: new Date().getTime(),
     }))
   }
   const validateUserName= async (i: number, _rule?: any, value?: any, _callback?: any) => {
@@ -59,7 +70,7 @@ const Add: React.FC<FormComponentProps> = props => {
     if (value) {
       userMessage.forEach((user: UserMessage, index: number) => {
         if (user.userName === value && i !== index) {
-          throw new Error('用户名需要唯一');
+          _callback('用户名需要唯一');
         }
       })
     }
@@ -84,8 +95,8 @@ const Add: React.FC<FormComponentProps> = props => {
         </Col>
       </Row>
       {
-        userMessage.map((_user, index) => (
-          <div>
+        userMessage.map((user, index) => (
+          <div key={user.createTime}>
             <Row>
               <Col span={4}>
                 <FormItem { ...formItemLayout }>
@@ -131,7 +142,7 @@ const Add: React.FC<FormComponentProps> = props => {
                   })(<Input placeholder="请输入备注" />)}
                 </FormItem>
               </Col>
-              <Col style={{marginTop: '8px'}} span={2}><a onClick={() => removeUser(index) }>删除</a></Col>
+              <Col style={{marginTop: '8px'}} span={2}><a onClick={() => removeUser(user.createTime) }>删除</a></Col>
             </Row>
           </div>
         ))
