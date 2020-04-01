@@ -3,6 +3,8 @@ import { Form } from '@ant-design/compatible';
 import { Input, Button, Col, Row, message, Breadcrumb } from 'antd';
 import { FormComponentProps } from '@ant-design/compatible/es/form';
 
+import { emailReg } from '../../../../utils/regex';
+
 import styles from './index.less';
 
 const FormItem = Form.Item;
@@ -121,7 +123,10 @@ const Add: React.FC<FormComponentProps> = props => {
                   <FormItem { ...formItemLayout }>
                     {getFieldDecorator(`userMessage[${index}].nickName`, {
                       initialValue: userMessage[index].nickName,
-                      rules: [{ required: true, message: '需要创建昵称'}],
+                      rules: [
+                        { required: true, message: '需要创建昵称'},
+                        { max: 20, message: '最大长度是 20'}
+                      ],
                     })(<Input placeholder="请输入昵称" />)}
                   </FormItem>
                 </Col>
@@ -131,6 +136,7 @@ const Add: React.FC<FormComponentProps> = props => {
                       initialValue: userMessage[index].userName,
                       rules: [
                         { required: true, message: '需要创建用户名'},
+                        { max: 20, message: '最大长度是 20'},
                         { validator: (...args) => {
                             const newArgs = args.slice(0, 4);
                             validateUserName(index, ...newArgs)
@@ -144,6 +150,10 @@ const Add: React.FC<FormComponentProps> = props => {
                   <FormItem { ...formItemLayout }>
                     {getFieldDecorator(`userMessage[${index}].phone`, {
                       initialValue: userMessage[index].phone,
+                      rules: [
+                        { min: 5, message: '最小长度是 5' },
+                        { max: 20, message: '最大长度是 20'}
+                      ]
                     })(<Input placeholder="请输入手机" />)}
                   </FormItem>
                 </Col>
@@ -151,6 +161,12 @@ const Add: React.FC<FormComponentProps> = props => {
                   <FormItem { ...formItemLayout }>
                     {getFieldDecorator(`userMessage[${index}].email`, {
                       initialValue: userMessage[index].email,
+                      rules: [
+                        {
+                          pattern: emailReg,
+                          message: '请输入正确的邮箱格式'
+                        }
+                      ]
                     })(<Input placeholder="请输入邮箱" />)}
                   </FormItem>
                 </Col>
@@ -158,6 +174,9 @@ const Add: React.FC<FormComponentProps> = props => {
                   <FormItem { ...formItemLayout }>
                     {getFieldDecorator(`userMessage[${index}].note`, {
                       initialValue: userMessage[index].note,
+                      rules: [
+                        {max: 20, message: '最大长度是 20'}
+                      ]
                     })(<Input placeholder="请输入备注" />)}
                   </FormItem>
                 </Col>
