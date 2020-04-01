@@ -7,19 +7,19 @@ import styles from './index.less';
 
 const FormItem = Form.Item;
 
-interface UserMessage {
+interface IUserMessage {
   nickName: string;
   userName: string;
   phone?: string;
   email?: string;
   note?: string; 
-  createTime?: number;
+  createTime: number;
 }
 
 
 const Add: React.FC<FormComponentProps> = props => {
   const { form: { getFieldDecorator, validateFields, getFieldsValue, setFieldsValue } } = props;
-  const [userMessage, setUserMessage] = useState<UserMessage[]>([{
+  const [userMessage, setUserMessage] = useState<IUserMessage[]>([{
     nickName: '',
     userName: '',
     phone: '',
@@ -45,7 +45,7 @@ const Add: React.FC<FormComponentProps> = props => {
     })
   };
   const removeUser = (createTime: number) => {
-    const currentFormUserMessage = getFieldsValue().userMessage;
+    const currentFormUserMessage: IUserMessage[] = getFieldsValue().userMessage;
     currentFormUserMessage.forEach((item, index) => {
       item.createTime = userMessage[index].createTime;
     })
@@ -55,7 +55,7 @@ const Add: React.FC<FormComponentProps> = props => {
       userMessage: restUserMessage,
     });
   }
-  const addUser = () => {
+  const addUser = () => { 
     setUserMessage([...userMessage].concat({
       nickName: '',
       userName: '',
@@ -66,9 +66,9 @@ const Add: React.FC<FormComponentProps> = props => {
     }))
   }
   const validateUserName= async (i: number, _rule?: any, value?: any, _callback?: any) => {
-    const { userMessage } = getFieldsValue();
+    const { userMessage } = getFieldsValue<IUserMessage[]>();
     if (value) {
-      userMessage.forEach((user: UserMessage, index: number) => {
+      userMessage.forEach((user, index) => {
         if (user.userName === value && i !== index) {
           _callback('用户名需要唯一');
         }
