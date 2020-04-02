@@ -133,19 +133,19 @@ export default {
                   name: 'groups',
                   icon: 'TeamOutlined',
                   path: '/admin/group',
-                  component: './admin/Groups/List',
                   // authority: ['admin', 'user'],
                   routes: [
                     {
                       name: 'list',
-                      icon: 'smile',
+                      icon: 'TeamOutlined',
                       path: '/admin/group/list',
                       component: './admin/Groups/List',
-                    },{
+                    },
+                    {
                       name: 'add',
                       icon: 'UsergroupAddOutlined',
                       path: '/admin/group/add',
-                      component: './admin/Groups/Add',
+                      component: './admin/Groups/Add/index',
                     }
                   ]
                 },
