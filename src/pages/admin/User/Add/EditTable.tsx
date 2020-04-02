@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table, Form, Input } from 'antd';
 
 import { ColumnProps } from 'antd/lib/table';
 import { FormComponentProps } from '@ant-design/compatible/es/form';
 
+import { emailReg, validateUniqueUserName } from '../../../../utils/validates';
 import { IUserMessage } from './index';
+
 
 interface User extends IUserMessage {
 
@@ -22,30 +24,42 @@ type EditingKey = string | number;
 const FormItem = Form.Item;
 
 const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, style, onChange, form}) => {
-  const [editing, setEditing] = useState<boolean>(false);
+  const dataLength = dataSource.length;
+  const [editing, setEditing] = useState<boolean[]>(new Array(dataLength).fill(false));
   const [editingKey, setEditingKey] = useState<EditingKey>('');
-  const { getFieldDecorator, validateFields} = form;
+  const { getFieldDecorator, validateFields, getFieldsValue} = form;
+  useEffect(() => {
+    setEditing(new Array(dataLength).fill(false))
+    return () => {
+    }
+  }, [dataSource])
   const columns = [
     {
       title: 'Nickname',
       dataIndex: 'nickName',
-      render(_text: any, item: User) {
-        if (editing) {
-          return <FormItem>{getFieldDecorator('nickName', {
+      render(_text: any, item: User, index: number) {
+        if (editing[index]) {
+          return <FormItem>{getFieldDecorator(`userMessage[${index}].nickName`, {
             initialValue: item.nickName,
           })(<Input placeholder="Nickname" />)}</FormItem>
         } else {
-          return item.nickName
+          return item.nickName;
         }
       }
     }, {
       title: 'Username',
       dataIndex: 'userName',
-      render(_text: any, item: User) {
-        if (editing) {
-          return <FormItem>{getFieldDecorator('userName', {
+      render(_text: any, item: User, index: number) {
+        if (editing[index]) {
+          return <FormItem>{getFieldDecorator(`userMessage[${index}].userName`, {
             initialValue: item.userName,
-            rules: [{ required: true, message: 'UserName is required'}],
+            rules: [
+              { required: true, message: 'UserName is required'},
+              { validator: (...args) => {
+                const newArgs = args.slice(0, 4);
+                validateUniqueUserName(index, getFieldsValue().userMessage, ...newArgs);
+              }}
+            ],
           })(<Input placeholder="UserName" />)}</FormItem>
         } else {
           return item.userName;
@@ -54,9 +68,9 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
     }, {
       title: 'Password',
       dataIndex: 'password',
-      render(_text: any, item: User) {
-        if (editing) {
-          return <FormItem>{getFieldDecorator('password', {
+      render(_text: any, item: User, index: number) {
+        if (editing[index]) {
+          return <FormItem>{getFieldDecorator(`userMessage[${index}].password`, {
             initialValue: item.password,
             rules: [{ required: true, message: 'Password is required'}],
           })(<Input placeholder="Password" />)}</FormItem>
@@ -66,25 +80,25 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
       }
     }, {
       title: 'Phone',
-      dataIndex: 'phoneNumber',
-      render(_text: any, item: User) {
-        if (editing) {
-          return <FormItem>{getFieldDecorator('phoneNumber', {
-            initialValue: item.phoneNumber,
+      dataIndex: 'phone',
+      render(_text: any, item: User, index: number) {
+        if (editing[index]) {
+          return <FormItem>{getFieldDecorator(`userMessage[${index}].phone`, {
+            initialValue: item.phone,
           })(<Input placeholder="Phone" />)}</FormItem>
         } else {
-          return item.phoneNumber
+          return item.phone
         }
       }
     }, {
       title: 'Email',
       dataIndex: 'email',
-      render(_text: any, item: User) {
-        if (editing) {
-          return <FormItem>{getFieldDecorator('email', {
+      render(_text: any, item: User, index: number) {
+        if (editing[index]) {
+          return <FormItem>{getFieldDecorator('userMessage[${index}].email', {
             initialValue: item.email,
             rules: [{
-              pattern: /^[A-Za-z0-9]+([_\.][A-Za-z0-9]+)*@([A-Za-z0-9\-]+\.)+[A-Za-z]{2,6}$/,
+              pattern: emailReg,
               message: 'Please input corret email'
             }],
           })(<Input placeholder="Email" />)}</FormItem>
@@ -95,9 +109,9 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
     }, {
       title: 'Note',
       dataIndex: 'note',
-      render(_text: any, item: User) {
-        if (editing) {
-          return <FormItem>{getFieldDecorator('note', {
+      render(_text: any, item: User, index: number) {
+        if (editing[index]) {
+          return <FormItem>{getFieldDecorator(`userMessage[${index}].note`, {
             initialValue: item.note
           })(<Input placeholder="Note" />)}</FormItem>
         } else {
@@ -109,7 +123,7 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
       dataIndex: 'action',
       width: '13%',
       render(_text: any, item: User, index: number) {
-        if (editing) {
+        if (editing[index]) {
           return (
             <>
               <a style={{marginRight: '4px'}} onClick={() => saveEditingTable(index)}>Save</a>
@@ -128,17 +142,30 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
   const saveEditingTable = async (editingKey: EditingKey) => {
     const data = await validateFields();
     const newData = JSON.parse(JSON.stringify(dataSource));
-    newData[editingKey] = data;
+    newData[editingKey] = data['userMessage'][editingKey];
     onChange && onChange(newData);
-    setEditing(false);
+    let newEditing = [...editing];
+    newEditing = newEditing.map((val, index) => {
+      if (index === editingKey) {
+        val = false;
+      }
+      return val;
+    })
+    setEditing(newEditing);
     setEditingKey(-1);
   }
   const toggleEditing = (editingKey: EditingKey) => {
-    if (editing) {
-      setEditing(false);
+    const newEditing = [...editing].map((val, index) => {
+      if (index === editingKey) {
+        val = !editing[index];
+      }
+      return val;
+    })
+    console.log('newEditing', newEditing)
+    setEditing(newEditing);
+    if (editing[editingKey]) {
       setEditingKey(-1);
     } else {
-      setEditing(true);
       setEditingKey(editingKey);
     }
   }

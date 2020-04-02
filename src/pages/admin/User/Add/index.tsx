@@ -4,6 +4,8 @@ import { Input, Button, Col, Row, message, Breadcrumb, Checkbox, Table } from 'a
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { FormComponentProps } from '@ant-design/compatible/es/form';
 
+import { validateUniqueUserName, emailReg } from '@/utils/validates';
+
 import EditTable from './EditTable';
 import styles from './index.less';
 
@@ -14,8 +16,13 @@ export interface IUserMessage {
   userName: string;
   phone?: string;
   email?: string;
-  note?: string; 
+  password?: string;
+  note?: string;
   createTime: number;
+}
+
+export const generatePassword: () => string = () => {
+  return Math.random().toString(36).slice(-8);
 }
 
 const newUser: () => IUserMessage = () => {
@@ -33,7 +40,6 @@ const userRoleOptions = [
   { label: 'User', value: 'User' },
   { label: 'Admin', value: 'Admin' },
 ]
-
 
 const Add: React.FC<FormComponentProps> = props => {
   const { form: { getFieldDecorator, validateFields, getFieldsValue, setFieldsValue } } = props;
@@ -54,7 +60,10 @@ const Add: React.FC<FormComponentProps> = props => {
     validateFields((err, result) => {
       if (!err) {
         if (step === 1) {
-          const { userMessage } = result;
+          const userMessage: IUserMessage[] = result.userMessage;
+          userMessage.forEach(val => {
+            val.password = generatePassword();
+          })
           setUserMessage(userMessage);
           setStep(step + 1);
         } else if (step === 2) {
@@ -88,18 +97,8 @@ const Add: React.FC<FormComponentProps> = props => {
     }
     setUserMessage([...userMessage].concat(newUser()))
   }
-  const validateUserName= async (i: number, _rule?: any, value?: any, callback?: any) => {
-    const { userMessage } = getFieldsValue();
-    if (value) {
-      userMessage.forEach((user: IUserMessage, index: number) => {
-        if (user.userName === value && i !== index) {
-          callback('用户名需要唯一');
-        } else {
-          callback();
-        }
-      })
-    }
-    callback();
+  const onEditTableDataChange = (data: IUserMessage[]) => {
+    setUserMessage([...data]);
   }
   return (
     <PageHeaderWrapper>
@@ -155,7 +154,7 @@ const Add: React.FC<FormComponentProps> = props => {
                         { required: true, message: '需要创建用户名'},
                         { validator: (...args) => {
                             const newArgs = args.slice(0, 4);
-                            validateUserName(index, ...newArgs)
+                            validateUniqueUserName(index, getFieldsValue().userMessage, ...newArgs)
                           }
                         }
                       ],
@@ -173,6 +172,9 @@ const Add: React.FC<FormComponentProps> = props => {
                   <FormItem { ...formItemLayout }>
                     {getFieldDecorator(`userMessage[${index}].email`, {
                       initialValue: userMessage[index].email,
+                      rules: [
+                        {pattern: emailReg, message: '请输入正确的邮箱格式'}
+                      ]
                     })(<Input placeholder="请输入邮箱" />)}
                   </FormItem>
                 </Col>
@@ -206,7 +208,10 @@ const Add: React.FC<FormComponentProps> = props => {
       }
       {
         <div className="step-3">
-          <EditTable  dataSource={userMessage}/>
+          <EditTable 
+            dataSource={userMessage}
+            onChange={onEditTableDataChange}
+          />
         </div>
       }
       <div style={{marginTop: '40px'}}>
