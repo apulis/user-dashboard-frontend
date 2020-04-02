@@ -192,7 +192,7 @@ const Add: React.FC<FormComponentProps> = props => {
         }
         <Button onClick={addUser}>新增用户</Button><span style={{display: 'inline-block', marginLeft: '10px'}}>每次最多创建 10 个用户</span>
       </div> }
-      {
+      { step === 2 &&
         <div className="step-2">
           {
             getFieldDecorator('role', {
@@ -207,6 +207,7 @@ const Add: React.FC<FormComponentProps> = props => {
         </div>
       }
       {
+        step === 3 &&
         <div className="step-3">
           <EditTable 
             dataSource={userMessage}
