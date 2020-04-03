@@ -117,13 +117,13 @@ export default {
                   routes: [
                     {
                       name: 'list',
-                      icon: 'UserOutlined',
+                      // icon: 'UserOutlined',
                       path: '/admin/user/list',
                       component: './admin/User',
                     },
                     {
                       name: 'add',
-                      icon: 'UserAddOutlined',
+                      // icon: 'UserAddOutlined',
                       path: '/admin/user/add',
                       component: './admin/User/Add',
                     }
@@ -137,25 +137,32 @@ export default {
                   routes: [
                     {
                       name: 'list',
-                      icon: 'TeamOutlined',
+                      // icon: 'TeamOutlined',
                       path: '/admin/group/list',
                       component: './admin/Groups/List',
                     },
                     {
                       name: 'add',
-                      icon: 'UsergroupAddOutlined',
+                      // icon: 'UsergroupAddOutlined',
                       path: '/admin/group/add',
-                      component: './admin/Groups/Add/index',
+                      component: './admin/Groups/Add',
                     }
                   ]
                 },
-                // {
-                //   name: '角色管理',
-                //   icon: 'smile',
-                //   path: '/admin/role',
-                //   component: './admin/Role',
-                //   // authority: ['admin'],
-                // },
+                {
+                  name: 'roles',
+                  icon: 'ApartmentOutlined',
+                  path: '/admin/role',
+                  // component: './admin/Role',
+                  // authority: ['admin'],
+                  routes: [
+                    {
+                      name: 'add',
+                      path: '/admin/role/add',
+                      component: './admin/Roles/Add',
+                    }
+                  ]
+                },
                 // {
                 //   name: '权限管理',
                 //   icon: 'smile',
