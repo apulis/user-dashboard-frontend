@@ -236,11 +236,11 @@ export default {
   publicPath: '/custom-user-dashboard/',
   // chainWebpack: webpackPlugin,
   proxy: {
-    '/api/custom-user-dashboard': {
-      target: 'http://localhost:7001/',
+    '/custom-user-dashboard/api': {
+      target: 'http://localhost:5001/',
       changeOrigin: true,
       pathRewrite: {
-        '^/server': '',
+        '^/custom-user-dashboard/api': '',
       }, // /server/api/login => /api/login
     },
   },
