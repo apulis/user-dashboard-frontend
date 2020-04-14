@@ -50,6 +50,7 @@ const Add: React.FC<FormComponentProps & ConnectProps> = props => {
   const [userMessage, setUserMessage] = useState<IUserMessage[]>([newUser()]);
   const [selectedUserRole, setSelectedUserRole] = useState<string[]>([]);
   const [step, setStep] = useState<number>(1);
+  const [isEditingTableEditing, setIsEditingTableEditing] = useState<boolean>(false);
   const formItemLayout = {
     labelCol: {
       xs: { span: 21 },
@@ -63,7 +64,7 @@ const Add: React.FC<FormComponentProps & ConnectProps> = props => {
 
   const submitUser = async (userMessage: IUserMessage[], userRole: string[]) => {
     const { dispatch } = props;
-    const hide = message.loading('submiting');
+    const hide = message.loading('Submiting...');
     await dispatch({
       type: 'users/createUsers',
       payload: {
@@ -117,6 +118,9 @@ const Add: React.FC<FormComponentProps & ConnectProps> = props => {
   const onEditTableDataChange = (data: IUserMessage[]) => {
     setUserMessage([...data]);
   }
+  const onEditTableStatusChange = (isEditing: boolean) => {
+    setIsEditingTableEditing(isEditing);
+  }
   return (
     <PageHeaderWrapper>
 
@@ -129,7 +133,7 @@ const Add: React.FC<FormComponentProps & ConnectProps> = props => {
         { step >= 2 && <Breadcrumb.Item>
           2. 指定角色
         </Breadcrumb.Item> }
-        { step >= 3 && <Breadcrumb.Item>    
+        { step >= 3 && <Breadcrumb.Item>
           3. 审阅
         </Breadcrumb.Item> }
       </Breadcrumb>
@@ -229,15 +233,18 @@ const Add: React.FC<FormComponentProps & ConnectProps> = props => {
           <EditTable 
             dataSource={userMessage}
             onChange={onEditTableDataChange}
+            onStatusChange={onEditTableStatusChange}
           />
         </div>
       }
       <div style={{marginTop: '40px'}}>
-        <Button onClick={submit} type="primary">下一步</Button>
+        <Button disabled={isEditingTableEditing} onClick={submit} type="primary">{step === 3 ? 'Submit' : 'Next'}</Button>
       </div>
     </div>
     </PageHeaderWrapper>
   );
 };
 
-export default connect()(Form.create<FormComponentProps & ConnectProps>()(Add))
+export default connect(({ users }: ConnectState) => (
+  { conflictedUserName: users.conflictedUserName }
+))(Form.create<FormComponentProps & ConnectProps>()(Add))

@@ -17,13 +17,14 @@ interface EditTableProps {
   style?: React.CSSProperties;
   columns?: ColumnProps<any>;
   onChange?: (data: User[]) => any;
+  onStatusChange?: (isEditing: boolean) => any;
 }
 
 type EditingKey = string | number;
 
 const FormItem = Form.Item;
 
-const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, style, onChange, form}) => {
+const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, style, onChange, form, onStatusChange}) => {
   const dataLength = dataSource.length;
   const [editing, setEditing] = useState<boolean[]>(new Array(dataLength).fill(false));
   const [editingKey, setEditingKey] = useState<EditingKey>('');
@@ -143,7 +144,6 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
     const data = await validateFields();
     const newData = JSON.parse(JSON.stringify(dataSource));
     newData[editingKey] = data['userMessage'][editingKey];
-    onChange && onChange(newData);
     let newEditing = [...editing];
     newEditing = newEditing.map((val, index) => {
       if (index === editingKey) {
@@ -151,6 +151,7 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
       }
       return val;
     })
+    onChange && onChange(newData);
     setEditing(newEditing);
     setEditingKey(-1);
   }
@@ -161,6 +162,7 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
       }
       return val;
     });
+    onStatusChange && onStatusChange(newEditing.reduce((temp, val) => temp || val, newEditing[0]))
     setEditing(newEditing);
     if (editing[editingKey]) {
       setEditingKey(-1);
