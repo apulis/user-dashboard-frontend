@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { Dispatch } from 'redux';
 import { Form } from '@ant-design/compatible';
 import { Input, Button, Col, Row, message, Breadcrumb, Checkbox, Table } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { FormComponentProps } from '@ant-design/compatible/es/form';
-
+import { connect } from 'dva';
+import { ConnectState, ConnectProps } from '@/models/connect';
 import { validateUniqueUserName, emailReg } from '@/utils/validates';
 
 import EditTable from './EditTable';
@@ -41,7 +43,9 @@ const userRoleOptions = [
   { label: 'Admin', value: 'Admin' },
 ]
 
-const Add: React.FC<FormComponentProps> = props => {
+
+
+const Add: React.FC<FormComponentProps & ConnectProps> = props => {
   const { form: { getFieldDecorator, validateFields, getFieldsValue, setFieldsValue } } = props;
   const [userMessage, setUserMessage] = useState<IUserMessage[]>([newUser()]);
   const [selectedUserRole, setSelectedUserRole] = useState<string[]>([]);
@@ -56,6 +60,20 @@ const Add: React.FC<FormComponentProps> = props => {
       sm: { span: 21 },
     },
   };
+
+  const submitUser = async (userMessage: IUserMessage[], userRole: string[]) => {
+    const { dispatch } = props;
+    const hide = message.loading('submiting');
+    await dispatch({
+      type: 'users/createUsers',
+      payload: {
+        userMessage,
+        userRole,
+      }
+    })
+    hide();
+  }
+
   const submit = () => {
     validateFields((err, result) => {
       if (!err) {
@@ -71,9 +89,8 @@ const Add: React.FC<FormComponentProps> = props => {
           setSelectedUserRole(role);
           setStep(step + 1)
         } else if (step === 3) {
-          console.log('userMessage', userMessage)
-          console.log('userRole', selectedUserRole)
-          setStep(step + 1)
+          submitUser(userMessage, selectedUserRole)
+          // setStep(step + 1)
         } 
         
       }
@@ -223,4 +240,4 @@ const Add: React.FC<FormComponentProps> = props => {
   );
 };
 
-export default Form.create<FormComponentProps>()(Add)
+export default connect()(Form.create<FormComponentProps & ConnectProps>()(Add))
