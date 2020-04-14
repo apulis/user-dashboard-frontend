@@ -16,4 +16,3 @@ export async function createUsers(payload: any) {
     data: payload
   })
 }
-

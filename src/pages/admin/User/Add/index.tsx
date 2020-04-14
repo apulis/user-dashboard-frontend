@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { Dispatch } from 'redux';
 import { Form } from '@ant-design/compatible';
-import { Input, Button, Col, Row, message, Breadcrumb, Checkbox, Table } from 'antd';
+import { Input, Button, Col, Row, message, Breadcrumb, Checkbox } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { FormComponentProps } from '@ant-design/compatible/es/form';
 import { connect } from 'dva';
-import { ConnectState, ConnectProps } from '@/models/connect';
+import router from 'umi/router';
+import { ConnectProps } from '@/models/connect';
 import { validateUniqueUserName, emailReg } from '@/utils/validates';
 
 import EditTable from './EditTable';
 import styles from './index.less';
+import { createUsers } from '@/services/users';
 
 const FormItem = Form.Item;
 
@@ -63,15 +65,20 @@ const Add: React.FC<FormComponentProps & ConnectProps> = props => {
   };
 
   const submitUser = async (userMessage: IUserMessage[], userRole: string[]) => {
-    const { dispatch } = props;
     const hide = message.loading('Submiting...');
-    await dispatch({
-      type: 'users/createUsers',
-      payload: {
-        userMessage,
-        userRole,
-      }
-    })
+    const res = await createUsers({
+      userMessage,
+      userRole,
+    });
+    if (res.success === true) {
+      hide();
+      message.success('Success create users');
+      router.push('/admin/user/list');
+      return;
+    } else if (res.success === false) {
+      const { conflictedUserName } = res;
+      // TODO: show conflictedUserName
+    }
     hide();
   }
 
@@ -245,6 +252,4 @@ const Add: React.FC<FormComponentProps & ConnectProps> = props => {
   );
 };
 
-export default connect(({ users }: ConnectState) => (
-  { conflictedUserName: users.conflictedUserName }
-))(Form.create<FormComponentProps & ConnectProps>()(Add))
+export default connect()(Form.create<FormComponentProps & ConnectProps>()(Add))

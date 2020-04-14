@@ -15,7 +15,7 @@ const { TextArea } = Input;
 
 
 
-const Group: React.FC<FormComponentProps> = ({ form }) => {
+const Group: React.FC<FormComponentProps> = ({ form, dispatch }) => {
   const { getFieldDecorator, validateFields } = form;
   const [step, setStep] = useState<number>(1);
   const [submitData, setSubmitData] = useState<IUserGroup>();
@@ -43,6 +43,7 @@ const Group: React.FC<FormComponentProps> = ({ form }) => {
       })
     } else if (step === 3) {
       console.log('submitData', submitData)
+      
     }
   }
   const removeRole = (index: number) => {

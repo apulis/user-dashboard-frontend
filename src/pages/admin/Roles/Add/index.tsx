@@ -4,6 +4,8 @@ import { Form } from '@ant-design/compatible'
 
 import { FormComponentProps } from '@ant-design/compatible/es/form';
 import { AntTreeNodeSelectedEvent } from 'antd/lib/tree';
+import { connect } from 'dva';
+import { ConnectState } from '@/models/connect';
 
 const FormItem = Form.Item;
 const { TreeNode } = Tree;
@@ -98,4 +100,4 @@ const Add: React.FC<FormComponentProps> = ({ form }) => {
 }
 
 
-export default Form.create<FormComponentProps>()(Add);
+export default connect(({user}: ConnectState) => user)(Form.create<FormComponentProps>()(Add));
