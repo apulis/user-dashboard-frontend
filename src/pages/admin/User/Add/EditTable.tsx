@@ -95,7 +95,7 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
       dataIndex: 'email',
       render(_text: any, item: User, index: number) {
         if (editing[index]) {
-          return <FormItem>{getFieldDecorator('userMessage[${index}].email', {
+          return <FormItem>{getFieldDecorator(`userMessage[${index}].email`, {
             initialValue: item.email,
             rules: [{
               pattern: emailReg,
@@ -160,8 +160,7 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
         val = !editing[index];
       }
       return val;
-    })
-    console.log('newEditing', newEditing)
+    });
     setEditing(newEditing);
     if (editing[editingKey]) {
       setEditingKey(-1);
