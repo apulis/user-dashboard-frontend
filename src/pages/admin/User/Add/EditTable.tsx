@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Form, Input } from 'antd';
+import { Table, Form, Input, Button } from 'antd';
+import { saveAs } from 'file-saver'
 
 import { ColumnProps } from 'antd/lib/table';
 import { FormComponentProps } from '@ant-design/compatible/es/form';
+import Excel from 'exceljs/dist/exceljs.bare';
+
 
 import { emailReg, validateUniqueUserName } from '../../../../utils/validates';
 import { IUserMessage } from './index';
@@ -170,8 +173,29 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
       setEditingKey(editingKey);
     }
   }
+  const download = async () => {
+    const workbook = new Excel.Workbook();
+    workbook.addWorksheet('userMessage');
+    const worksheet = workbook.getWorksheet('userMessage');
+    worksheet.columns = [
+      { header: 'NickName', key: 'nickName', width: 36},
+      { header: 'UserName', key: 'userName', width: 36},
+      { header: 'Phone', key: 'phone', width: 36},
+      { header: 'Email', key: 'email', width: 36},
+      { header: 'Note', key: 'note', width: 36},
+    ]
+    dataSource.forEach(val => {
+      worksheet.addRow(val);
+    });
+    const buf = await workbook.xlsx.writeBuffer();
+    saveAs(new Blob([buf]), 'userMessage.xlsx')
+
+  }
   return (
-    <Table columns={columns} dataSource={dataSource} style={style} />
+    <>
+      <Button type="primary" onClick={download}>Download</Button>
+      <Table columns={columns} dataSource={dataSource} style={{...style, marginTop: '20px'}} />
+    </>
   )
 }
 
