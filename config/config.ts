@@ -119,7 +119,7 @@ export default {
                       name: 'list',
                       // icon: 'UserOutlined',
                       path: '/admin/user/list',
-                      component: './admin/User',
+                      component: './admin/User/List',
                     },
                     {
                       name: 'add',
