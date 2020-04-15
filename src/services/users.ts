@@ -1,17 +1,18 @@
 import request from '@/utils/request';
 
+interface IFetchUserPayload {
+  pageSize: number;
+  pageNo: number;
+}
 
-export async function fetchUsers(pageNo: number, pageSize: number): Promise<any> {
-  return request('/users/list', {
-    params: {
-      pageNo,
-      pageSize,
-    }
+export async function fetchUsers(payload: IFetchUserPayload): Promise<any> {
+  return await request('/users/list', {
+    params: payload
   });
 }
 
 export async function createUsers(payload: any) {
-  return request('/users', {
+  return await request('/users', {
     method: 'POST',
     data: payload
   })

@@ -15,7 +15,7 @@ export interface UsersStateType {
   pageNo: number;
   pageSize: number;
   total: number;
-  users: IUsers[];
+  list: IUsers[];
   conflictedUserName: string[];
 }
 
@@ -35,10 +35,10 @@ export interface UsersModelType {
 const UsersModel: UsersModelType = {
   namespace: 'users',
   state: {
-    pageNo: 0,
+    pageNo: 1,
     pageSize: 10,
     total: 10,
-    users: [],
+    list: [],
     conflictedUserName: []
   },
   effects: {
@@ -49,7 +49,7 @@ const UsersModel: UsersModelType = {
         yield put({
           type: 'saveUsers',
           payload: {
-            users: list,
+            list: list,
             pageNo: payload.pageNo,
             pageSize: payload.pageSize,
             total: res.total,
