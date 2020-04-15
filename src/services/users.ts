@@ -17,3 +17,10 @@ export async function createUsers(payload: any) {
     data: payload
   })
 }
+
+export async function removeUsers(payload: string[]) {
+  return await request('/users', {
+    method: 'DELETE',
+    data: payload,
+  })
+}

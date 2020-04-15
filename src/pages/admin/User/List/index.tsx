@@ -1,27 +1,35 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
 import { Link } from 'umi';
-import { Table, Button, Pagination, Select } from 'antd';
+import { Table, Button, Pagination, Select, Dropdown, Menu, Modal, message, Input } from 'antd';
 import { Form } from '@ant-design/compatible';
 import { FormComponentProps } from 'antd/lib/form';
+import { DownOutlined, UsergroupAddOutlined, UserDeleteOutlined, ExclamationCircleOutlined  } from '@ant-design/icons';
 
 import { ConnectProps, ConnectState } from '@/models/connect';
 import { ColumnProps } from 'antd/es/table';
 import { IUsers } from '@/models/users';
 
+import { removeUsers } from '@/services/users';
+
 import styles from './index.less'
+import { ClickParam } from 'antd/lib/menu';
 
 const { Option } = Select;
+const { confirm } = Modal;
+const { Search } = Input;
 
 const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props) => {
   const { dispatch, users: { list, pageNo, pageSize, total } } = props;
+  const [selectRows, setSelectRows] = useState<IUsers>([]);
   useEffect(() => {
     dispatch({
       type: 'users/fetchUsers',
       payload: {
         pageNo: pageNo,
         pageSize: pageSize,
+        search: '',
       }
     })
   }, [])
@@ -35,6 +43,16 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       title: 'NickName',
       dataIndex: 'nickName',
       key: 'nickName',
+    },
+    {
+      title: 'Phone',
+      dataIndex: 'phone',
+      key: 'phone',
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
     },
     {
       title: 'Action',
@@ -55,7 +73,6 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
     })
   }
   const onPageSizeChange = (pageSize: number) => {
-    console.log('pageSize', pageSize)
     dispatch({
       type: 'users/changePageSize',
       payload: {
@@ -70,13 +87,96 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       }
     })
   }
+  const onRowSelection: (selectedRowKeys: string[] | number[], selectedRows: IUsers[]) => void = (selectedRowKeys, selectedRows) => {
+    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+    setSelectRows(selectedRows);
+  }
+  const handleMenuClick: ((param: ClickParam) => void) = (e) => {
+    //
+  }
+  const addToGroup = () => {
+
+  }
+  const removeUser = () => {
+    
+    confirm({
+      title: 'Do you Want to delete these items?',
+      icon: <ExclamationCircleOutlined />,
+      content: 'Then these users will not be allowed to platform',
+      okText: 'OK',
+      cancelText: 'CANCEL',
+      onOk() {
+        const userNames = selectRows.map((val: IUsers) => val.userName);
+        removeUsers(userNames)
+          .then(res => {
+            if (res.success) {
+              message.success('Success Delete User: ' + userNames.join(', '))
+              dispatch({
+                type: 'users/fetchUsers',
+                payload: {
+                  pageNo,
+                  pageSize,
+                }
+              })
+            }
+          })
+      },
+      onCancel() {
+        //
+      },
+    })
+
+  }
+  const onSearch = (s: string) => {
+    dispatch({
+      type: 'users/fetchUsers',
+      payload: {
+        search: s,
+        pageNo,
+        pageSize,
+      }
+    })
+  }
+  
+  const menu = (
+    <Menu onClick={handleMenuClick}>
+      <Menu.Item key="1" onClick={addToGroup}>
+        <UsergroupAddOutlined />
+        Add To Group
+      </Menu.Item>
+      <Menu.Item key="2" onClick={removeUser}>
+        <UserDeleteOutlined />
+        Delete Current User
+      </Menu.Item>
+    </Menu>
+  )
   return (
     <PageHeaderWrapper>
-      <Link to="/admin/user/add">
-        <Button type="primary">Add User</Button>
-      </Link>
+      <div className={styles.top}>
+        <div className={styles.left}>
+          <Link to="/admin/user/add">
+            <Button type="primary">Add User</Button>
+          </Link>
+          <Dropdown disabled={selectRows.length === 0} overlay={menu}>
+            <Button style={{marginLeft: '15px'}}>
+              Actions <DownOutlined />
+            </Button>
+          </Dropdown>
+        </div>
+        
+        <Search
+          placeholder="input search text"
+          onSearch={onSearch}
+          style={{ width: 200 }}
+        />
+      </div>
+      
       <Table
         style={{marginTop: '20px'}}
+        rowSelection={{
+          type: "checkbox",
+          onChange: onRowSelection,
+        }}
         dataSource={list}
         columns={columns}
         pagination={false}
@@ -99,6 +199,9 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
           total={total}
         />
       </div>
+      <Modal>
+
+      </Modal>
     </PageHeaderWrapper>
   )
 };

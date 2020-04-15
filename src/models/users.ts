@@ -1,7 +1,7 @@
 import { Reducer } from 'redux';
 import { Effect } from 'dva';
 
-import { createUsers, fetchUsers } from '@/services/users';
+import { removeUsers, fetchUsers } from '@/services/users';
 
 
 export interface IUsers {
@@ -16,7 +16,7 @@ export interface UsersStateType {
   pageSize: number;
   total: number;
   list: IUsers[];
-  conflictedUserName: string[];
+  search: string;
 }
 
 export interface UsersModelType {
@@ -41,10 +41,14 @@ const UsersModel: UsersModelType = {
     pageSize: 10,
     total: 10,
     list: [],
-    conflictedUserName: []
+    search: ''
   },
   effects: {
-    * fetchUsers({ payload }, { call, put }) {
+    * fetchUsers({ payload }, { call, put, select }) {
+      const state = yield select();
+      if (!payload.search) {
+        payload.search = state.search;
+      }
       const res = yield call(fetchUsers, payload);
       if (res.success === true) {
         const { list } = res;
@@ -55,20 +59,14 @@ const UsersModel: UsersModelType = {
             pageNo: payload.pageNo,
             pageSize: payload.pageSize,
             total: res.total,
+            search: payload.search,
           },
         });
       }
       console.log(res)
     },
     * createUsers({ payload }, { call, put }) {
-      const res = yield call(createUsers, payload);
-      if (res.success === true) {
-
-      } else if (res.success === false) {
-        const { conflictedUserName } = res;
-
-      }
-      console.log('res', res)
+      //
     },
     * changePageSize({ payload }, { call, put }) {
       yield put({
@@ -77,7 +75,14 @@ const UsersModel: UsersModelType = {
       })
     },
     * removeUsers({ payload }, { call, put }) {
-
+      const { selectRows } = payload;
+      const removingUserNames = selectRows.map((val: IUsers) => val.userName)
+      const res = yield call(removeUsers, removingUserNames);
+      if (res.success) {
+        //
+      } else {
+        //
+      }
     }
   },
   
