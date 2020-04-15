@@ -100,7 +100,7 @@ const footerRender: BasicLayoutProps['footerRender'] = () => {
           textAlign: 'center',
         }}
       >
-        DLWS 后台管理系统
+        DLWS User Dashboard
       </div>
     </>
   );
