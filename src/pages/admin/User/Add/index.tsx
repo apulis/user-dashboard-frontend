@@ -164,7 +164,7 @@ const Add: React.FC<FormComponentProps & ConnectProps> = props => {
         </Row>
         {
           userMessage.map((user, index) => (
-            <div key={user.createTime}>
+            <div key={user.createTime} style={{ marginTop: '10px' }}>
               <Row>
                 <Col span={4}>
                   <FormItem { ...formItemLayout }>
@@ -218,7 +218,7 @@ const Add: React.FC<FormComponentProps & ConnectProps> = props => {
             </div>
           ))
         }
-        <Button onClick={addUser}>新增用户</Button><span style={{display: 'inline-block', marginLeft: '10px'}}>每次最多创建 10 个用户</span>
+        <Button onClick={addUser}>新增用户</Button><span style={{display: 'inline-block', marginLeft: '10px', marginTop: '20px'}}>每次最多创建 10 个用户</span>
       </div> }
       { step === 2 &&
         <div className="step-2">
