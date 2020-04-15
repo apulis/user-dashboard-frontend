@@ -22,7 +22,7 @@ const { Search } = Input;
 
 const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props) => {
   const { dispatch, users: { list, pageNo, pageSize, total } } = props;
-  const [selectRows, setSelectRows] = useState<IUsers>([]);
+  const [selectRows, setSelectRows] = useState<IUsers[]>([]);
   useEffect(() => {
     dispatch({
       type: 'users/fetchUsers',
