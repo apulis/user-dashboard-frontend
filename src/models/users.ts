@@ -26,9 +26,11 @@ export interface UsersModelType {
     fetchUsers: Effect;
     createUsers: Effect;
     removeUsers: Effect;
+    changePageSize: Effect;
   };
   reducers: {
     saveUsers: Reducer;
+    changePageSize: Reducer;
   };
 }
 
@@ -59,7 +61,6 @@ const UsersModel: UsersModelType = {
       console.log(res)
     },
     * createUsers({ payload }, { call, put }) {
-      console.log('payload', payload)
       const res = yield call(createUsers, payload);
       if (res.success === true) {
 
@@ -68,6 +69,12 @@ const UsersModel: UsersModelType = {
 
       }
       console.log('res', res)
+    },
+    * changePageSize({ payload }, { call, put }) {
+      yield put({
+        type: 'saveUsers',
+        payload,
+      })
     },
     * removeUsers({ payload }, { call, put }) {
 
@@ -81,6 +88,12 @@ const UsersModel: UsersModelType = {
         ...payload,
       }
     },
+    changePageSize(state = {}, { payload }) {
+      return {
+        ...state,
+        pageSize: payload.pageSize,
+      }
+    }
   },
 };
 export default UsersModel;
