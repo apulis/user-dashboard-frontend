@@ -6,7 +6,7 @@ import { FormComponentProps } from '@ant-design/compatible/es/form';
 import { connect } from 'dva';
 import router from 'umi/router';
 import { ConnectProps } from '@/models/connect';
-import { addGroup } from '@/services/group';
+import { addGroup } from '@/services/groups';
 
 export interface IAddUserGroup {
   name: string;
