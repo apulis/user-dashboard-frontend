@@ -11,8 +11,6 @@ export const validateUniqueUserName= async (i: number, data: any, _rule?: any, v
     userMessage.forEach((user: IUserMessage, index: number) => {
       if (user.userName === value && i !== index) {
         callback('用户名需要唯一');
-      } else {
-        callback();
       }
     })
   }
