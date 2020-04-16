@@ -4,10 +4,12 @@ import { Input, Button, Breadcrumb, Checkbox, Row, Col, Table } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { FormComponentProps } from '@ant-design/compatible/es/form';
 import { connect } from 'dva';
+import router from 'umi/router';
 import { ConnectProps } from '@/models/connect';
+import { addGroup } from '@/services/group';
 
-interface IUserGroup {
-  groupName: string;
+export interface IAddUserGroup {
+  name: string;
   note: string;
   role: string[];
 }
@@ -20,7 +22,7 @@ const { TextArea } = Input;
 const Group: React.FC<FormComponentProps & ConnectProps> = ({ form, dispatch }) => {
   const { getFieldDecorator, validateFields } = form;
   const [step, setStep] = useState<number>(1);
-  const [submitData, setSubmitData] = useState<IUserGroup>();
+  const [submitData, setSubmitData] = useState<IAddUserGroup>();
   const layout = {
     labelCol: { span: 24 },
     wrapperCol: { span: 12 },
@@ -44,8 +46,10 @@ const Group: React.FC<FormComponentProps & ConnectProps> = ({ form, dispatch }) 
         }
       })
     } else if (step === 3) {
-      console.log('submitData', submitData)
-      
+      addGroup(submitData as IAddUserGroup)
+        .then(result => {
+          router.push('/admin/group/list');
+        })
     }
   }
   const removeRole = (index: number) => {
@@ -53,7 +57,7 @@ const Group: React.FC<FormComponentProps & ConnectProps> = ({ form, dispatch }) 
     setSubmitData({
       ...submitData,
       role: newRoleList,
-    } as IUserGroup)
+    } as IAddUserGroup)
   }
   const columns = [
     {
@@ -96,8 +100,8 @@ const Group: React.FC<FormComponentProps & ConnectProps> = ({ form, dispatch }) 
         step === 1 && <div className="step-1">
           <FormItem label="Group Name" {...layout}>
             {
-              getFieldDecorator('groupName', {
-                initialValue: submitData?.groupName || '',
+              getFieldDecorator('name', {
+                initialValue: submitData?.name || '',
                 rules: [
                   { required: true, message: 'group name is required' },
                   { max: 10, message: 'max length is 10' }
@@ -143,7 +147,7 @@ const Group: React.FC<FormComponentProps & ConnectProps> = ({ form, dispatch }) 
         step === 3 && <div className="step-3">
           <h1>用户组信息</h1>
           <div>
-            <div>用户组名：{submitData?.groupName}</div>
+            <div>用户组名：{submitData?.name}</div>
             <div>备注: {submitData?.note}</div>
           </div>
           <h1>Role  ({submitData?.role.length})</h1> 
@@ -154,7 +158,7 @@ const Group: React.FC<FormComponentProps & ConnectProps> = ({ form, dispatch }) 
         step >=  2 &&
         <Button style={{marginRight: '15px'}} onClick={pre}>PREVIOUS</Button>
       }
-      <Button style={{marginTop: '20px'}} type="primary" onClick={next}>{ step === 3 ? 'FINISH' : 'NEXT'}</Button>
+      <Button style={{marginTop: '20px'}} type="primary" onClick={next}>{ step === 3 ? 'FINISH' : 'SUBMIT'}</Button>
     </PageHeaderWrapper>
   );
 }
