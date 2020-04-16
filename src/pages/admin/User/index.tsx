@@ -1,5 +1,5 @@
 import { DownOutlined, PlusOutlined } from '@ant-design/icons';
-import { Form } from '@ant-design/compatible';
+import { Form, Icon as LegacyIcon } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Button, Divider, Dropdown, Menu, message } from 'antd';
 import React, { useState, useRef } from 'react';
@@ -142,7 +142,7 @@ const TableList: React.FC<TableListProps> = () => {
         rowKey="key"
         toolBarRender={(action, { selectedRows }) => [
           <Authorized authority={["admin"]} noMatch={null}>
-            <Button icon={'plus'} type="primary" onClick={() => handleModalVisible(true)}>
+            <Button icon={<LegacyIcon type={'plus'} />} type="primary" onClick={() => handleModalVisible(true)}>
               新建
           </Button>,
           </Authorized>,

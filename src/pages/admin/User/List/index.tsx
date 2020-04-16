@@ -4,7 +4,7 @@ import { connect } from 'dva';
 import { Link } from 'umi';
 import { Table, Button, Pagination, Select, Dropdown, Menu, Modal, message, Input } from 'antd';
 import { Form } from '@ant-design/compatible';
-import { FormComponentProps } from 'antd/lib/form';
+import { FormComponentProps } from '@ant-design/compatible/lib/form';
 import { DownOutlined, UsergroupAddOutlined, UserDeleteOutlined, ExclamationCircleOutlined  } from '@ant-design/icons';
 
 import { ConnectProps, ConnectState } from '@/models/connect';

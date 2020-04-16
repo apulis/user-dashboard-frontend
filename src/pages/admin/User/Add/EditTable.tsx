@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Form, Input, Button } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Table, Input, Button } from 'antd';
 import { saveAs } from 'file-saver'
 
 import { ColumnProps } from 'antd/lib/table';
