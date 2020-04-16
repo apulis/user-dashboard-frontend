@@ -3,6 +3,8 @@ import { Form } from '@ant-design/compatible';
 import { Input, Button, Breadcrumb, Checkbox, Row, Col, Table } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { FormComponentProps } from '@ant-design/compatible/es/form';
+import { connect } from 'dva';
+import { ConnectProps } from '@/models/connect';
 
 interface IUserGroup {
   groupName: string;
@@ -15,7 +17,7 @@ const { TextArea } = Input;
 
 
 
-const Group: React.FC<FormComponentProps> = ({ form, dispatch }) => {
+const Group: React.FC<FormComponentProps & ConnectProps> = ({ form, dispatch }) => {
   const { getFieldDecorator, validateFields } = form;
   const [step, setStep] = useState<number>(1);
   const [submitData, setSubmitData] = useState<IUserGroup>();
@@ -92,24 +94,24 @@ const Group: React.FC<FormComponentProps> = ({ form, dispatch }) => {
     <PageHeaderWrapper>
       {
         step === 1 && <div className="step-1">
-          <FormItem label="用户组名" {...layout}>
+          <FormItem label="Group Name" {...layout}>
             {
               getFieldDecorator('groupName', {
-                initialValue: submitData?.groupName,
+                initialValue: submitData?.groupName || '',
                 rules: [
-                  { required: true },
-                  { max: 10 }
+                  { required: true, message: 'group name is required' },
+                  { max: 10, message: 'max length is 10' }
                 ],
               })(<Input />)
             }
           </FormItem>
-          <FormItem label="备注" {...layout}>
+          <FormItem label="Note" {...layout}>
             {
               getFieldDecorator('note', {
-                initialValue: submitData?.note,
+                initialValue: submitData?.note || '',
                 rules: [
-                  { required: true, },
-                  { max: 40 }
+                  { required: true, message: 'note is required'},
+                  { max: 40, message: 'max length is 40'}
                 ],
               })(<TextArea />)
             }
@@ -144,18 +146,18 @@ const Group: React.FC<FormComponentProps> = ({ form, dispatch }) => {
             <div>用户组名：{submitData?.groupName}</div>
             <div>备注: {submitData?.note}</div>
           </div>
-          <h1>角色 ({submitData?.role.length})</h1>
+          <h1>Role  ({submitData?.role.length})</h1> 
           <Table dataSource={tableDataSource} columns={columns} />
         </div>
       }
       {
         step >=  2 &&
-        <Button style={{marginRight: '15px'}} onClick={pre}>上一步</Button>
+        <Button style={{marginRight: '15px'}} onClick={pre}>PREVIOUS</Button>
       }
-      <Button type="primary" onClick={next}>{ step === 3 ? '完成' : '下一步'}</Button>
+      <Button style={{marginTop: '20px'}} type="primary" onClick={next}>{ step === 3 ? 'FINISH' : 'NEXT'}</Button>
     </PageHeaderWrapper>
   );
 }
 
 
-export default Form.create<FormComponentProps>()(Group);
+export default connect()(Form.create<FormComponentProps>()(Group));
