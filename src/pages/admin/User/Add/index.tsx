@@ -164,7 +164,7 @@ const Add: React.FC<FormComponentProps & ConnectProps> = props => {
         </Row>
         {
           userMessage.map((user, index) => (
-            <div key={user.createTime} style={{ marginTop: '10px' }}>
+            <div key={user.createTime}>
               <Row>
                 <Col span={4}>
                   <FormItem { ...formItemLayout }>

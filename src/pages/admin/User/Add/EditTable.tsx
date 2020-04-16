@@ -63,7 +63,7 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
               { required: true, message: 'UserName is required'},
               { validator: (...args) => {
                 const newArgs = args.slice(0, 4);
-                validateUniqueUserName(index, getFieldsValue().userMessage, ...newArgs);
+                validateUniqueUserName(index, dataSource, ...newArgs);
               }}
             ],
           })(<Input placeholder="UserName" />)}</FormItem>
@@ -156,6 +156,7 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
       }
       return val;
     })
+    onStatusChange && onStatusChange(newEditing.reduce((temp, val) => temp || val, newEditing[0]))
     onChange && onChange(newData);
     setEditing(newEditing);
     setEditingKey(-1);
