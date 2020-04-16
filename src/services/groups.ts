@@ -16,8 +16,11 @@ export async function removeGroup(name: string | string[]): Promise<any> {
   });
 }
 
-export async function getGroups() {
+export async function getGroups(payload: {search: string}) {
   return await request('/group/list', {
     method: 'GET',
+    params: {
+      search: payload.search
+    }
   })
 }

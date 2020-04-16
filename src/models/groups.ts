@@ -27,7 +27,7 @@ const UsersModel: GroupsModelType = {
   },
   effects: {
     * fetchGroups({ payload }, { call, put }) {
-      const res = yield call(getGroups);
+      const res = yield call(getGroups, payload);
       if (res.success) {
         yield put({
           type: 'saveGroups',
