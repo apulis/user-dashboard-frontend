@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Input, Checkbox, Tree, Button } from 'antd';
+import { Input, Checkbox, Tree, Button, message } from 'antd';
 import { Form } from '@ant-design/compatible'
+import { connect } from 'dva';
 
 import { FormComponentProps } from '@ant-design/compatible/es/form';
 import { AntTreeNodeSelectedEvent } from 'antd/lib/tree';
-import { connect } from 'dva';
 import { ConnectState } from '@/models/connect';
+
+import { createRole } from '@/services/roles';
 
 const FormItem = Form.Item;
 const { TreeNode } = Tree;
@@ -66,20 +68,41 @@ const Add: React.FC<FormComponentProps> = ({ form }) => {
     console.log('onSelect', info);
     setSelectedKeys(selectedKeys);
   };
-  const next = async () => {
-    const values = await validateFields();
-    console.log('values', values)
+  const next = () => {
+    validateFields(async (err, values) => {
+      if (err) return;
+      const result = await createRole({
+        name: values.name,
+        note: values.note,
+        permissions: selectedKeys
+      });
+      if (result.success) {
+        message.success('Success Create Role ' + values.name);
+      } else {
+        //
+      }
+    });
   }
   return (
     <>
-      <FormItem label="RoleName" {...layout} style={{width: '50%'}}>
+      <FormItem label="RoleName" {...layout} style={{width: '80%'}}>
         {
-          getFieldDecorator('roleName', {
+          getFieldDecorator('name', {
             rules: [
               { required: true },
               { max: 15 }
             ]
           })(<Input />)
+        }
+      </FormItem>
+      <FormItem label="Decription" {...layout} style={{width: '80%'}}>
+        {
+          getFieldDecorator('note', {
+            rules: [
+              { required: true },
+              { max: 15 }
+            ]
+          })(<Input.TextArea />)
         }
       </FormItem>
       <h1>Choose permissions:</h1>
