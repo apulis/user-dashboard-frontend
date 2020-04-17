@@ -160,6 +160,11 @@ export default {
                       name: 'add',
                       path: '/admin/role/add',
                       component: './admin/Roles/Add',
+                    },
+                    {
+                      name: 'list',
+                      path: '/admin/role/list',
+                      component: './admin/Roles/List',
                     }
                   ]
                 },

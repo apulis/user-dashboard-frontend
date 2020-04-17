@@ -12,3 +12,14 @@ export async function createRole(payload: ICreateRole) {
     data: payload
   })
 }
+
+export async function getUsers(payload: any) {
+  return await request('/role', {
+    method: 'GET',
+    params: {
+      pageNo: payload.pageNo,
+      pageSize: payload.pageSize,
+      search: payload.search
+    }
+  })
+}

@@ -19,7 +19,7 @@ export interface GroupsModelType {
   };
 }
 
-const UsersModel: GroupsModelType = {
+const GroupsModel: GroupsModelType = {
   namespace: 'groups',
   state: {
     list: [],
@@ -49,4 +49,4 @@ const UsersModel: GroupsModelType = {
     },
   },
 };
-export default UsersModel;
+export default GroupsModel;

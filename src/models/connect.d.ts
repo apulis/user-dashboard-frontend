@@ -7,6 +7,7 @@ import { UserModelState } from './user';
 import { UsersStateType } from './users'
 import { StateType } from './login';
 import { GroupsStateType } from './groups';
+import { RoleStateType } from './roles';
 
 export { GlobalModelState, SettingModelState, UserModelState };
 
@@ -29,7 +30,8 @@ export interface ConnectState {
   user: UserModelState;
   login: StateType;
   users: UsersStateType;
-  groups: GroupsStateType
+  groups: GroupsStateType;
+  roles: RoleStateType;
 }
 
 export interface Route extends MenuDataItem {
