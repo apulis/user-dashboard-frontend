@@ -9,12 +9,18 @@ import { DownOutlined, UsergroupAddOutlined, UserDeleteOutlined, ExclamationCirc
 
 import { ConnectProps, ConnectState } from '@/models/connect';
 import { ColumnProps } from 'antd/es/table';
-import { IUsers } from '@/models/users';
+import UsersModel, { IUsers } from '@/models/users';
 
 import { removeUsers } from '@/services/users';
 
 import styles from './index.less'
 import { ClickParam } from 'antd/lib/menu';
+
+interface IFetchUserParam {
+  pageNo: number;
+  pageSize?: number;
+  search?: string;
+}
 
 const { Option } = Select;
 const { confirm } = Modal;
@@ -23,15 +29,22 @@ const { Search } = Input;
 const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props) => {
   const { dispatch, users: { list, pageNo, pageSize, total } } = props;
   const [selectRows, setSelectRows] = useState<IUsers[]>([]);
-  useEffect(() => {
-    dispatch({
+  const [addGroupModalVisible, setAddGroupModalVisible] = useState<boolean>(false);
+  const [tableLoading, setTableLoading] = useState<boolean>(false);
+  const fetchUsers = async (params: IFetchUserParam) => {
+    setTableLoading(true);
+    await dispatch({
       type: 'users/fetchUsers',
       payload: {
-        pageNo: pageNo,
-        pageSize: pageSize,
-        search: '',
+        pageNo: params.pageNo,
+        pageSize: params.pageSize,
+        search: params.search,
       }
     })
+    setTableLoading(false);
+  }
+  useEffect(() => {
+    fetchUsers({pageNo, pageSize});
   }, [])
   const columns: ColumnProps<IUsers>[] = [
     {
@@ -63,14 +76,9 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       }
     },
   ];
+  
   const onPageNationChange: (page: number, pageSize?: number) => void = (pageNo, pageSize) => {
-    dispatch({
-      type: 'users/fetchUsers',
-      payload: {
-        pageNo,
-        pageSize,
-      }
-    })
+    fetchUsers({pageSize, pageNo})
   }
   const onPageSizeChange = (pageSize: number) => {
     dispatch({
@@ -79,12 +87,9 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
         pageSize,
       }
     })
-    dispatch({
-      type: 'users/fetchUsers',
-      payload: {
-        pageNo,
-        pageSize,
-      }
+    fetchUsers({
+      pageNo,
+      pageSize,
     })
   }
   const onRowSelection: (selectedRowKeys: string[] | number[], selectedRows: IUsers[]) => void = (selectedRowKeys, selectedRows) => {
@@ -95,7 +100,13 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
     //
   }
   const addToGroup = () => {
-
+    setAddGroupModalVisible(true);
+    dispatch({
+      type: 'groups/fetchGroups',
+      payload: {
+        search: '',
+      }
+    })
   }
   const removeUser = () => {
     
@@ -111,12 +122,9 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
           .then(res => {
             if (res.success) {
               message.success('Success Delete User: ' + userNames.join(', '))
-              dispatch({
-                type: 'users/fetchUsers',
-                payload: {
-                  pageNo,
-                  pageSize,
-                }
+              fetchUsers({
+                pageSize,
+                pageNo,
               })
             }
           })
@@ -128,13 +136,10 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
 
   }
   const onSearch = (s: string) => {
-    dispatch({
-      type: 'users/fetchUsers',
-      payload: {
-        search: s,
-        pageNo,
-        pageSize,
-      }
+    fetchUsers({
+      pageNo,
+      pageSize,
+      search: s,
     })
   }
   
@@ -180,6 +185,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
         dataSource={list}
         columns={columns}
         pagination={false}
+        loading={tableLoading}
       />
       <div className={styles.bottom}>
         <div style={{ height: '24px', marginRight: '10px' }}>Count per page:</div>
@@ -199,11 +205,14 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
           total={total}
         />
       </div>
-      <Modal>
-
-      </Modal>
+      {
+        addGroupModalVisible && <Modal>
+          test
+        </Modal>
+      }
+      
     </PageHeaderWrapper>
   )
 };
 
-export default connect(({ users }: ConnectState) => ({ users }))(Form.create<FormComponentProps & ConnectProps>()(List));
+export default connect(({ users, groups }: ConnectState) => ({ users, groups }))(Form.create<FormComponentProps & ConnectProps>()(List));
