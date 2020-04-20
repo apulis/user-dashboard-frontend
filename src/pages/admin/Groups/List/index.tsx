@@ -13,7 +13,7 @@ import { FormComponentProps } from 'antd/lib/form';
 import styles from './index.less';
 import { Link } from 'umi';
 
-interface IGroup {
+export interface IGroup {
   name: string;
   note: string;
   createTime: string;

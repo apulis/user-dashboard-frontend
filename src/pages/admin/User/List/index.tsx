@@ -6,15 +6,16 @@ import { Table, Button, Pagination, Select, Dropdown, Menu, Modal, message, Inpu
 import { Form } from '@ant-design/compatible';
 import { FormComponentProps } from '@ant-design/compatible/lib/form';
 import { DownOutlined, UsergroupAddOutlined, UserDeleteOutlined, ExclamationCircleOutlined  } from '@ant-design/icons';
+import { ColumnProps } from 'antd/es/table';
+import { ClickParam } from 'antd/lib/menu';
 
 import { ConnectProps, ConnectState } from '@/models/connect';
-import { ColumnProps } from 'antd/es/table';
-import UsersModel, { IUsers } from '@/models/users';
+import { IUsers } from '@/models/users';
 
-import { removeUsers } from '@/services/users';
+import { removeUsers, addUsersToGroups } from '@/services/users';
+import SelectGroup from './SelectGroup';
 
 import styles from './index.less'
-import { ClickParam } from 'antd/lib/menu';
 
 interface IFetchUserParam {
   pageNo: number;
@@ -27,8 +28,10 @@ const { confirm } = Modal;
 const { Search } = Input;
 
 const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props) => {
-  const { dispatch, users: { list, pageNo, pageSize, total } } = props;
+  const { dispatch, users: { list, pageNo, pageSize, total }, form, groups } = props;
+  const { list: groupList } = groups;
   const [selectRows, setSelectRows] = useState<IUsers[]>([]);
+  const [selectedGroupName, setSelectedGroupName] = useState<string[]>([]);
   const [addGroupModalVisible, setAddGroupModalVisible] = useState<boolean>(false);
   const [tableLoading, setTableLoading] = useState<boolean>(false);
   const [selectRowKeys, setSelectRowKeys] = useState<string[] | number[]>([]);
@@ -46,6 +49,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
   }
   useEffect(() => {
     fetchUsers({pageNo, pageSize});
+    fetchUserGroups();
   }, [])
   const columns: ColumnProps<IUsers>[] = [
     {
@@ -93,23 +97,26 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       pageSize,
     })
   }
+  const clearRowSelection = () => {
+    setSelectRowKeys([]);
+  }
   const onRowSelection: (selectedRowKeys: string[] | number[], selectedRows: IUsers[]) => void = (selectedRowKeys, selectedRows) => {
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
     setSelectRowKeys(selectedRowKeys)
     setSelectRows(selectedRows);
   }
   const handleMenuClick: ((param: ClickParam) => void) = (e) => {
     //
   }
-  const addToGroup = () => {
-    setAddGroupModalVisible(true);
-    console.log(123, addGroupModalVisible)
+  const fetchUserGroups = (search?: string) => {
     dispatch({
       type: 'groups/fetchGroups',
       payload: {
-        search: '',
+        search: search || '',
       }
     })
+  }
+  const addToGroup = () => {
+    setAddGroupModalVisible(true);
   }
   const removeUser = () => {
     
@@ -129,7 +136,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
                 pageSize,
                 pageNo,
               })
-              setSelectRowKeys([])
+              clearRowSelection();
             }
           })
       },
@@ -146,7 +153,9 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       search: s,
     })
   }
-  
+  const onSelectedGroupChange = (selectedGroupName: string[]) => {
+    setSelectedGroupName(selectedGroupName);
+  }
   const menu = (
     <Menu onClick={handleMenuClick}>
       <Menu.Item key="1" onClick={addToGroup}>
@@ -159,6 +168,17 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       </Menu.Item>
     </Menu>
   )
+  const onConfirmAddGroup = async () => {
+    const selectedUserNames = selectRows.map(val => val.userName);
+    const cancel = message.loading('Submitting')
+    const res = await addUsersToGroups(selectedUserNames, selectedGroupName);
+    cancel();
+    if (res.success === true) {
+      message.success('Success!')
+    } else {
+      message.error('erorrs')
+    }
+  }
   return (
     <PageHeaderWrapper>
       <div className={styles.top}>
@@ -213,9 +233,14 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       <Modal
         visible={addGroupModalVisible}
         onCancel={() => setAddGroupModalVisible(false)}
+        onOk={onConfirmAddGroup}
         title="Add to group"
+        width="65%"
       >
-        
+        <SelectGroup
+          groupList={groupList}
+          onChange={onSelectedGroupChange}
+        />
       </Modal>
       
     </PageHeaderWrapper>

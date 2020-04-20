@@ -24,3 +24,13 @@ export async function removeUsers(payload: string[]) {
     data: payload,
   })
 }
+
+export async function addUsersToGroups(userNames: string[], groupNames: string[]): Promise<any> {
+  return await request('/group-user', {
+    method: 'POST',
+    data: {
+      userNames,
+      groupNames,
+    }
+  })
+}

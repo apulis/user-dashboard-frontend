@@ -3,9 +3,16 @@ import { Effect } from 'dva';
 
 import { getGroups } from '@/services/groups';
 
+interface IGroupListItem {
+  name: string;
+  note: string;
+  createTime: string;
+}
 
 
 export interface groupsStateType {
+  list: IGroupListItem[],
+  search: string
 }
 
 export interface GroupsModelType {
