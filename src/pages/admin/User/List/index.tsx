@@ -31,6 +31,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
   const [selectRows, setSelectRows] = useState<IUsers[]>([]);
   const [addGroupModalVisible, setAddGroupModalVisible] = useState<boolean>(false);
   const [tableLoading, setTableLoading] = useState<boolean>(false);
+  const [selectRowKeys, setSelectRowKeys] = useState<string[] | number[]>([]);
   const fetchUsers = async (params: IFetchUserParam) => {
     setTableLoading(true);
     await dispatch({
@@ -94,6 +95,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
   }
   const onRowSelection: (selectedRowKeys: string[] | number[], selectedRows: IUsers[]) => void = (selectedRowKeys, selectedRows) => {
     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+    setSelectRowKeys(selectedRowKeys)
     setSelectRows(selectedRows);
   }
   const handleMenuClick: ((param: ClickParam) => void) = (e) => {
@@ -101,6 +103,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
   }
   const addToGroup = () => {
     setAddGroupModalVisible(true);
+    console.log(123, addGroupModalVisible)
     dispatch({
       type: 'groups/fetchGroups',
       payload: {
@@ -126,6 +129,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
                 pageSize,
                 pageNo,
               })
+              setSelectRowKeys([])
             }
           })
       },
@@ -181,6 +185,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
         rowSelection={{
           type: "checkbox",
           onChange: onRowSelection,
+          selectedRowKeys: selectRowKeys
         }}
         dataSource={list}
         columns={columns}
@@ -205,11 +210,13 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
           total={total}
         />
       </div>
-      {
-        addGroupModalVisible && <Modal>
-          test
-        </Modal>
-      }
+      <Modal
+        visible={addGroupModalVisible}
+        onCancel={() => setAddGroupModalVisible(false)}
+        title="Add to group"
+      >
+        
+      </Modal>
       
     </PageHeaderWrapper>
   )
