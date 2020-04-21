@@ -31,6 +31,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
   const { dispatch, users: { list, pageNo, pageSize, total }, form, groups } = props;
   const { list: groupList } = groups;
   const [selectRows, setSelectRows] = useState<IUsers[]>([]);
+  const [search, setSearch] = useState<string>('');
   const [selectedGroupName, setSelectedGroupName] = useState<string[]>([]);
   const [addGroupModalVisible, setAddGroupModalVisible] = useState<boolean>(false);
   const [tableLoading, setTableLoading] = useState<boolean>(false);
@@ -43,7 +44,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       payload: {
         pageNo: params.pageNo,
         pageSize: params.pageSize,
-        search: params.search,
+        search: params.search || search,
       }
     })
     setTableLoading(false);
@@ -128,7 +129,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
   ];
   
   const onPageNationChange: (page: number, pageSize?: number) => void = (pageNo, pageSize) => {
-    fetchUsers({pageSize, pageNo})
+    fetchUsers({ pageSize, pageNo })
   }
   const onPageSizeChange = (pageSize: number) => {
     dispatch({
@@ -182,6 +183,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
 
   }
   const onSearch = (s: string) => {
+    setSearch(s);
     fetchUsers({
       pageNo,
       pageSize,

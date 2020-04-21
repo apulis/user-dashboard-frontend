@@ -45,10 +45,6 @@ const UsersModel: UsersModelType = {
   },
   effects: {
     * fetchUsers({ payload }, { call, put, select }) {
-      const state = yield select();
-      if (!payload.search) {
-        payload.search = state.search;
-      }
       const res = yield call(fetchUsers, payload);
       if (res.success === true) {
         const { list } = res;
