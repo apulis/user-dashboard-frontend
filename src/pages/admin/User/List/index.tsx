@@ -176,7 +176,11 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
     if (res.success === true) {
       message.success('Success!')
     } else {
-      message.error('erorrs')
+      if (res.duplicate && res.duplicate.length > 0) {
+        res.duplicate.forEach((dpc: any) => {
+          message.error(`user ${dpc.userName} is already in group ${dpc.groupName}, please cancel selected`);
+        })
+      }
     }
   }
   return (
