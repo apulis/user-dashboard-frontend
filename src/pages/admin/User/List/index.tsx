@@ -35,6 +35,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
   const [addGroupModalVisible, setAddGroupModalVisible] = useState<boolean>(false);
   const [tableLoading, setTableLoading] = useState<boolean>(false);
   const [selectRowKeys, setSelectRowKeys] = useState<string[] | number[]>([]);
+  const [currentHandleUserName, setCurrentHandleUserName] = useState<string>('');
   const fetchUsers = async (params: IFetchUserParam) => {
     setTableLoading(true);
     await dispatch({
@@ -51,6 +52,26 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
     fetchUsers({pageNo, pageSize});
     fetchUserGroups();
   }, [])
+  const starRemoveUsers = (currentHandleUserName?: string) => {
+    let userNames: string[];
+    if (currentHandleUserName) {
+      userNames = [currentHandleUserName];
+    } else {
+      userNames = selectRows.map((val: IUsers) => val.userName);
+    }
+    removeUsers(userNames)
+      .then(res => {
+        if (res.success) {
+          message.success('Success Delete User: ' + userNames.join(', '))
+          fetchUsers({
+            pageSize,
+            pageNo,
+          })
+          clearRowSelection();
+          setCurrentHandleUserName('');
+        }
+      })
+  }
   const columns: ColumnProps<IUsers>[] = [
     {
       title: 'UserName',
@@ -66,17 +87,41 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       title: 'Phone',
       dataIndex: 'phone',
       key: 'phone',
+      render(text) {
+        return (
+          text ? text : '-'
+        )
+      }
     },
     {
       title: 'Email',
       dataIndex: 'email',
       key: 'email',
+      render(text) {
+        return (
+          text ? text : '-'
+        )
+      }
     },
     {
       title: 'Action',
-      render(): React.ReactNode {
+      width: '250px',
+      align: 'center',
+      render(_text, item): React.ReactNode {
         return (
-          <span>123</span>
+          <div style={{display: 'flex', justifyContent: 'space-between'}}>
+            <a>Specify Role</a>
+            <Dropdown
+              overlay={<Menu>
+              <Menu.Item onClick={() => {addToGroup();setCurrentHandleUserName(item.userName)}} key="1">Add To User Group</Menu.Item>
+              <Menu.Item onClick={() => {setCurrentHandleUserName(item.userName);starRemoveUsers(item.userName)}} key="2">Delete</Menu.Item>
+            </Menu>}
+            >
+            <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                More Operator <DownOutlined />
+              </a>
+            </Dropdown>
+          </div>
         )
       }
     },
@@ -127,21 +172,11 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       okText: 'OK',
       cancelText: 'CANCEL',
       onOk() {
-        const userNames = selectRows.map((val: IUsers) => val.userName);
-        removeUsers(userNames)
-          .then(res => {
-            if (res.success) {
-              message.success('Success Delete User: ' + userNames.join(', '))
-              fetchUsers({
-                pageSize,
-                pageNo,
-              })
-              clearRowSelection();
-            }
-          })
+        starRemoveUsers();
       },
       onCancel() {
         //
+        setCurrentHandleUserName('')
       },
     })
 
@@ -169,12 +204,18 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
     </Menu>
   )
   const onConfirmAddGroup = async () => {
-    const selectedUserNames = selectRows.map(val => val.userName);
+    let selectedUserNames: string[];
+    if (currentHandleUserName) {
+      selectedUserNames = [currentHandleUserName]
+    } else {
+      selectedUserNames = selectRows.map(val => val.userName);
+    }
     const cancel = message.loading('Submitting')
     const res = await addUsersToGroups(selectedUserNames, selectedGroupName);
     cancel();
     if (res.success === true) {
       message.success('Success!')
+      setAddGroupModalVisible(false);
     } else {
       if (res.duplicate && res.duplicate.length > 0) {
         res.duplicate.forEach((dpc: any) => {
