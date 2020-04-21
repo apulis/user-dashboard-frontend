@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Input } from 'antd';
+import { Table, Button, Input, Modal, message } from 'antd';
 import { Form } from '@ant-design/compatible';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-
-
-
-import { ColumnProps } from 'antd/es/table';
 import { connect } from 'dva';
-import { ConnectProps, ConnectState } from '@/models/connect';
+import moment from 'moment';
+import { Link } from 'umi';
 import { FormComponentProps } from 'antd/lib/form';
 
+import { ColumnProps } from 'antd/es/table';
+
+import { ConnectProps, ConnectState } from '@/models/connect';
+import { removeGroup } from '@/services/groups'
+
+import { addUsersToGroups } from '@/services/users';
+
+import SelectUser from './SelectUser';
 import styles from './index.less';
-import { Link } from 'umi';
 
 export interface IGroup {
   name: string;
@@ -22,7 +26,10 @@ export interface IGroup {
 const { Search } = Input;
 
 const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, groups }) => {
-  const [selectedRows, setSelectedRows] = useState<IGroup[]>([])
+  const [selectedRows, setSelectedRows] = useState<IGroup[]>([]);
+  const [addGroupModalVisible, setAddGroupModalVisible] = useState<boolean>(false);
+  const [currentGroupName, setCurrentGroupName] = useState<string>('');
+  const [selectedUserNames, setSelectedUserNames] = useState<string[]>([]);
   const { list } = groups;
   const fetchUsers = (search?: string) => {
     dispatch({
@@ -35,11 +42,20 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, groups }) => {
   useEffect(() => {
     fetchUsers()
   }, []);
-  const addUserFormGroup = () => {
-    //
-  }
-  const removeGroup = () => {
-    //
+  const removeGroups = (groupName: string[]) => {
+    Modal.confirm({
+      title: `Will delete group: ${groupName.join(', ')}`,
+      onCancel() {
+
+      },
+      async onOk() {
+        const res = await removeGroup(groupName);
+        if (res.success) {
+          message.success(`Success delete group: ${groupName.join(', ')}`);
+          fetchUsers();
+        }
+      }
+    })
   }
   const columns: ColumnProps<IGroup>[] = [
     {
@@ -56,16 +72,26 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, groups }) => {
       title: 'Create Time',
       key: 'createTime',
       dataIndex: 'createTime',
+      render(_text, item) {
+        if (!item.createTime) {
+          return (
+            <div>-</div>
+          )
+        }
+        return (
+          <div>{moment(Number(item.createTime)).format('YYYY-MM-DD')}</div>
+        )
+      }
     },
     {
       title: 'Actions',
-      render(): React.ReactNode {
+      render(_text, item): React.ReactNode {
         return (
           <div>
-            <a onClick={addUserFormGroup} style={{marginRight: '18px', marginLeft: '-20px'}}>
+            <a onClick={() => addUserToCurrentGroups(item.name)} style={{marginRight: '18px', marginLeft: '-20px'}}>
               Add Users
             </a>
-            <a onClick={removeGroup}>
+            <a onClick={() => removeGroups([item.name])}>
               Delete
             </a>
           </div>
@@ -80,8 +106,37 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, groups }) => {
   const onRowSelection: (selectedRowKeys: string[] | number[], selectedRows: IGroup[]) => void = (selectedRowKeys, selectedRows) => {
     setSelectedRows(selectedRows);
   }
-  const addUserToManyGroups = () => {
-    //
+  const addUserToCurrentGroups = (currentGroupName?: string) => {
+    setCurrentGroupName(currentGroupName || '');
+    setAddGroupModalVisible(true);
+  }
+  const cancelAddGroup = () => {
+    setAddGroupModalVisible(false);
+    setCurrentGroupName('');
+  }
+  const confirmAddGroup = async () => {
+    let res;
+    console.log(selectedRows, currentGroupName)
+    if (currentGroupName) {
+      res = await addUsersToGroups(selectedUserNames, [currentGroupName]);
+      setCurrentGroupName('');
+    } else {
+      res = await addUsersToGroups(selectedUserNames, selectedRows.map(r => r.name));
+      setCurrentGroupName('');
+    }
+    if (res.success === true) {
+      message.success('Success!')
+      setAddGroupModalVisible(false);
+    } else {
+      if (res.duplicate && res.duplicate.length > 0) {
+        res.duplicate.forEach((dpc: any) => {
+          message.error(`user ${dpc.userName} is already in group ${dpc.groupName}, please cancel selected`);
+        })
+      }
+    }
+  }
+  const onSelectUserNames = (userNames: string[]) => {
+    setSelectedUserNames(userNames);
   }
   return (
     <PageHeaderWrapper>
@@ -90,7 +145,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, groups }) => {
           <Link to="/admin/group/add">
             <Button type="primary">Add Group</Button>
           </Link>
-          <Button onClick={addUserToManyGroups} disabled={selectedRows.length === 0} style={{marginLeft: '20px'}}>Add Users</Button>
+          <Button onClick={() => addUserToCurrentGroups()} disabled={selectedRows.length === 0} style={{marginLeft: '20px'}}>Add Users</Button>
         </div>
         <Search
           placeholder="input search text"
@@ -105,6 +160,16 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, groups }) => {
           type: "checkbox",
           onChange: onRowSelection,
         }} />
+        <Modal
+          visible={addGroupModalVisible}
+          onCancel={cancelAddGroup}
+          onOk={() => confirmAddGroup()}
+          width="65%"
+        >
+          <SelectUser
+            onChange={(userNames) => {onSelectUserNames(userNames)}}
+          />
+        </Modal>
     </PageHeaderWrapper>
   )
 }

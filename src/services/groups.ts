@@ -12,7 +12,9 @@ export async function addGroup(payload: IAddUserGroup): Promise<any> {
 export async function removeGroup(name: string | string[]): Promise<any> {
   return await request('/group ', {
     method: 'DELETE',
-    data: name
+    data: {
+      groupNames: name
+    }
   });
 }
 

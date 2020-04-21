@@ -59,7 +59,6 @@ const UsersModel: UsersModelType = {
           },
         });
       }
-      console.log(res)
     },
     * createUsers({ payload }, { call, put }) {
       //
