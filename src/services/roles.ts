@@ -17,7 +17,7 @@ export async function getRoles(payload: any) {
   return await request('/role', {
     method: 'GET',
     params: {
-      pageNo: payload.pageNo,
+      pageNo: payload.pageNo || 1,
       pageSize: payload.pageSize,
       search: payload.search
     }

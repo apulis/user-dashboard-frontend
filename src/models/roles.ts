@@ -35,7 +35,7 @@ const RolesModel: RolesModelType = {
     total: 0,
   },
   effects: {
-    * fetchRoles({ payload }, { call, put }) {
+    * fetchRoles({ payload = {} }, { call, put }) {
       const res = yield call(getRoles, payload);
       if (res.success) {
         yield put({

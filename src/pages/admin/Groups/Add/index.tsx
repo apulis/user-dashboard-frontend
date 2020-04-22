@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form } from '@ant-design/compatible';
 import { Input, Button, Breadcrumb, Checkbox, Row, Col, Table } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { FormComponentProps } from '@ant-design/compatible/es/form';
 import { connect } from 'dva';
 import router from 'umi/router';
-import { ConnectProps } from '@/models/connect';
+import { ConnectProps, ConnectState } from '@/models/connect';
 import { addGroup } from '@/services/groups';
+import { ColumnProps } from 'antd/lib/table';
+import { IRoleListItem } from '@/models/roles';
 
 export interface IAddUserGroup {
   name: string;
@@ -19,10 +21,30 @@ const { TextArea } = Input;
 
 
 
-const Group: React.FC<FormComponentProps & ConnectProps> = ({ form, dispatch }) => {
+const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form, dispatch, roles }) => {
   const { getFieldDecorator, validateFields } = form;
   const [step, setStep] = useState<number>(1);
   const [submitData, setSubmitData] = useState<IAddUserGroup>();
+  const fetchRoles = (pageSize?: number) => {
+    dispatch({
+      type: 'roles/fetchRoles',
+      payload: {
+        pageNo: 1,
+        pageSize: pageSize || 20,
+      }
+    })
+  }
+  useEffect(() => {
+    fetchRoles();
+  }, [])
+
+  const { total: roleTotal } = roles;
+  const rolesList: IRoleListItem[] = roles.list;
+  useEffect(() => {
+    if (roleTotal > 20) {
+      fetchRoles(roleTotal)
+    }
+  }, [roleTotal])
   const layout = {
     labelCol: { span: 24 },
     wrapperCol: { span: 12 },
@@ -59,7 +81,7 @@ const Group: React.FC<FormComponentProps & ConnectProps> = ({ form, dispatch }) 
       role: newRoleList,
     } as IAddUserGroup)
   }
-  const columns = [
+  const columns: ColumnProps<IRoleListItem>[] = [
     {
       title: 'Role',
       dataIndex: 'role',
@@ -69,12 +91,17 @@ const Group: React.FC<FormComponentProps & ConnectProps> = ({ form, dispatch }) 
       title: 'RoleDescription',
       dataIndex: 'roleDesc',
       key: 'roleDesc',
+      render(_text, item) {
+        return (
+          <div>{item.note}</div>
+        )
+      }
     },
     {
       title: 'RoleType',
       dataIndex: 'roleType',
-      render() {
-        return <span>Preset</span>
+      render(_text, item) {
+        return <span>{item.isPreset ? 'Preset Role' : 'Custom Role'}</span>
       }
     },
     {
@@ -89,11 +116,14 @@ const Group: React.FC<FormComponentProps & ConnectProps> = ({ form, dispatch }) 
     setStep(step - 1);
   }
   const tableDataSource = (submitData?.role || []).map(val => {
+    const item = rolesList.find(v => v.name === val);
     return {
       role: val,
-      roleDesc: 'test',
+      isPreset: item ? item.isPreset : '',
+      note: item ? item.note : '',
     };
   });
+  console.log(tableDataSource)
   return (
     <PageHeaderWrapper>
       {
@@ -132,12 +162,13 @@ const Group: React.FC<FormComponentProps & ConnectProps> = ({ form, dispatch }) 
               ]
             })(<Checkbox.Group style={{ width: '100%'}}>
               <Row>
-                <Col span={24}>
-                  <Checkbox value="User">User</Checkbox>
-                </Col>
-                <Col span={24}>
-                  <Checkbox value="Admin">Admin</Checkbox>
-                </Col>
+                {
+                  rolesList.map(r => (
+                    <Col span={8}>
+                      <Checkbox style={{marginTop: '4px', marginBottom: '4px'}} value={r.name}>{r.name}</Checkbox>
+                    </Col>
+                  ))
+                }
               </Row>
             </Checkbox.Group>)
           }
@@ -164,4 +195,4 @@ const Group: React.FC<FormComponentProps & ConnectProps> = ({ form, dispatch }) 
 }
 
 
-export default connect()(Form.create<FormComponentProps>()(Group));
+export default connect(({ roles }: ConnectState) => ({roles}))(Form.create<FormComponentProps>()(Group));
