@@ -14,7 +14,7 @@ import { removeGroup } from '@/services/groups'
 
 import { addUsersToGroups } from '@/services/users';
 
-import SelectUser from './SelectUser';
+import SelectUser from '../../../../components/Relate/SelectUser';
 import styles from './index.less';
 
 export interface IGroup {

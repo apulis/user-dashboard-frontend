@@ -13,7 +13,7 @@ import { ConnectProps, ConnectState } from '@/models/connect';
 import { IUsers } from '@/models/users';
 
 import { removeUsers, addUsersToGroups } from '@/services/users';
-import SelectGroup from './SelectGroup';
+import SelectGroup from '../../../../components/Relate/SelectGroup';
 
 import styles from './index.less'
 

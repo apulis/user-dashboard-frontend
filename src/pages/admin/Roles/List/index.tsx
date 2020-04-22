@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Table, Input, Pagination, message } from 'antd';
+import { Button, Table, Input, Pagination, message, Modal } from 'antd';
 import { Form } from '@ant-design/compatible';
 import { connect } from 'dva';
 
@@ -12,6 +12,7 @@ import { ColumnProps } from 'antd/es/table';
 
 import { removeRoles } from '@/services/roles';
 import { IRoleListItem } from '@/models/roles';
+
 
 
 const { Search } = Input;
@@ -72,7 +73,6 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles }) => {
     }
   }
   const fetchUsers = (s?: string, page?: number) => {
-    console.log('s', s)
     dispatch({
       type: 'roles/fetchRoles',
       payload: {
