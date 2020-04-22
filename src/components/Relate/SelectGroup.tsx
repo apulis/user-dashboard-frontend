@@ -1,7 +1,7 @@
-import React, { useState, Suspense } from 'react'
+import React, { useState } from 'react'
 import { connect } from 'dva';
 import { Form } from '@ant-design/compatible';
-import { Modal, Checkbox, Button, Input, Row, Col } from 'antd';
+import { Checkbox, Input, Row, Col } from 'antd';
 
 import { FormComponentProps } from '@ant-design/compatible/lib/form';
 
@@ -14,20 +14,28 @@ import { CheckboxValueType } from 'antd/lib/checkbox/Group';
 
 interface ISearchGroupProps {
   groupList: IGroup[];
-  onChange?: (selectedGroupName: string[]) => void;
+  onChange?: (selectedGroupId: number[]) => void;
 }
 
 const { Search } = Input;
 
 const SelectGroup: React.FC<ISearchGroupProps & FormComponentProps & ConnectProps> = ({ groupList, onChange }) => {
   
-  const [selectedGroup, setSelectedGroup] = useState<string[]>([]);
+  const [selectedGroup, setSelectedGroup] = useState<IGroup[]>([]);
 
   const [currentGroupList, setCurrentGroupList] = useState<IGroup[]>(groupList); 
 
   const onCheckboxSelect = (checkedValue: CheckboxValueType[]) => {
-    setSelectedGroup(checkedValue as string[]);
-    onChange && onChange(checkedValue as string[]);
+    const selectGroup: IGroup[] = [];
+    checkedValue.forEach(c => {
+      groupList.forEach(g => {
+        if (g.id === c) {
+          selectGroup.push(g);
+        }
+      })
+    })
+    setSelectedGroup(selectGroup);
+    onChange && onChange(checkedValue as number[]);
   }
 
   const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,7 +64,7 @@ const SelectGroup: React.FC<ISearchGroupProps & FormComponentProps & ConnectProp
               {
                 currentGroupList.map((g) => (
                   <Col span={24}>
-                    <Checkbox style={{marginTop: '5px'}} key={g.name} value={g.name}>{g.name}</Checkbox>
+                    <Checkbox style={{marginTop: '5px'}} key={g.id} value={g.id}>{g.name}</Checkbox>
                   </Col>
                 ))
               }
@@ -73,7 +81,7 @@ const SelectGroup: React.FC<ISearchGroupProps & FormComponentProps & ConnectProp
             </div>
             {
               selectedGroup.map((g) => (
-              <div>{g}</div>
+              <div>{g.name}</div>
               ))
             }
           </div>

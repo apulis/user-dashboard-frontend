@@ -33,22 +33,22 @@ export async function removeRoles(roles: number[]) {
   })
 }
 
-export async function addRoleToGroups(roleNames: string[], groupNames: string[]) {
+export async function addRoleToGroups(roleIds: number[], groupIds: number[]) {
   return await request('/group-role', {
     method: 'POST',
     data: {
-      roleNames,
-      groupNames,
+      roleIds,
+      groupIds,
     }
   })
 }
 
-export async function addRoleToUsers(userNames: string[], roleNames: string[]) {
+export async function addRoleToUsers(userIds: number[], roleIds: number[]) {
   return await request('/user-role', {
     method: 'POST',
     data: {
-      userNames,
-      roleNames,
+      userIds,
+      roleIds,
     }
   })
 } 

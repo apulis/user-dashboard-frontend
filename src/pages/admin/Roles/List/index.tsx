@@ -28,17 +28,17 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
   const [selectRows, setSelectRows] = useState<IRoleListItem[]>([]);
   const [search, setSearch] = useState<string>('');
   const [pageNo, setPageNo] = useState<number>(1);
-  const [currentHandleRoleName, setCurrentHandleRoleName] = useState<string>('');
+  const [currentHandleRoleId, setCurrentHandleRoleId] = useState<number>(0);
   const [addGroupModalVisible, setAddGroupModalVisible] = useState<boolean>(false);
   const [addUserModalVisible, setAddUserModalVisible] = useState<boolean>(false);
-  const [selectedUserName, setSelectedUserName] = useState<string[]>([]);
-  const [selectedGroupName, setSelectedGroupName] = useState<string[]>([]);
-  const addRoleToUser = (roleName: string) => {
-    setCurrentHandleRoleName(roleName);
+  const [selectedUserId, setSelectedUserId] = useState<number[]>([]);
+  const [selectedGroupId, setSelectedGroupId] = useState<number[]>([]);
+  const addRoleToUser = (roleName: number) => {
+    setCurrentHandleRoleId(roleName);
     setAddUserModalVisible(true);
   }
-  const addRoleToGroup = (roleName: string) => {
-    setCurrentHandleRoleName(roleName);
+  const addRoleToGroup = (roleName: number) => {
+    setCurrentHandleRoleId(roleName);
     setAddGroupModalVisible(true);
   }
   const { list: groupList } = groups;
@@ -71,8 +71,8 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
       render(_text, item) {
         return (
           <div style={{display: 'flex', justifyContent: 'space-around'}}>
-            <a onClick={() => addRoleToUser(item.name)}>Related To User</a>
-            <a onClick={() => addRoleToGroup(item.name)}>Related To Group</a>
+            <a onClick={() => addRoleToUser(item.id)}>Related To User</a>
+            <a onClick={() => addRoleToGroup(item.id)}>Related To Group</a>
             {item.isPreset === 0 && <a onClick={() => removeCurrentSelectedRole(item.id)}>Delete</a>}
           </div>
         )
@@ -81,11 +81,11 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
   ]
   const { list, total } = roles;
   const cancelRelate = () => {
-    setCurrentHandleRoleName('');
+    setCurrentHandleRoleId(0);
     setAddUserModalVisible(false);
     setAddGroupModalVisible(false);
-    setSelectedGroupName([]);
-    setSelectedUserName([]);
+    setSelectedGroupId([]);
+    setSelectedUserId([]);
   }
   const removeCurrentSelectedRole = async (currentRole?: number) => {
     let res;
@@ -125,7 +125,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
     fetchUsers(search);
   }
   const confirmRelateGroup = async () => {
-    const res = await addRoleToGroups([currentHandleRoleName], selectedGroupName);
+    const res = await addRoleToGroups([currentHandleRoleId], selectedGroupId);
     if (res.success === true) {
       message.success('Success');
       setAddGroupModalVisible(false);
@@ -136,7 +136,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
     }
   }
   const confirmRelateUser = async () => {
-    const res = await addRoleToUsers([currentHandleRoleName], selectedUserName);
+    const res = await addRoleToUsers(selectedUserId, [currentHandleRoleId]);
     if (res.success === true) {
       message.success('Success');
       setAddUserModalVisible(false);
@@ -189,7 +189,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
       >
         <SelectGroup
           groupList={groupList}
-          onChange={(selectedGroupName) => setSelectedGroupName(selectedGroupName)}
+          onChange={(selectedGroupId) => setSelectedGroupId(selectedGroupId)}
         />
       </Modal>
       }
@@ -200,7 +200,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
         onOk={confirmRelateUser}
       >
         <SelectUser
-          onChange={(selectedUserName) => setSelectedUserName(selectedUserName)}
+          onChange={(selectedUserId) => setSelectedUserId(selectedUserId)}
         />
       </Modal> 
       }
