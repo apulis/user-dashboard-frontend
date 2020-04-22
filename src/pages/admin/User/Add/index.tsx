@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import { Dispatch } from 'redux';
+import React, { useState, useEffect } from 'react';
 import { Form } from '@ant-design/compatible';
 import { Input, Button, Col, Row, message, Breadcrumb, Checkbox } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { FormComponentProps } from '@ant-design/compatible/es/form';
 import { connect } from 'dva';
 import router from 'umi/router';
-import { ConnectProps } from '@/models/connect';
+import { ConnectProps, ConnectState } from '@/models/connect';
 import { validateUniqueUserName, emailReg } from '@/utils/validates';
 
 import EditTable from './EditTable';
 import styles from './index.less';
 import { createUsers } from '@/services/users';
+import { IRoleListItem } from '@/models/roles';
 
 const FormItem = Form.Item;
 
@@ -47,8 +47,8 @@ const userRoleOptions = [
 
 
 
-const Add: React.FC<FormComponentProps & ConnectProps> = props => {
-  const { form: { getFieldDecorator, validateFields, getFieldsValue, setFieldsValue } } = props;
+const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props => {
+  const { form: { getFieldDecorator, validateFields, getFieldsValue, setFieldsValue }, roles, dispatch } = props;
   const [userMessage, setUserMessage] = useState<IUserMessage[]>([newUser()]);
   const [selectedUserRole, setSelectedUserRole] = useState<string[]>([]);
   const [step, setStep] = useState<number>(1);
@@ -63,6 +63,27 @@ const Add: React.FC<FormComponentProps & ConnectProps> = props => {
       sm: { span: 21 },
     },
   };
+  const fetchRoles = (pageSize?: number) => {
+    dispatch({
+      type: 'roles/fetchRoles',
+      payload: {
+        pageNo: 1,
+        pageSize: pageSize || 20,
+      }
+    })
+  }
+  useEffect(() => {
+    fetchRoles();
+  }, [])
+
+  const { total: roleTotal } = roles;
+  const rolesList: IRoleListItem[] = roles.list;
+  useEffect(() => {
+    if (roleTotal > 20) {
+      fetchRoles(roleTotal)
+    }
+  }, [roleTotal])
+
 
   const submitUser = async (userMessage: IUserMessage[], userRole: string[]) => {
     const hide = message.loading('Submiting...');
@@ -76,8 +97,11 @@ const Add: React.FC<FormComponentProps & ConnectProps> = props => {
       router.push('/admin/user/list');
       return;
     } else if (res.success === false) {
-      const { conflictedUserName } = res;
-      // TODO: show conflictedUserName
+      if (res.conflictedUserName && res.conflictedUserName.length > 0) {
+        res.duplicate.forEach((dpc: any) => {
+          message.error(`user ${dpc.userName} is already existed, please cancel selected`);
+        })
+      }
     }
     hide();
   }
@@ -252,4 +276,4 @@ const Add: React.FC<FormComponentProps & ConnectProps> = props => {
   );
 };
 
-export default connect()(Form.create<FormComponentProps & ConnectProps>()(Add))
+export default connect(({ users, groups }: ConnectState) => ({ users, groups }))(Form.create<FormComponentProps & ConnectProps>()(Add))

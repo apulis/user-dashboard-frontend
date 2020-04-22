@@ -29,8 +29,8 @@ const { Search } = Input;
 const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, groups }) => {
   const [selectedRows, setSelectedRows] = useState<IGroup[]>([]);
   const [addGroupModalVisible, setAddGroupModalVisible] = useState<boolean>(false);
-  const [currentGroupName, setCurrentGroupName] = useState<string>('');
-  const [selectedUserNames, setSelectedUserNames] = useState<string[]>([]);
+  const [currentGroupId, setCurrentGroupId] = useState<number>(0);
+  const [selectedUserIds, setSelectedUserIds] = useState<number[]>([]);
   const { list } = groups;
   const fetchUsers = (search?: string) => {
     dispatch({
@@ -89,7 +89,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, groups }) => {
       render(_text, item): React.ReactNode {
         return (
           <div>
-            <a onClick={() => addUserToCurrentGroups(item.name)} style={{marginRight: '18px', marginLeft: '-20px'}}>
+            <a onClick={() => addUserToCurrentGroups(item.id)} style={{marginRight: '18px', marginLeft: '-20px'}}>
               Add Users
             </a>
             <a onClick={() => removeGroups([item.name], [item.id])}>
@@ -107,23 +107,23 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, groups }) => {
   const onRowSelection: (selectedRowKeys: string[] | number[], selectedRows: IGroup[]) => void = (selectedRowKeys, selectedRows) => {
     setSelectedRows(selectedRows);
   }
-  const addUserToCurrentGroups = (currentGroupName?: string) => {
-    setCurrentGroupName(currentGroupName || '');
+  const addUserToCurrentGroups = (currentGroupId?: number) => {
+    setCurrentGroupId(currentGroupId || 0);
     setAddGroupModalVisible(true);
   }
   const cancelAddGroup = () => {
     setAddGroupModalVisible(false);
-    setCurrentGroupName('');
+    setCurrentGroupId(0);
   }
   const confirmAddGroup = async () => {
     let res;
-    if (currentGroupName) {
-      res = await addUsersToGroups(selectedUserNames, [currentGroupName]);
+    if (currentGroupId) {
+      res = await addUsersToGroups(selectedUserIds, [currentGroupId]);
     } else {
-      res = await addUsersToGroups(selectedUserNames, selectedRows.map(r => r.name));
+      res = await addUsersToGroups(selectedUserIds, selectedRows.map(r => r.id));
     }
     if (res.success === true) {
-      setCurrentGroupName('');
+      setCurrentGroupId(0);
       message.success('Success!')
       setAddGroupModalVisible(false);
     } else {
@@ -134,8 +134,8 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, groups }) => {
       }
     }
   }
-  const onSelectUserNames = (userNames: string[]) => {
-    setSelectedUserNames(userNames);
+  const onSelectUserIds = (userNames: number[]) => {
+    setSelectedUserIds(userNames);
   }
   return (
     <PageHeaderWrapper>
@@ -166,7 +166,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, groups }) => {
           width="65%"
         >
           <SelectUser
-            onChange={(userNames) => {onSelectUserNames(userNames)}}
+            onChange={(userIds) => {onSelectUserIds(userIds)}}
           />
         </Modal>
     </PageHeaderWrapper>

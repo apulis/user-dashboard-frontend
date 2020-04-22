@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'dva';
 import { Form } from '@ant-design/compatible';
-import { Modal, Checkbox, Button, Input, Row, Col } from 'antd';
+import { Checkbox, Input, Row, Col } from 'antd';
 
 import { FormComponentProps } from '@ant-design/compatible/lib/form';
 
@@ -12,7 +12,7 @@ import { CheckboxValueType } from 'antd/lib/checkbox/Group';
 import { IUsers } from '@/models/users';
 
 interface ISearchUserProps {
-  onChange?: (selectedGroupName: string[]) => void;
+  onChange?: (selectedGroupName: number[]) => void;
 }
 
 const { Search } = Input;
@@ -30,11 +30,20 @@ const SelectGroup: React.FC<ISearchUserProps & FormComponentProps & ConnectProps
   useEffect(() => {
     fetchUsers();
   }, [])
-  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  const [selectedUsers, setSelectedUsers] = useState<IUsers[]>([]);
 
   const onCheckboxSelect = (checkedValue: CheckboxValueType[]) => {
-    setSelectedUsers(checkedValue as string[]);
-    onChange && onChange(checkedValue as string[]);
+    console.log('checkedValue', checkedValue)
+    const selectedUsers: IUsers[] = []
+    checkedValue.forEach(id => {
+      userList.forEach(u => {
+        if (u.id === id) {
+          selectedUsers.push(u)
+        }
+      })
+    })
+    setSelectedUsers(selectedUsers);
+    onChange && onChange(checkedValue as number[]);
   }
 
   const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,7 +63,7 @@ const SelectGroup: React.FC<ISearchUserProps & FormComponentProps & ConnectProps
               {
                 userList.map((u) => (
                   <Col span={24}>
-                    <Checkbox style={{marginTop: '5px'}} key={u.userName} value={u.userName}>{u.userName}</Checkbox>
+                    <Checkbox style={{marginTop: '5px'}} key={u.id} value={u.id}>{u.userName}</Checkbox>
                   </Col>
                 ))
               }
@@ -71,7 +80,7 @@ const SelectGroup: React.FC<ISearchUserProps & FormComponentProps & ConnectProps
             </div>
             {
               selectedUsers.map(u => (
-                <div>{u}</div>
+                <div>{u.userName}</div>
               ))
             }
           </div>

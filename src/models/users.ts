@@ -9,6 +9,7 @@ export interface IUsers {
   nickName: string;
   phone?: string;
   email?: string;
+  id: number;
 }
 
 export interface UsersStateType {
