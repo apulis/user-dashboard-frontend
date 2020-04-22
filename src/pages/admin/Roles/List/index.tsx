@@ -25,18 +25,22 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
   const [selectRows, setSelectRows] = useState<IRoleListItem[]>([]);
   const [search, setSearch] = useState<string>('');
   const [pageNo, setPageNo] = useState<number>(1);
+  const [currentHandleRoleName, setCurrentHandleRoleName] = useState<string>('');
   const [addGroupModalVisible, setAddGroupModalVisible] = useState<boolean>(false);
   const [addUserModalVisible, setAddUserModalVisible] = useState<boolean>(false);
-  const addRoleToUser = () => {
+  const [selectedUserName, setSelectedUserName] = useState<string[]>([]);
+  const [selectedGroupName, setSelectedGroupName] = useState<string[]>([]);
+  const addRoleToUser = (roleName: string) => {
+    setCurrentHandleRoleName(roleName);
     setAddUserModalVisible(true);
   }
-  const addRoleToGroup = () => {
+  const addRoleToGroup = (roleName: string) => {
     dispatch({
       type: 'groups/fetchGroups'
     })
+    setCurrentHandleRoleName(roleName);
     setAddGroupModalVisible(true);
   }
-  console.log('groups', groups)
   const { list: groupList } = groups
   const columns: ColumnProps<IRoleListItem>[] = [
     {
@@ -66,8 +70,8 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
       render(_text, item) {
         return (
           <div style={{display: 'flex', justifyContent: 'space-around'}}>
-            <a onClick={addRoleToUser}>Related To User</a>
-            <a onClick={addRoleToGroup}>Related To Group</a>
+            <a onClick={() => addRoleToUser(item.name)}>Related To User</a>
+            <a onClick={() => addRoleToGroup(item.name)}>Related To Group</a>
             {item.isPreset === 0 && <a onClick={() => removeCurrentSelectedRole(item.name)}>Delete</a>}
           </div>
         )
@@ -75,6 +79,13 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
     },
   ]
   const { list, total } = roles;
+  const cancelRelate = () => {
+    setCurrentHandleRoleName('');
+    setAddUserModalVisible(false);
+    setAddGroupModalVisible(false);
+    setSelectedGroupName([]);
+    setSelectedUserName([]);
+  }
   const removeCurrentSelectedRole = async (currentRole?: string) => {
     let res;
     if (typeof currentRole === 'string') {
@@ -101,6 +112,8 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
   const onPageNationChange = (pageNo: number) => {
     setPageNo(pageNo);
     fetchUsers(search, pageNo);
+    setSelectRows([]);
+    setSelectRowKeys([]);
   }
   const onRowSelection: (selectedRowKeys: string[] | number[], selectedRows: IRoleListItem[]) => void = (selectedRowKeys, selectedRows) => {
     setSelectRowKeys(selectedRowKeys)
@@ -109,6 +122,12 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
   const onSearchRoles = (search: string) => {
     setSearch(search);
     fetchUsers(search);
+  }
+  const confirmRelateGroup = () => {
+    //
+  }
+  const confirmRelateUser = () => {
+
   }
   useEffect(() => {
     fetchUsers()
@@ -144,18 +163,24 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
       {
         addGroupModalVisible && <Modal
         visible={addGroupModalVisible}
-        onCancel={() => setAddGroupModalVisible(false)}
+        onCancel={cancelRelate}
+        onOk={confirmRelateGroup}
       >
         <SelectGroup
           groupList={groupList}
+          onChange={(selectedGroupName) => setSelectedGroupName(selectedGroupName)}
         />
       </Modal>
       }
       {
         addUserModalVisible && <Modal
         visible={addUserModalVisible}
+        onCancel={cancelRelate}
+        onOk={confirmRelateUser}
       >
-        <SelectUser />
+        <SelectUser
+          onChange={(selectedUserName) => setSelectedUserName(selectedUserName)}
+        />
       </Modal> 
       }
       
