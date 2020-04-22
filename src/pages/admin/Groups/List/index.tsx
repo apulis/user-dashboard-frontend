@@ -21,6 +21,7 @@ export interface IGroup {
   name: string;
   note: string;
   createTime: string;
+  id: number;
 }
 
 const { Search } = Input;
@@ -42,14 +43,14 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, groups }) => {
   useEffect(() => {
     fetchUsers()
   }, []);
-  const removeGroups = (groupName: string[]) => {
+  const removeGroups = (groupName: string[], groupId: number[]) => {
     Modal.confirm({
       title: `Will delete group: ${groupName.join(', ')}`,
       onCancel() {
 
       },
       async onOk() {
-        const res = await removeGroup(groupName);
+        const res = await removeGroup(groupId);
         if (res.success) {
           message.success(`Success delete group: ${groupName.join(', ')}`);
           fetchUsers();
@@ -91,7 +92,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, groups }) => {
             <a onClick={() => addUserToCurrentGroups(item.name)} style={{marginRight: '18px', marginLeft: '-20px'}}>
               Add Users
             </a>
-            <a onClick={() => removeGroups([item.name])}>
+            <a onClick={() => removeGroups([item.name], [item.id])}>
               Delete
             </a>
           </div>
@@ -116,7 +117,6 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, groups }) => {
   }
   const confirmAddGroup = async () => {
     let res;
-    console.log(selectedRows, currentGroupName)
     if (currentGroupName) {
       res = await addUsersToGroups(selectedUserNames, [currentGroupName]);
     } else {

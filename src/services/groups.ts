@@ -9,11 +9,11 @@ export async function addGroup(payload: IAddUserGroup): Promise<any> {
   });
 }
 
-export async function removeGroup(name: string | string[]): Promise<any> {
+export async function removeGroup(groupIds: number[]): Promise<any> {
   return await request('/group ', {
     method: 'DELETE',
     data: {
-      groupNames: name
+      groupIds: groupIds
     }
   });
 }
