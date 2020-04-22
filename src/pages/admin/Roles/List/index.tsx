@@ -13,6 +13,8 @@ import { ColumnProps } from 'antd/es/table';
 import SelectGroup from '@/components/Relate/SelectGroup';
 import SelectUser from "@/components/Relate/SelectUser";
 
+import { addRoleToGroups } from '@/services/roles';
+
 import { removeRoles } from '@/services/roles';
 import { IRoleListItem } from '@/models/roles';
 
@@ -35,13 +37,11 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
     setAddUserModalVisible(true);
   }
   const addRoleToGroup = (roleName: string) => {
-    dispatch({
-      type: 'groups/fetchGroups'
-    })
     setCurrentHandleRoleName(roleName);
     setAddGroupModalVisible(true);
   }
-  const { list: groupList } = groups
+  const { list: groupList } = groups;
+  console.log('groupList', groupList)
   const columns: ColumnProps<IRoleListItem>[] = [
     {
       title: 'Role Name',
@@ -123,14 +123,25 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
     setSearch(search);
     fetchUsers(search);
   }
-  const confirmRelateGroup = () => {
-    //
+  const confirmRelateGroup = async () => {
+    const res = await addRoleToGroups([currentHandleRoleName], selectedGroupName);
+    if (res.success === true) {
+      message.success('Success');
+      setAddGroupModalVisible(false);
+    } else {
+      res.duplicate.forEach((dpc: any) => {
+        message.error(`role ${dpc.roleName} is already in group ${dpc.groupName}, please cancel selected`);
+      });
+    }
   }
   const confirmRelateUser = () => {
 
   }
   useEffect(() => {
-    fetchUsers()
+    fetchUsers();
+    dispatch({
+      type: 'groups/fetchGroups'
+    })
   }, [])
   
   return (
@@ -153,6 +164,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
         }}
         columns={columns}
         dataSource={list}
+        pagination={false}
       />
       <Pagination
         style={{marginTop: '20px'}}

@@ -32,3 +32,13 @@ export async function removeRoles(roles: string[]) {
     }
   })
 }
+
+export async function addRoleToGroups(roleNames: string[], groupNames: string[]) {
+  return await request('/group-role', {
+    method: 'POST',
+    data: {
+      roleNames,
+      groupNames,
+    }
+  })
+}
