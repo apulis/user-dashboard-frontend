@@ -13,7 +13,7 @@ import { ColumnProps } from 'antd/es/table';
 import SelectGroup from '@/components/Relate/SelectGroup';
 import SelectUser from "@/components/Relate/SelectUser";
 
-import { addRoleToGroups } from '@/services/roles';
+import { addRoleToGroups, addRoleToUsers } from '@/services/roles';
 
 import { removeRoles } from '@/services/roles';
 import { IRoleListItem } from '@/models/roles';
@@ -89,7 +89,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
   const removeCurrentSelectedRole = async (currentRole?: string) => {
     let res;
     if (typeof currentRole === 'string') {
-      res = await  removeRoles([currentRole])
+      res = await removeRoles([currentRole])
     } else {
       const currentRemoveUserRoleNames = selectRows.map(r => r.name);
       res = await removeRoles(currentRemoveUserRoleNames)
@@ -129,13 +129,21 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
       message.success('Success');
       setAddGroupModalVisible(false);
     } else {
-      res.duplicate.forEach((dpc: any) => {
+      res.duplicate && res.duplicate.forEach((dpc: any) => {
         message.error(`role ${dpc.roleName} is already in group ${dpc.groupName}, please cancel selected`);
       });
     }
   }
-  const confirmRelateUser = () => {
-
+  const confirmRelateUser = async () => {
+    const res = await addRoleToUsers([currentHandleRoleName], selectedUserName);
+    if (res.success === true) {
+      message.success('Success');
+      setAddUserModalVisible(false);
+    } else {
+      res.duplicate && res.duplicate.forEach((dpc: any) => {
+        message.error(`user ${dpc.roleName} is already has role ${dpc.roleName}, please cancel selected`);
+      });
+    }
   }
   useEffect(() => {
     fetchUsers();

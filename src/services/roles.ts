@@ -42,3 +42,13 @@ export async function addRoleToGroups(roleNames: string[], groupNames: string[])
     }
   })
 }
+
+export async function addRoleToUsers(userNames: string[], roleNames: string[]) {
+  return await request('/user-role', {
+    method: 'POST',
+    data: {
+      userNames,
+      roleNames,
+    }
+  })
+} 
