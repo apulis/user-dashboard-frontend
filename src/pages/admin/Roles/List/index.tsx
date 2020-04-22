@@ -72,7 +72,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
           <div style={{display: 'flex', justifyContent: 'space-around'}}>
             <a onClick={() => addRoleToUser(item.name)}>Related To User</a>
             <a onClick={() => addRoleToGroup(item.name)}>Related To Group</a>
-            {item.isPreset === 0 && <a onClick={() => removeCurrentSelectedRole(item.name)}>Delete</a>}
+            {item.isPreset === 0 && <a onClick={() => removeCurrentSelectedRole(item.id)}>Delete</a>}
           </div>
         )
       }
@@ -86,12 +86,12 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
     setSelectedGroupName([]);
     setSelectedUserName([]);
   }
-  const removeCurrentSelectedRole = async (currentRole?: string) => {
+  const removeCurrentSelectedRole = async (currentRole?: number) => {
     let res;
-    if (typeof currentRole === 'string') {
+    if (typeof currentRole === 'number') {
       res = await removeRoles([currentRole])
     } else {
-      const currentRemoveUserRoleNames = selectRows.map(r => r.name);
+      const currentRemoveUserRoleNames = selectRows.map(r => r.id);
       res = await removeRoles(currentRemoveUserRoleNames)
     }
     if (res.success === true) {

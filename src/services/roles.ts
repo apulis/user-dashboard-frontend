@@ -24,11 +24,11 @@ export async function getRoles(payload: any) {
   })
 }
 
-export async function removeRoles(roles: string[]) {
+export async function removeRoles(roles: number[]) {
   return await request('/role', {
     method: 'DELETE',
     data: {
-      roles,
+      roleIds: roles,
     }
   })
 }

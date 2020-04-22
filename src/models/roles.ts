@@ -7,6 +7,7 @@ export interface IRoleListItem {
   name: string;
   note: string;
   isPreset: number;
+  id: number;
 }
 
 
