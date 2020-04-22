@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Table, Input, Pagination, message, Modal } from 'antd';
 import { Form } from '@ant-design/compatible';
 import { connect } from 'dva';
+import { PageHeaderWrapper } from '@ant-design/pro-layout';
 
 import { ConnectState, ConnectProps } from '@/models/connect';
 import { FormComponentProps } from '@ant-design/compatible/es/form';
@@ -153,7 +154,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
   }, [])
   
   return (
-    <>
+    <PageHeaderWrapper>
       <div className={styles.top}>
         <div className={styles.left}>
           <Link to="/admin/role/add">
@@ -204,7 +205,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
       </Modal> 
       }
       
-    </>
+    </PageHeaderWrapper>
   )
 }
 

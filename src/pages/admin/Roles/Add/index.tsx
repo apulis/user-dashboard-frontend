@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Input, Checkbox, Tree, Button, message } from 'antd';
 import { Form } from '@ant-design/compatible'
 import { connect } from 'dva';
+import { PageHeaderWrapper } from '@ant-design/pro-layout';
 
 import { FormComponentProps } from '@ant-design/compatible/es/form';
 import { AntTreeNodeSelectedEvent } from 'antd/lib/tree';
@@ -84,7 +85,7 @@ const Add: React.FC<FormComponentProps> = ({ form }) => {
     });
   }
   return (
-    <>
+    <PageHeaderWrapper>
       <FormItem label="RoleName" {...layout} style={{width: '80%'}}>
         {
           getFieldDecorator('name', {
@@ -118,7 +119,7 @@ const Add: React.FC<FormComponentProps> = ({ form }) => {
         treeData={treeData}
       />
       <Button onClick={next}>Next</Button>
-    </>
+    </PageHeaderWrapper>
   )
 }
 
