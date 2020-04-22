@@ -13,13 +13,22 @@ export async function createRole(payload: ICreateRole) {
   })
 }
 
-export async function getUsers(payload: any) {
+export async function getRoles(payload: any) {
   return await request('/role', {
     method: 'GET',
     params: {
       pageNo: payload.pageNo,
       pageSize: payload.pageSize,
       search: payload.search
+    }
+  })
+}
+
+export async function removeRoles(roles: string[]) {
+  return await request('/role', {
+    method: 'DELETE',
+    data: {
+      roles,
     }
   })
 }

@@ -1,7 +1,7 @@
 import { Reducer } from 'redux';
 import { Effect } from 'dva';
 
-import { getUsers } from '@/services/roles';
+import { getRoles } from '@/services/roles';
 
 export interface IRoleListItem {
   name: string;
@@ -36,9 +36,8 @@ const RolesModel: RolesModelType = {
   },
   effects: {
     * fetchRoles({ payload }, { call, put }) {
-      const res = yield call(getUsers, payload);
+      const res = yield call(getRoles, payload);
       if (res.success) {
-        console.log(res)
         yield put({
           type: 'saveRoles',
           payload: {

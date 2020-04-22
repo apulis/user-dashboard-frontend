@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Button, Table, Input, Pagination } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Button, Table, Input, Pagination, message } from 'antd';
 import { Form } from '@ant-design/compatible';
 import { connect } from 'dva';
 
@@ -10,11 +10,17 @@ import styles from './index.less';
 import { Link } from 'umi';
 import { ColumnProps } from 'antd/es/table';
 
+import { removeRoles } from '@/services/roles';
 import { IRoleListItem } from '@/models/roles';
+
 
 const { Search } = Input;
 
 const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles }) => {
+  const [selectRowKeys, setSelectRowKeys] = useState<string[] | number[]>([]);
+  const [selectRows, setSelectRows] = useState<IRoleListItem[]>([]);
+  const [search, setSearch] = useState<string>('');
+  const [pageNo, setPageNo] = useState<number>(1);
   const columns: ColumnProps<IRoleListItem>[] = [
     {
       title: 'Role Name',
@@ -28,42 +34,70 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles }) => {
     },
     {
       title: 'Type',
-      render(): React.ReactNode {
+      dataIndex: 'type',
+      align: 'center',
+      render(_text, item) {
         return (
-          123
+          <div>{item.isPreset ? 'Preset Role' : 'Custom Role'}</div>
         )
       } 
     },
     {
       title: 'Action',
-      render(): React.ReactNode {
+      align: 'center',
+      width: '320px',
+      render(_text, item) {
         return (
-          <>
+          <div style={{display: 'flex', justifyContent: 'space-around'}}>
             <a>Related To User</a>
             <a>Related To Group</a>
-            <a>Delete</a>
-          </>
+            {item.isPreset === 0 && <a onClick={() => removeCurrentSelectedRole(item.name)}>Delete</a>}
+          </div>
         )
       }
     },
   ]
-  const { list } = roles;
-  const fetchUsers = () => {
+  const { list, total } = roles;
+  const removeCurrentSelectedRole = async (currentRole?: string) => {
+    let res;
+    if (typeof currentRole === 'string') {
+      res = await  removeRoles([currentRole])
+    } else {
+      const currentRemoveUserRoleNames = selectRows.map(r => r.name);
+      res = await removeRoles(currentRemoveUserRoleNames)
+    }
+    if (res.success === true) {
+      message.success(`Success`);
+      fetchUsers()
+    }
+  }
+  const fetchUsers = (s?: string, page?: number) => {
+    console.log('s', s)
     dispatch({
       type: 'roles/fetchRoles',
       payload: {
-        pageNo: 1,
+        pageNo: page || pageNo,
         pageSize: 10,
-        search: ''
+        search: typeof s !== 'undefined' ? s : search
       }
     })
   }
-  const onPageNationChange = () => {
-    //
+  const onPageNationChange = (pageNo: number) => {
+    setPageNo(pageNo);
+    fetchUsers(search, pageNo);
+  }
+  const onRowSelection: (selectedRowKeys: string[] | number[], selectedRows: IRoleListItem[]) => void = (selectedRowKeys, selectedRows) => {
+    setSelectRowKeys(selectedRowKeys)
+    setSelectRows(selectedRows);
+  }
+  const onSearchRoles = (search: string) => {
+    setSearch(search);
+    fetchUsers(search);
   }
   useEffect(() => {
     fetchUsers()
   }, [])
+  
   return (
     <>
       <div className={styles.top}>
@@ -71,16 +105,25 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles }) => {
           <Link to="/admin/role/add">
             <Button style={{marginRight: '20px'}} type="primary">ADD ROLE</Button>
           </Link>
-          <Button>DELETE CURRENT ROLE</Button>
+          <Button onClick={() => removeCurrentSelectedRole()} disabled={selectRows.length === 0}>DELETE CURRENT ROLE</Button>
         </div>
-        <Search style={{width: '200px' }}/>
+        <Search onSearch={onSearchRoles} style={{width: '200px' }}/>
       </div>
-      <Table style={{marginTop: '20px'}} columns={columns} dataSource={list}  />
+      <Table
+        style={{marginTop: '20px'}}
+        rowSelection={{
+          type: "checkbox",
+          onChange: onRowSelection,
+          selectedRowKeys: selectRowKeys
+        }}
+        columns={columns}
+        dataSource={list}
+      />
       <Pagination
         style={{marginTop: '20px'}}
         onChange={onPageNationChange}
         // pageSize={pageSize}
-        // total={total}
+        total={total}
       />
     </>
   )
