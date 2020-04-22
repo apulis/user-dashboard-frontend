@@ -119,12 +119,11 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, groups }) => {
     console.log(selectedRows, currentGroupName)
     if (currentGroupName) {
       res = await addUsersToGroups(selectedUserNames, [currentGroupName]);
-      setCurrentGroupName('');
     } else {
       res = await addUsersToGroups(selectedUserNames, selectedRows.map(r => r.name));
-      setCurrentGroupName('');
     }
     if (res.success === true) {
+      setCurrentGroupName('');
       message.success('Success!')
       setAddGroupModalVisible(false);
     } else {
