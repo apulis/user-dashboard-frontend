@@ -10,6 +10,9 @@ import styles from './index.less';
 import { Link } from 'umi';
 import { ColumnProps } from 'antd/es/table';
 
+import SelectGroup from '@/components/Relate/SelectGroup';
+import SelectUser from "@/components/Relate/SelectUser";
+
 import { removeRoles } from '@/services/roles';
 import { IRoleListItem } from '@/models/roles';
 
@@ -17,11 +20,24 @@ import { IRoleListItem } from '@/models/roles';
 
 const { Search } = Input;
 
-const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles }) => {
+const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }) => {
   const [selectRowKeys, setSelectRowKeys] = useState<string[] | number[]>([]);
   const [selectRows, setSelectRows] = useState<IRoleListItem[]>([]);
   const [search, setSearch] = useState<string>('');
   const [pageNo, setPageNo] = useState<number>(1);
+  const [addGroupModalVisible, setAddGroupModalVisible] = useState<boolean>(false);
+  const [addUserModalVisible, setAddUserModalVisible] = useState<boolean>(false);
+  const addRoleToUser = () => {
+    setAddUserModalVisible(true);
+  }
+  const addRoleToGroup = () => {
+    dispatch({
+      type: 'groups/fetchGroups'
+    })
+    setAddGroupModalVisible(true);
+  }
+  console.log('groups', groups)
+  const { list: groupList } = groups
   const columns: ColumnProps<IRoleListItem>[] = [
     {
       title: 'Role Name',
@@ -50,8 +66,8 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles }) => {
       render(_text, item) {
         return (
           <div style={{display: 'flex', justifyContent: 'space-around'}}>
-            <a>Related To User</a>
-            <a>Related To Group</a>
+            <a onClick={addRoleToUser}>Related To User</a>
+            <a onClick={addRoleToGroup}>Related To Group</a>
             {item.isPreset === 0 && <a onClick={() => removeCurrentSelectedRole(item.name)}>Delete</a>}
           </div>
         )
@@ -125,9 +141,27 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles }) => {
         // pageSize={pageSize}
         total={total}
       />
+      {
+        addGroupModalVisible && <Modal
+        visible={addGroupModalVisible}
+        onCancel={() => setAddGroupModalVisible(false)}
+      >
+        <SelectGroup
+          groupList={groupList}
+        />
+      </Modal>
+      }
+      {
+        addUserModalVisible && <Modal
+        visible={addUserModalVisible}
+      >
+        <SelectUser />
+      </Modal> 
+      }
+      
     </>
   )
 }
 
 
-export default connect(({roles}: ConnectState) => ({roles}))(Form.create<FormComponentProps>()(List));
+export default connect(({ roles, groups }: ConnectState) => ({ roles, groups }))(Form.create<FormComponentProps>()(List));

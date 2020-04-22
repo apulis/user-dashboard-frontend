@@ -33,7 +33,7 @@ const GroupsModel: GroupsModelType = {
     search: ''
   },
   effects: {
-    * fetchGroups({ payload }, { call, put }) {
+    * fetchGroups({ payload = {} }, { call, put }) {
       const res = yield call(getGroups, payload);
       if (res.success) {
         yield put({
