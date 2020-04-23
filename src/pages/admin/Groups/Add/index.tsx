@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Form } from '@ant-design/compatible';
-import { Input, Button, Breadcrumb, Checkbox, Row, Col, Table } from 'antd';
+import { Input, Button, Breadcrumb, Checkbox, Row, Col, Table, message } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { FormComponentProps } from '@ant-design/compatible/es/form';
 import { connect } from 'dva';
@@ -71,6 +71,7 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
       addGroup(submitData as IAddUserGroup)
         .then(res => {
           if (res.success) {
+            message.success('Success');
             router.push('/admin/group/list');
           }
         })
