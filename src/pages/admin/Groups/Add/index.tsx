@@ -13,7 +13,7 @@ import { IRoleListItem } from '@/models/roles';
 export interface IAddUserGroup {
   name: string;
   note: string;
-  role: string[];
+  role: number[];
 }
 
 const FormItem = Form.Item;
@@ -69,8 +69,10 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
       })
     } else if (step === 3) {
       addGroup(submitData as IAddUserGroup)
-        .then(result => {
-          router.push('/admin/group/list');
+        .then(res => {
+          if (res.success) {
+            router.push('/admin/group/list');
+          }
         })
     }
   }
@@ -81,16 +83,20 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
       role: newRoleList,
     } as IAddUserGroup)
   }
-  const columns: ColumnProps<IRoleListItem>[] = [
+  const columns: ColumnProps<{role: number; note: string; isPreset: number}>[] = [
     {
       title: 'Role',
       dataIndex: 'role',
-      key: 'role',
+      render(_text, item) {
+        console.log(_text, item)
+        return (
+          <div>{rolesList.find(r => r.id === item.role)?.name}</div>
+        )
+      }
     },
     {
       title: 'RoleDescription',
-      dataIndex: 'roleDesc',
-      key: 'roleDesc',
+      key: 'note',
       render(_text, item) {
         return (
           <div>{item.note}</div>
@@ -99,7 +105,6 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
     },
     {
       title: 'RoleType',
-      dataIndex: 'roleType',
       render(_text, item) {
         return <span>{item.isPreset ? 'Preset Role' : 'Custom Role'}</span>
       }
@@ -116,7 +121,7 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
     setStep(step - 1);
   }
   const tableDataSource = (submitData?.role || []).map(val => {
-    const item = rolesList.find(v => v.name === val);
+    const item = rolesList.find(v => v.id === val);
     return {
       role: val,
       isPreset: item ? item.isPreset : '',
@@ -156,7 +161,7 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
         step === 2 && <div className="step-2">
           {
             getFieldDecorator('role', {
-              initialValue: submitData?.role || ['User'],
+              initialValue: submitData?.role,
               rules: [
                 { required: true }
               ]
@@ -165,7 +170,7 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
                 {
                   rolesList.map(r => (
                     <Col span={8}>
-                      <Checkbox style={{marginTop: '4px', marginBottom: '4px'}} value={r.name}>{r.name}</Checkbox>
+                      <Checkbox style={{marginTop: '4px', marginBottom: '4px'}} value={r.id}>{r.name}</Checkbox>
                     </Col>
                   ))
                 }
@@ -176,10 +181,10 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
       }
       {
         step === 3 && <div className="step-3">
-          <h1>用户组信息</h1>
+          <h1>Group Info</h1>
           <div>
-            <div>用户组名：{submitData?.name}</div>
-            <div>备注: {submitData?.note}</div>
+            <div>Group Name：{submitData?.name}</div>
+            <div>Description: {submitData?.note}</div>
           </div>
           <h1>Role  ({submitData?.role.length})</h1> 
           <Table dataSource={tableDataSource} columns={columns} />
