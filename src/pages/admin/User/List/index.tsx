@@ -12,7 +12,10 @@ import { ClickParam } from 'antd/lib/menu';
 import { ConnectProps, ConnectState } from '@/models/connect';
 import { IUsers } from '@/models/users';
 
+import SelectRole from '@/components/Relate/SelectRole'
+
 import { removeUsers, addUsersToGroups } from '@/services/users';
+import { addRoleToUsers } from '@/services/roles';
 import SelectGroup from '../../../../components/Relate/SelectGroup';
 
 import styles from './index.less'
@@ -31,12 +34,14 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
   const { dispatch, users: { list, pageNo, pageSize, total }, form, groups } = props;
   const { list: groupList } = groups;
   const [selectRows, setSelectRows] = useState<IUsers[]>([]);
+  const [addRoleForUserModalVisible, setAddRoleForUserModalVisible] = useState<boolean>(false);
   const [search, setSearch] = useState<string>('');
   const [selectedGroupId, setSelectedGroupId] = useState<number[]>([]);
   const [addGroupModalVisible, setAddGroupModalVisible] = useState<boolean>(false);
   const [tableLoading, setTableLoading] = useState<boolean>(false);
   const [selectRowKeys, setSelectRowKeys] = useState<string[] | number[]>([]);
   const [currentHandleUserId, setCurrentHandleUserId] = useState<number>(0);
+  const [selectedRoleIds, setSelectedRoleIds] = useState<number[]>([]);
   const fetchUsers = async (params: IFetchUserParam) => {
     setTableLoading(true);
     await dispatch({
@@ -74,7 +79,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       })
   }
   const addRolesForUser = () => {
-    //
+    setAddRoleForUserModalVisible(true);
   }
   const columns: ColumnProps<IUsers>[] = [
     {
@@ -118,7 +123,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
             <Dropdown
               overlay={<Menu>
               <Menu.Item onClick={() => {addToGroup();setCurrentHandleUserId(item.id)}} key="1">Add To User Group</Menu.Item>
-              <Menu.Item onClick={() => {setCurrentHandleUserId(item.id);starRemoveUsers(item.userName)}} key="2">Delete</Menu.Item>
+              <Menu.Item onClick={() => {setCurrentHandleUserId(item.id);removeUser()}} key="2">Delete</Menu.Item>
             </Menu>}
             >
             <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
@@ -229,6 +234,14 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
         })
       }
     }
+  };
+  const confirmAddRoleToUser = async () => {
+    const res = await addRoleToUsers([currentHandleUserId], selectedRoleIds);
+    if (res.success) {
+      message.success('Success add role');
+      setCurrentHandleUserId(0);
+      setAddRoleForUserModalVisible(false);
+    }
   }
   return (
     <PageHeaderWrapper>
@@ -298,9 +311,15 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       </Modal>
 
       <Modal
-
+        visible={addRoleForUserModalVisible}
+        onOk={confirmAddRoleToUser}
+        onCancel={() => {setAddRoleForUserModalVisible(false);setCurrentHandleUserId(0)}}
       >
-
+        {
+          addRoleForUserModalVisible && <SelectRole
+            onChange={(selectedRoleIds) => setSelectedRoleIds(selectedRoleIds)}
+          />
+        }
 
       </Modal>
       

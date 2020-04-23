@@ -9,45 +9,53 @@ import { ConnectProps, ConnectState } from '@/models/connect';
 
 import styles from './index.less';
 import { CheckboxValueType } from 'antd/lib/checkbox/Group';
-import { IUsers } from '@/models/users';
+import { IRoleListItem } from '@/models/roles';
 
-interface ISearchUserProps {
-  onChange?: (selectedUserId: number[]) => void;
+interface ISearchRoleProps {
+  onChange?: (selectedRoleIds: number[]) => void;
 }
 
 const { Search } = Input;
 
-const SelectGroup: React.FC<ISearchUserProps & FormComponentProps & ConnectProps & ConnectState> = ({ users, onChange, dispatch }) => {
-  const { list: userList } = users;
-  const fetchUsers = (search?: string) => {
+const SelectGroup: React.FC<ISearchRoleProps & FormComponentProps & ConnectProps & ConnectState> = ({ roles, onChange, dispatch }) => {
+  const fetchRoles = (pageSize?: number) => {
     dispatch({
-      type: 'users/fetchUsers',
+      type: 'roles/fetchRoles',
       payload: {
-        search: search,
+        pageNo: 1,
+        pageSize: pageSize || 20,
       }
     })
   }
   useEffect(() => {
-    fetchUsers();
+    fetchRoles();
   }, [])
-  const [selectedUsers, setSelectedUsers] = useState<IUsers[]>([]);
+
+  const { total: roleTotal } = roles;
+  const roleList: IRoleListItem[] = roles.list;
+  useEffect(() => {
+    if (roleTotal > 20) {
+      fetchRoles(roleTotal)
+    }
+  }, [roleTotal])
+  const [selectedRoles, setSelectedRoles] = useState<IRoleListItem[]>([]);
 
   const onCheckboxSelect = (checkedValue: CheckboxValueType[]) => {
-    const selectedUsers: IUsers[] = []
+    const selectedRoles: IRoleListItem[] = []
     checkedValue.forEach(id => {
-      userList.forEach(u => {
-        if (u.id === id) {
-          selectedUsers.push(u)
+      roleList.forEach(r => {
+        if (r.id === id) {
+          selectedRoles.push(r);
         }
       })
     })
-    setSelectedUsers(selectedUsers);
+    setSelectedRoles(selectedRoles);
     onChange && onChange(checkedValue as number[]);
   }
 
   const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const s = e.target.value;
-    fetchUsers(s);
+    fetchRoles(s);
   }
   return (
     <div>
@@ -55,19 +63,19 @@ const SelectGroup: React.FC<ISearchUserProps & FormComponentProps & ConnectProps
         <Col span={11}>
           <div className={styles.container}>
             <div className="ant-modal-title">
-              Choose Users ( total: {userList.length} )
+              Choose Roles ( total: {roleList.length} )
             </div>
             <Search placeholder="input search text" onChange={onSearch} style={{marginTop: '10px'}} />
             <Checkbox.Group onChange={onCheckboxSelect} style={{marginTop: '10px'}}>
               {
-                userList.map((u) => (
+                roleList.map((r) => (
                   <Col span={24}>
-                    <Checkbox style={{marginTop: '5px'}} key={u.id} value={u.id}>{u.userName}</Checkbox>
+                    <Checkbox style={{marginTop: '5px'}} key={r.id} value={r.id}>{r.name}</Checkbox>
                   </Col>
                 ))
               }
               {
-                userList.length === 0 && <div>No availble users</div>
+                roleList.length === 0 && <div>No availble users</div>
               }
             </Checkbox.Group>
           </div>
@@ -78,8 +86,8 @@ const SelectGroup: React.FC<ISearchUserProps & FormComponentProps & ConnectProps
               Selected: {}
             </div>
             {
-              selectedUsers.map(u => (
-                <div>{u.userName}</div>
+              selectedRoles.map(u => (
+                <div>{u.name}</div>
               ))
             }
           </div>
@@ -90,4 +98,4 @@ const SelectGroup: React.FC<ISearchUserProps & FormComponentProps & ConnectProps
 }
 
 
-export default connect(({ users }: ConnectState) => ({ users }))(Form.create<FormComponentProps & ConnectProps & ISearchUserProps>()(SelectGroup));
+export default connect(({ roles }: ConnectState) => ({ roles }))(Form.create<FormComponentProps & ConnectProps & ISearchRoleProps>()(SelectGroup));
