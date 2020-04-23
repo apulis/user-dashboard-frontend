@@ -11,24 +11,34 @@ import styles from './index.less';
 import { CheckboxValueType } from 'antd/lib/checkbox/Group';
 import { IRoleListItem } from '@/models/roles';
 
+
+
 interface ISearchRoleProps {
+  currentUserId?: number;
   onChange?: (selectedRoleIds: number[]) => void;
 }
 
 const { Search } = Input;
 
-const SelectGroup: React.FC<ISearchRoleProps & FormComponentProps & ConnectProps & ConnectState> = ({ roles, onChange, dispatch }) => {
-  const fetchRoles = (pageSize?: number) => {
+const SelectGroup: React.FC<ISearchRoleProps & FormComponentProps & ConnectProps & ConnectState> = ({ roles, onChange, dispatch, currentUserId }) => {
+  const fetchRoles = (pageSize?: number, search?: string) => {
     dispatch({
       type: 'roles/fetchRoles',
       payload: {
         pageNo: 1,
         pageSize: pageSize || 20,
+        search
       }
     })
+  };
+  const fetchCurrentUserRoles = (currentUserId: number) => {
+    //
   }
   useEffect(() => {
     fetchRoles();
+    if (currentUserId) {
+      fetchCurrentUserRoles(currentUserId)
+    }
   }, [])
 
   const { total: roleTotal } = roles;
@@ -55,7 +65,7 @@ const SelectGroup: React.FC<ISearchRoleProps & FormComponentProps & ConnectProps
 
   const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const s = e.target.value;
-    fetchRoles(s);
+    fetchRoles(undefined, s);
   }
   return (
     <div>
@@ -75,7 +85,7 @@ const SelectGroup: React.FC<ISearchRoleProps & FormComponentProps & ConnectProps
                 ))
               }
               {
-                roleList.length === 0 && <div>No availble users</div>
+                roleList.length === 0 && <div>No availble roles</div>
               }
             </Checkbox.Group>
           </div>
