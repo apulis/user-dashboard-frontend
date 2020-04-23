@@ -32,11 +32,11 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
   const { list: groupList } = groups;
   const [selectRows, setSelectRows] = useState<IUsers[]>([]);
   const [search, setSearch] = useState<string>('');
-  const [selectedGroupName, setSelectedGroupName] = useState<string[]>([]);
+  const [selectedGroupId, setSelectedGroupId] = useState<number[]>([]);
   const [addGroupModalVisible, setAddGroupModalVisible] = useState<boolean>(false);
   const [tableLoading, setTableLoading] = useState<boolean>(false);
   const [selectRowKeys, setSelectRowKeys] = useState<string[] | number[]>([]);
-  const [currentHandleUserName, setCurrentHandleUserName] = useState<string>('');
+  const [currentHandleUserId, setCurrentHandleUserId] = useState<number>(0);
   const fetchUsers = async (params: IFetchUserParam) => {
     setTableLoading(true);
     await dispatch({
@@ -53,10 +53,10 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
     fetchUsers({pageNo, pageSize});
     fetchUserGroups();
   }, [])
-  const starRemoveUsers = (currentHandleUserName?: string) => {
+  const starRemoveUsers = (currentHandleUserId?: string) => {
     let userNames: string[];
-    if (currentHandleUserName) {
-      userNames = [currentHandleUserName];
+    if (currentHandleUserId) {
+      userNames = [currentHandleUserId];
     } else {
       userNames = selectRows.map((val: IUsers) => val.userName);
     }
@@ -69,9 +69,12 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
             pageNo,
           })
           clearRowSelection();
-          setCurrentHandleUserName('');
+          setCurrentHandleUserId(0);
         }
       })
+  }
+  const addRolesForUser = () => {
+    //
   }
   const columns: ColumnProps<IUsers>[] = [
     {
@@ -111,11 +114,11 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       render(_text, item): React.ReactNode {
         return (
           <div style={{display: 'flex', justifyContent: 'space-between'}}>
-            <a>Specify Role</a>
+            <a onClick={addRolesForUser}>Specify Role</a>
             <Dropdown
               overlay={<Menu>
-              <Menu.Item onClick={() => {addToGroup();setCurrentHandleUserName(item.userName)}} key="1">Add To User Group</Menu.Item>
-              <Menu.Item onClick={() => {setCurrentHandleUserName(item.userName);starRemoveUsers(item.userName)}} key="2">Delete</Menu.Item>
+              <Menu.Item onClick={() => {addToGroup();setCurrentHandleUserId(item.id)}} key="1">Add To User Group</Menu.Item>
+              <Menu.Item onClick={() => {setCurrentHandleUserId(item.id);starRemoveUsers(item.userName)}} key="2">Delete</Menu.Item>
             </Menu>}
             >
             <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
@@ -177,7 +180,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       },
       onCancel() {
         //
-        setCurrentHandleUserName('')
+        setCurrentHandleUserId(0);
       },
     })
 
@@ -190,8 +193,8 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       search: s,
     })
   }
-  const onSelectedGroupChange = (selectedGroupName: string[]) => {
-    setSelectedGroupName(selectedGroupName);
+  const onSelectedGroupChange = (selectedGroupId: number[]) => {
+    setSelectedGroupId(selectedGroupId);
   }
   const menu = (
     <Menu onClick={handleMenuClick}>
@@ -206,14 +209,15 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
     </Menu>
   )
   const onConfirmAddGroup = async () => {
-    let selectedUserNames: string[];
-    if (currentHandleUserName) {
-      selectedUserNames = [currentHandleUserName]
+    let selectedUserIds: number[];
+    if (currentHandleUserId) {
+      selectedUserIds = [currentHandleUserId]
     } else {
-      selectedUserNames = selectRows.map(val => val.userName);
+      selectedUserIds = selectRows.map(val => val.id);
     }
-    const cancel = message.loading('Submitting')
-    const res = await addUsersToGroups(selectedUserNames, selectedGroupName);
+    console.log(111, selectRows, selectedUserIds)
+    const cancel = message.loading('Submitting');
+    const res = await addUsersToGroups(selectedUserIds, selectedGroupId);
     cancel();
     if (res.success === true) {
       message.success('Success!')
@@ -284,10 +288,20 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
         title="Add to group"
         width="65%"
       >
-        <SelectGroup
-          groupList={groupList}
-          onChange={onSelectedGroupChange}
-        />
+        {
+          addGroupModalVisible && <SelectGroup
+            groupList={groupList}
+            onChange={(selectedGroupId) => onSelectedGroupChange(selectedGroupId)}
+          />
+        }
+        
+      </Modal>
+
+      <Modal
+
+      >
+
+
       </Modal>
       
     </PageHeaderWrapper>
