@@ -15,7 +15,7 @@ import { IUsers } from '@/models/users';
 import SelectRole from '@/components/Relate/SelectRole'
 
 import { removeUsers, addUsersToGroups, getUserRolesById } from '@/services/users';
-import { addRoleToUsers } from '@/services/roles';
+import { addRoleToUsers, editRoleToUsers } from '@/services/roles';
 import SelectGroup from '../../../../components/Relate/SelectGroup';
 
 import styles from './index.less'
@@ -250,7 +250,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
     }
   };
   const confirmAddRoleToUser = async () => {
-    const res = await addRoleToUsers([currentHandleUserId], selectedRoleIds);
+    const res = await editRoleToUsers(currentHandleUserId, selectedRoleIds);
     if (res.success) {
       message.success('Success add role');
       setCurrentHandleUserId(0);

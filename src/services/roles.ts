@@ -51,4 +51,14 @@ export async function addRoleToUsers(userIds: number[], roleIds: number[]) {
       roleIds,
     }
   })
-} 
+}
+
+export async function editRoleToUsers(userId: number, roleIds: number[]) {
+  return await request('/user-role', {
+    method: 'PATCH',
+    data: {
+      userId,
+      roleIds,
+    }
+  })
+}
