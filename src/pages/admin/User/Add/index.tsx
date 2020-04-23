@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Form } from '@ant-design/compatible';
-import { Input, Button, Col, Row, message, Breadcrumb, Checkbox } from 'antd';
+import { Input, Button, Col, Row, message, Breadcrumb, Checkbox, Table } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { FormComponentProps } from '@ant-design/compatible/es/form';
 import { connect } from 'dva';
@@ -12,6 +12,7 @@ import EditTable from './EditTable';
 import styles from './index.less';
 import { createUsers } from '@/services/users';
 import { IRoleListItem } from '@/models/roles';
+import { ColumnProps } from 'antd/lib/table';
 
 const FormItem = Form.Item;
 
@@ -40,17 +41,13 @@ const newUser: () => IUserMessage = () => {
   }
 }
 
-const userRoleOptions = [
-  { label: 'User', value: 'User' },
-  { label: 'Admin', value: 'Admin' },
-]
 
 
 
 const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props => {
   const { form: { getFieldDecorator, validateFields, getFieldsValue, setFieldsValue }, roles, dispatch } = props;
   const [userMessage, setUserMessage] = useState<IUserMessage[]>([newUser()]);
-  const [selectedUserRole, setSelectedUserRole] = useState<string[]>([]);
+  const [selectedUserRole, setSelectedUserRole] = useState<number[]>([]);
   const [step, setStep] = useState<number>(1);
   const [isEditingTableEditing, setIsEditingTableEditing] = useState<boolean>(false);
   const formItemLayout = {
@@ -78,6 +75,12 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
 
   const { total: roleTotal } = roles;
   const rolesList: IRoleListItem[] = roles.list;
+  const userRoleOptions = rolesList.map((r) => {
+    return {
+      label: r.name,
+      value: r.id,
+    }
+  })
   useEffect(() => {
     if (roleTotal > 20) {
       fetchRoles(roleTotal)
@@ -85,7 +88,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
   }, [roleTotal])
 
 
-  const submitUser = async (userMessage: IUserMessage[], userRole: string[]) => {
+  const submitUser = async (userMessage: IUserMessage[], userRole: number[]) => {
     const hide = message.loading('Submiting...');
     const res = await createUsers({
       userMessage,
@@ -141,7 +144,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
   }
   const addUser = () => {
     if (userMessage.length >= 10) {
-      message.warn('每次最多创建 10 个用户');
+      message.warn('maximum user is 10');
       return;
     }
     setUserMessage([...userMessage].concat(newUser()))
@@ -152,38 +155,77 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
   const onEditTableStatusChange = (isEditing: boolean) => {
     setIsEditingTableEditing(isEditing);
   }
+  const removeSelectRole = (id: number) => {
+    const s = selectedUserRole.filter(s => s !== id)
+    setSelectedUserRole(s); 
+  }
+  const userRoleColumn: ColumnProps<IRoleListItem>[] = [
+    {
+      title: 'Role',
+      key: 'name',
+      dataIndex: 'name',
+    },
+    {
+      title: 'Description',
+      key: 'note',
+      dataIndex: 'note',
+    },
+    {
+      title: 'Type',
+      render(_text, item) {
+        return (
+          item.isPreset ? 'Preset': 'Custom'
+        )
+      }
+    },
+    {
+      title: 'Action',
+      render(_text, item) {
+        return (
+          <a onClick={() => removeSelectRole(item.id)}>Remove</a>
+        )
+      }
+    },
+  ];
+  const userRoleDataSource = selectedUserRole.map(s => {
+    let result;
+    rolesList.forEach(r => {
+      if (s === r.id) {
+        result = r;
+      }
+    })
+    return result;
+  })
   return (
     <PageHeaderWrapper>
-
-    
     <div className={styles.add}>
       <Breadcrumb style={{marginBottom: '16px'}}>
         { step >= 1 && <Breadcrumb.Item>
-          1. 填写用户信息
+          1. User Info
         </Breadcrumb.Item> }
         { step >= 2 && <Breadcrumb.Item>
-          2. 指定角色
+          2. Role
         </Breadcrumb.Item> }
         { step >= 3 && <Breadcrumb.Item>
-          3. 审阅
+          3. Review
         </Breadcrumb.Item> }
       </Breadcrumb>
       { step === 1 && <div className="step-1">
         <Row>
           <Col span={4}>
-            昵称 *
+            NickName *
           </Col>
           <Col span={4}>
-            用户名 *
+            UserName *
           </Col>
           <Col span={4}>
-            手机
+            phone
           </Col>
           <Col span={4}>
-            邮箱
+            email
           </Col>
           <Col span={4}>
-            备注
+            note
           </Col>
         </Row>
         {
@@ -194,8 +236,8 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
                   <FormItem { ...formItemLayout }>
                     {getFieldDecorator(`userMessage[${index}].nickName`, {
                       initialValue: userMessage[index].nickName,
-                      rules: [{ required: true, message: '需要创建昵称'}],
-                    })(<Input placeholder="请输入昵称" />)}
+                      rules: [{ required: true, message: 'NickName is required'}],
+                    })(<Input placeholder="nickName" />)}
                   </FormItem>
                 </Col>
                 <Col span={4}>
@@ -203,21 +245,21 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
                     {getFieldDecorator(`userMessage[${index}].userName`, {
                       initialValue: userMessage[index].userName,
                       rules: [
-                        { required: true, message: '需要创建用户名'},
+                        { required: true, message: 'UserName is required'},
                         { validator: (...args) => {
                             const newArgs = args.slice(0, 4);
                             validateUniqueUserName(index, getFieldsValue().userMessage, ...newArgs)
                           }
                         }
                       ],
-                    })(<Input placeholder="请输入用户名" />)}
+                    })(<Input placeholder="userName" />)}
                   </FormItem>
                 </Col>
                 <Col span={4}>
                   <FormItem { ...formItemLayout }>
                     {getFieldDecorator(`userMessage[${index}].phone`, {
                       initialValue: userMessage[index].phone,
-                    })(<Input placeholder="请输入手机" />)}
+                    })(<Input placeholder="phone" />)}
                   </FormItem>
                 </Col>
                 <Col span={4}>
@@ -225,24 +267,24 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
                     {getFieldDecorator(`userMessage[${index}].email`, {
                       initialValue: userMessage[index].email,
                       rules: [
-                        {pattern: emailReg, message: '请输入正确的邮箱格式'}
+                        { pattern: emailReg, message: 'please check email format' }
                       ]
-                    })(<Input placeholder="请输入邮箱" />)}
+                    })(<Input placeholder="email" />)}
                   </FormItem>
                 </Col>
                 <Col span={4}>
                   <FormItem { ...formItemLayout }>
                     {getFieldDecorator(`userMessage[${index}].note`, {
                       initialValue: userMessage[index].note,
-                    })(<Input placeholder="请输入备注" />)}
+                    })(<Input placeholder="note" />)}
                   </FormItem>
                 </Col>
-                <Col style={{marginTop: '8px'}} span={2}><a onClick={() => removeUser(user.createTime) }>删除</a></Col>
+                <Col style={{marginTop: '8px'}} span={2}><a onClick={() => removeUser(user.createTime) }>Remove</a></Col>
               </Row>
             </div>
           ))
         }
-        <Button onClick={addUser}>新增用户</Button><span style={{display: 'inline-block', marginLeft: '10px', marginTop: '20px'}}>每次最多创建 10 个用户</span>
+        <Button onClick={addUser}>ADD USER</Button><span style={{display: 'inline-block', marginLeft: '10px', marginTop: '20px'}}>maximum is 10</span>
       </div> }
       { step === 2 &&
         <div className="step-2">
@@ -266,6 +308,10 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
             onChange={onEditTableDataChange}
             onStatusChange={onEditTableStatusChange}
           />
+          <Table
+            columns={userRoleColumn}
+            dataSource={userRoleDataSource}
+          />
         </div>
       }
       <div style={{marginTop: '40px'}}>
@@ -276,4 +322,4 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
   );
 };
 
-export default connect(({ users, groups }: ConnectState) => ({ users, groups }))(Form.create<FormComponentProps & ConnectProps>()(Add))
+export default connect(({ users, groups, roles }: ConnectState) => ({ users, groups, roles }))(Form.create<FormComponentProps & ConnectProps>()(Add))
