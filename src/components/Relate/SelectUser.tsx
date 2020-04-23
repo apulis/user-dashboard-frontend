@@ -12,7 +12,7 @@ import { CheckboxValueType } from 'antd/lib/checkbox/Group';
 import { IUsers } from '@/models/users';
 
 interface ISearchUserProps {
-  onChange?: (selectedGroupName: number[]) => void;
+  onChange?: (selectedUserId: number[]) => void;
 }
 
 const { Search } = Input;
