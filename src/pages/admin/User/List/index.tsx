@@ -31,7 +31,8 @@ const { confirm } = Modal;
 const { Search } = Input;
 
 const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props) => {
-  const { dispatch, users: { list, pageNo, pageSize, total }, form, groups } = props;
+  const { dispatch, users, form, groups } = props;
+  const { list, pageNo, pageSize, total } = users || {};
   const { list: groupList } = groups;
   const [selectRows, setSelectRows] = useState<IUsers[]>([]);
   const [addRoleForUserModalVisible, setAddRoleForUserModalVisible] = useState<boolean>(false);
@@ -134,7 +135,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       render(_text, item): React.ReactNode {
         return (
           <div style={{display: 'flex', justifyContent: 'space-between'}}>
-            <a onClick={() => addRolesForUser(item.id)}>Specify Role</a>
+            <a onClick={() => addRolesForUser(item.id)}>Edit Role</a>
             <Dropdown
               overlay={<Menu>
               <Menu.Item onClick={() => {addToGroup();setCurrentHandleUserId(item.id)}} key="1">Add To User Group</Menu.Item>

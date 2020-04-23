@@ -71,7 +71,7 @@ const SelectGroup: React.FC<ISearchRoleProps & FormComponentProps & ConnectProps
             <div className="ant-modal-title">
               Choose Roles ( total: {roleList.length} )
             </div>
-            <Search placeholder="input search text" onChange={onSearch} style={{marginTop: '10px'}} />
+            {/* <Search placeholder="input search text" onChange={onSearch} style={{marginTop: '10px'}} /> */}
             <Checkbox.Group defaultValue={currentUserRoles} onChange={onCheckboxSelect} style={{marginTop: '10px'}}>
               {
                 roleList.map((r) => (
