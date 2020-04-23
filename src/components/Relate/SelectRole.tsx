@@ -11,16 +11,18 @@ import styles from './index.less';
 import { CheckboxValueType } from 'antd/lib/checkbox/Group';
 import { IRoleListItem } from '@/models/roles';
 
+import { getUserRolesById } from '@/services/users';
 
 
 interface ISearchRoleProps {
   currentUserId?: number;
+  currentUserRoles?: number[];
   onChange?: (selectedRoleIds: number[]) => void;
 }
 
 const { Search } = Input;
 
-const SelectGroup: React.FC<ISearchRoleProps & FormComponentProps & ConnectProps & ConnectState> = ({ roles, onChange, dispatch, currentUserId }) => {
+const SelectGroup: React.FC<ISearchRoleProps & FormComponentProps & ConnectProps & ConnectState> = ({ roles, onChange, dispatch, currentUserId, currentUserRoles }) => {
   const fetchRoles = (pageSize?: number, search?: string) => {
     dispatch({
       type: 'roles/fetchRoles',
@@ -31,14 +33,9 @@ const SelectGroup: React.FC<ISearchRoleProps & FormComponentProps & ConnectProps
       }
     })
   };
-  const fetchCurrentUserRoles = (currentUserId: number) => {
-    //
-  }
+  console.log('currentUserRoles', currentUserRoles)
   useEffect(() => {
     fetchRoles();
-    if (currentUserId) {
-      fetchCurrentUserRoles(currentUserId)
-    }
   }, [])
 
   const { total: roleTotal } = roles;
@@ -62,7 +59,6 @@ const SelectGroup: React.FC<ISearchRoleProps & FormComponentProps & ConnectProps
     setSelectedRoles(selectedRoles);
     onChange && onChange(checkedValue as number[]);
   }
-
   const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const s = e.target.value;
     fetchRoles(undefined, s);
@@ -76,10 +72,10 @@ const SelectGroup: React.FC<ISearchRoleProps & FormComponentProps & ConnectProps
               Choose Roles ( total: {roleList.length} )
             </div>
             <Search placeholder="input search text" onChange={onSearch} style={{marginTop: '10px'}} />
-            <Checkbox.Group onChange={onCheckboxSelect} style={{marginTop: '10px'}}>
+            <Checkbox.Group defaultValue={currentUserRoles} onChange={onCheckboxSelect} style={{marginTop: '10px'}}>
               {
                 roleList.map((r) => (
-                  <Col span={24}>
+                  <Col span={24} key={r.id}>
                     <Checkbox style={{marginTop: '5px'}} key={r.id} value={r.id}>{r.name}</Checkbox>
                   </Col>
                 ))

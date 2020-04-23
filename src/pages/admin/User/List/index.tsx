@@ -14,7 +14,7 @@ import { IUsers } from '@/models/users';
 
 import SelectRole from '@/components/Relate/SelectRole'
 
-import { removeUsers, addUsersToGroups } from '@/services/users';
+import { removeUsers, addUsersToGroups, getUserRolesById } from '@/services/users';
 import { addRoleToUsers } from '@/services/roles';
 import SelectGroup from '../../../../components/Relate/SelectGroup';
 
@@ -42,6 +42,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
   const [selectRowKeys, setSelectRowKeys] = useState<string[] | number[]>([]);
   const [currentHandleUserId, setCurrentHandleUserId] = useState<number>(0);
   const [selectedRoleIds, setSelectedRoleIds] = useState<number[]>([]);
+  const [currentUserRoles, setCurrentUserRoles] = useState<number[]>([]);
   const fetchUsers = async (params: IFetchUserParam) => {
     setTableLoading(true);
     await dispatch({
@@ -78,8 +79,22 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
         }
       })
   }
-  const addRolesForUser = () => {
-    setAddRoleForUserModalVisible(true);
+  const addRolesForUser = (userId: number) => {
+    setCurrentHandleUserId(userId);
+    const cancel = message.loading('loading...');
+    getUserRolesById(userId)
+      .then(res => {
+        if (res.success) {
+          cancel();
+          const currentUserRoles = res.list.map(r => r.roleId);
+          setCurrentUserRoles(currentUserRoles);
+          setAddRoleForUserModalVisible(true);
+        }
+      })
+      .catch(error => {
+        cancel();
+        message.error('loading roles error');
+      })
   }
   const columns: ColumnProps<IUsers>[] = [
     {
@@ -119,7 +134,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       render(_text, item): React.ReactNode {
         return (
           <div style={{display: 'flex', justifyContent: 'space-between'}}>
-            <a onClick={addRolesForUser}>Specify Role</a>
+            <a onClick={() => addRolesForUser(item.id)}>Specify Role</a>
             <Dropdown
               overlay={<Menu>
               <Menu.Item onClick={() => {addToGroup();setCurrentHandleUserId(item.id)}} key="1">Add To User Group</Menu.Item>
@@ -220,7 +235,6 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
     } else {
       selectedUserIds = selectRows.map(val => val.id);
     }
-    console.log(111, selectRows, selectedUserIds)
     const cancel = message.loading('Submitting');
     const res = await addUsersToGroups(selectedUserIds, selectedGroupId);
     cancel();
@@ -240,6 +254,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
     if (res.success) {
       message.success('Success add role');
       setCurrentHandleUserId(0);
+      setCurrentUserRoles([]);
       setAddRoleForUserModalVisible(false);
     }
   }
@@ -317,7 +332,9 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       >
         {
           addRoleForUserModalVisible && <SelectRole
+            currentUserId={currentHandleUserId}
             onChange={(selectedRoleIds) => setSelectedRoleIds(selectedRoleIds)}
+            currentUserRoles={currentUserRoles}
           />
         }
 

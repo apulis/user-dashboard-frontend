@@ -34,3 +34,10 @@ export async function addUsersToGroups(userIds: number[], groupIds: number[]): P
     }
   })
 }
+
+
+export async function getUserRolesById(userId: number): Promise<{list: {roleId: number; userId: number}[]; success: boolean}> {
+  return await request('/user-role/userId/' + userId, {
+    method: 'GET'
+  })
+}
