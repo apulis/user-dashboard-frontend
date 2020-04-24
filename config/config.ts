@@ -143,10 +143,14 @@ export default {
                     },
                     {
                       name: 'add',
-                      // icon: 'UsergroupAddOutlined',
                       path: '/admin/group/add',
                       component: './admin/Groups/Add',
-                    }
+                    },
+                    {
+                      path: '/admin/group/detail/:id',
+                      component: './admin/Groups/Detail',
+                    },
+
                   ]
                 },
                 {

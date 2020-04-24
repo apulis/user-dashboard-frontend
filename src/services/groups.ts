@@ -26,3 +26,15 @@ export async function getGroups(payload: {search: string}) {
     }
   })
 }
+
+export async function getGroupDetail(groupId: number) {
+  return await request('/group/' + groupId);
+}
+
+export async function getGroupUsers(groupId: number) {
+  return await request('/group-user?groupId=' + groupId);
+}
+
+export async function getGroupRoles(groupId: number) {
+  return await request('/group-role?groupId=' + groupId);
+}
