@@ -61,8 +61,11 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, groups }) => {
   const columns: ColumnProps<IGroup>[] = [
     {
       title: 'Group Name',
-      key: 'name',
-      dataIndex: 'name',
+      render(_text, item) {
+        return (
+        <Link to={'/admin/group/detail/' + item.id}>{item.name}</Link>
+        )
+      }
     },
     {
       title: 'Note',
