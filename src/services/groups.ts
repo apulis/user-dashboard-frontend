@@ -47,3 +47,21 @@ export async function editGroupDetail(id: number, payload: { name:string; note: 
     }
   })
 }
+
+export async function removeGroupRole(groupId: number, roleId: number) {
+  return await request('/group-role/' + groupId, {
+    method: 'DELETE',
+    params: {
+      roleId
+    }
+  })
+}
+
+export async function removeGroupUser(groupId: number, userId: number) {
+  return await request('/group-user/' + groupId, {
+    method: 'DELETE',
+    params: {
+      userId,
+    }
+  })
+}

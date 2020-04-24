@@ -10,7 +10,7 @@ import { ColumnProps } from 'antd/es/table';
 import { ConnectProps, ConnectState } from '@/models/connect';
 import { FormComponentProps } from 'antd/lib/form';
 
-import { getGroupDetail, getGroupRoles, getGroupUsers, editGroupDetail } from '@/services/groups';
+import { getGroupDetail, getGroupRoles, getGroupUsers, editGroupDetail, removeGroupRole, removeGroupUser } from '@/services/groups';
 
 const FormItem = Form.Item;
 
@@ -66,12 +66,20 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
     }
   }
 
-  const removeRole = (groupId: number) => {
-    //
+  const removeRole = async (roleId: number) => {
+    const res = await removeGroupRole(Number(id), roleId);
+    if (res.success) {
+      message.success('Success delete role');
+      fetchGroupRoles(Number(id));
+    }
   }
 
-  const removeUser = (groupId: number) => {
-    //
+  const removeUser = async (userId: number) => {
+    const res = await removeGroupUser(Number(id), userId);
+    if (res.success) {
+      message.success('Success delete user');
+      fetchGroupUsers(Number(id));
+    }
   }
   useEffect(() => {
     if (id) {
@@ -148,7 +156,7 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
       render(_text, item) {
         return (
           <div>
-            <a onClick={() => removeRole(item.id)}>Remove</a>
+            <a onClick={() => removeUser(item.id)}>Remove</a>
           </div>
         )
       }
@@ -223,8 +231,6 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
             :
             <a onClick={toggleEditing}>Edit</a>
           }
-          
-          
         </div>
       </div>
 
