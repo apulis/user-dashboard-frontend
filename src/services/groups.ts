@@ -32,11 +32,11 @@ export async function getGroupDetail(groupId: number) {
 }
 
 export async function getGroupUsers(groupId: number) {
-  return await request('/group-user?groupId=' + groupId);
+  return await request('/group-user/users?groupId=' + groupId);
 }
 
 export async function getGroupRoles(groupId: number) {
-  return await request('/group-role?groupId=' + groupId);
+  return await request('/group-role/roles?groupId=' + groupId);
 }
 
 export async function editGroupDetail(id: number, payload: { name:string; note: string;}) {

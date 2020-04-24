@@ -14,11 +14,29 @@ import { getGroupDetail, getGroupRoles, getGroupUsers, editGroupDetail } from '@
 
 const FormItem = Form.Item;
 
+interface IGroupUserInfo {
+  userName: string;
+  password: string;
+  nickName: string;
+  phone: string;
+  email: string;
+  id: number;
+  note: string;
+}
+
+interface IGroupRoleInfo {
+  name: string;
+  note: string;
+  isPreset: number;
+}
+
 const Detail: React.FC<FormComponentProps> = ({ form }) => {
   const { id } = useParams();
   const { getFieldDecorator, validateFields } = form;
   const [isGroupInfoEditing, setIsGroupInfoEditing] = useState(false);
   const [groupInfo, setGroupInfo] = useState<{name?: string; note?: string}>({});
+  const [groupUserDataSource, setGroupUserDataSorce] = useState<IGroupUserInfo[]>([]);
+  const [groupRoleDataSource, setGroupRoleDataSouce] = useState<IGroupRoleInfo[]>([]);
   const fetchGroupDetail = async (groupId: number) => {
     const res = await getGroupDetail(groupId);
     if (res.success) {
@@ -26,12 +44,26 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
     }
   }
 
-  const fetchGroupUsers = (groupId: number) => {
-    //
+  const fetchGroupUsers = async (groupId: number) => {
+    const res = await getGroupUsers(groupId);
+    if (res.success) {
+      const data = res.list;
+      data.forEach((val: IGroupUserInfo) => {
+        for (const key in val) {
+          if (!val[key]) {
+            val[key] = '-';
+          }
+        }
+      })
+      setGroupUserDataSorce(res.list);
+    }
   }
 
-  const fetchGroupRoles = (groupId: number) => {
-    //
+  const fetchGroupRoles = async (groupId: number) => {
+    const res = await getGroupRoles(groupId);
+    if (res.success) {
+      setGroupRoleDataSouce(res.list);
+    }
   }
 
   const removeRole = (groupId: number) => {
@@ -45,8 +77,8 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
     if (id) {
       const groupId = Number(id);
       fetchGroupDetail(groupId);
-      // fetchGroupDetail(groupId);
-      // getGroupRoles(groupId);
+      fetchGroupUsers(groupId);
+      fetchGroupRoles(groupId);
     }
   }, [])
 
@@ -54,18 +86,21 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
   const roleColumns: ColumnProps<any>[] = [
     {
       title: 'Role',
-      dataIndex: '',
-      key: '',
+      dataIndex: 'name',
+      key: 'name',
     },
     {
       title: 'Description',
-      dataIndex: '',
-      key: '',
+      dataIndex: 'note',
+      key: 'note',
     },
     {
       title: 'Role Type',
-      dataIndex: '',
-      key: '',
+      render(_text, item) {
+        return (
+          <div>{item.isPreset ? 'Preset Role' : 'Custom Role'}</div>
+        )
+      }
     },
     {
       title: 'Action',
@@ -193,9 +228,9 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
         </div>
       </div>
 
-      <Table columns={roleColumns} title={() => <h2>Role:</h2>} />
+      <Table columns={roleColumns} dataSource={groupRoleDataSource} title={() => <h2>Role:</h2>} />
 
-      <Table columns={usersColumns} title={() => <h2>User:</h2>}/>
+      <Table columns={usersColumns} dataSource={groupUserDataSource} title={() => <h2>User:</h2>}/>
 
     </>
   )
