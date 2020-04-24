@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Input, Table, Col, Button } from 'antd';
+import { Input, Table, Col, Button, message } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
 import { Form } from '@ant-design/compatible';
@@ -10,7 +10,7 @@ import { ColumnProps } from 'antd/es/table';
 import { ConnectProps, ConnectState } from '@/models/connect';
 import { FormComponentProps } from 'antd/lib/form';
 
-import { getGroupDetail, getGroupRoles, getGroupUsers} from '@/services/groups';
+import { getGroupDetail, getGroupRoles, getGroupUsers, editGroupDetail } from '@/services/groups';
 
 const FormItem = Form.Item;
 
@@ -119,8 +119,20 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
       }
     },
   ];
-  const confirmEditing = () => {
-    // 
+  const confirmEditing = async () => {
+    validateFields(['name', 'note'], async (err, values) => {
+      if (err) return
+      const res = await editGroupDetail(Number(id), {
+        name: values.name,
+        note: values.note,
+      })
+      if (res.success) {
+        message.success('Edit success');
+        setIsGroupInfoEditing(false);
+        fetchGroupDetail(Number(id));
+      }
+    });
+    
   }
   const toggleEditing = () => {
     setIsGroupInfoEditing(!isGroupInfoEditing);
@@ -146,7 +158,7 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
               }
             </FormItem>
             
-            <FormItem label="Group Name">
+            <FormItem label="Description">
               {
                 getFieldDecorator('note', {
                   rules: [{

@@ -38,3 +38,12 @@ export async function getGroupUsers(groupId: number) {
 export async function getGroupRoles(groupId: number) {
   return await request('/group-role?groupId=' + groupId);
 }
+
+export async function editGroupDetail(id: number, payload: { name:string; note: string;}) {
+  return await request('/group/' + id, {
+    method: 'PATCH',
+    data: {
+      ...payload
+    }
+  })
+}
