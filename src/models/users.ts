@@ -9,6 +9,7 @@ export interface IUsers {
   nickName: string;
   phone?: string;
   email?: string;
+  note?: string;
   id: number;
 }
 

@@ -39,6 +39,11 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
   const [groupInfo, setGroupInfo] = useState<{name?: string; note?: string}>({});
   const [groupUserDataSource, setGroupUserDataSorce] = useState<IGroupUserInfo[]>([]);
   const [groupRoleDataSource, setGroupRoleDataSouce] = useState<IGroupRoleInfo[]>([]);
+  useEffect(() => {
+    if (isNaN(Number(id))) {
+      router.push('/admin/group/list')
+    }
+  }, [id])
   const fetchGroupDetail = async (groupId: number) => {
     const res = await getGroupDetail(groupId);
     if (res.success) {

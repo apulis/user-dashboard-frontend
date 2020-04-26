@@ -41,3 +41,21 @@ export async function getUserRolesById(userId: number): Promise<{list: {roleId: 
     method: 'GET'
   })
 }
+
+export async function getUserById(id: number) {
+  return await request('/users/' + id);
+}
+
+export interface IEditUserInfo {
+  nickName: string;
+  phone: string;
+  note: string;
+  email: string;
+}
+
+export async function editUserInfo(id: number, userInfo: IEditUserInfo) {
+  return await request('/users/' + id, {
+    method: 'PATCh',
+    data: userInfo
+  })
+}

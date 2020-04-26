@@ -126,7 +126,11 @@ export default {
                       // icon: 'UserAddOutlined',
                       path: '/admin/user/add',
                       component: './admin/User/Add',
-                    }
+                    },
+                    {
+                      path: '/admin/user/detail/:id',
+                      component: './admin/User/Detail',
+                    },
                   ]
                 },
                 {

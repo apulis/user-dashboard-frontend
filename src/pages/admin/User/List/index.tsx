@@ -101,12 +101,20 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
     {
       title: 'UserName',
       dataIndex: 'userName',
-      key: 'userName',    
+      render(_text, item) {
+        return (
+          <Link to={"/admin/user/detail/" + item.id}>{item.userName}</Link>
+        )
+      }
     },
     {
       title: 'NickName',
       dataIndex: 'nickName',
-      key: 'nickName',
+      render(_text, item) {
+        return (
+          <Link to={"/admin/user/detail/" + item.id}>{item.nickName}</Link>
+        )
+      }
     },
     {
       title: 'Phone',
