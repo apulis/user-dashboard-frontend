@@ -62,3 +62,8 @@ export async function editRoleToUsers(userId: number, roleIds: number[]) {
     }
   })
 }
+
+
+export async function getRolesCount() {
+  return await request('/role/count')
+}

@@ -8,6 +8,7 @@ import { ConnectState, ConnectProps } from '@/models/connect';
 const Index: React.FC<ConnectState & ConnectProps> = ({ users, groups, roles, dispatch }) => {
   const userTotal = users.total;
   const groupTotal = groups.total;
+  const roleTotal = roles.total;
   useEffect(() => {
     if (!userTotal) {
       dispatch({
@@ -17,6 +18,11 @@ const Index: React.FC<ConnectState & ConnectProps> = ({ users, groups, roles, di
     if (!groupTotal) {
       dispatch({
         type: 'groups/getGroupTotalCount'
+      });
+    }
+    if (!roleTotal) {
+      dispatch({
+        type: 'roles/getRolesTotalCount'
       });
     }
     
@@ -45,7 +51,7 @@ const Index: React.FC<ConnectState & ConnectProps> = ({ users, groups, roles, di
             title="CUSTOME ROLE" 
             extra={<Link to="/admin/role/add">CREATE CUSTOME ROLES</Link>} style={{ width: 300 }}
           >
-            <h2>{2}</h2>
+            <h2>{roleTotal || ''}</h2>
           </Card>
         </Col>
       </Row>

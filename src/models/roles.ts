@@ -1,7 +1,7 @@
 import { Reducer } from 'redux';
 import { Effect } from 'dva';
 
-import { getRoles } from '@/services/roles';
+import { getRoles, getRolesCount } from '@/services/roles';
 
 export interface IRoleListItem {
   name: string;
@@ -22,6 +22,7 @@ export interface RolesModelType {
   state: RolesStateType;
   effects: {
     fetchRoles: Effect;
+    getRolesTotalCount: Effect;
   };
   reducers: {
     saveRoles: Reducer;
@@ -44,6 +45,17 @@ const RolesModel: RolesModelType = {
           payload: {
             list: res.list,
             total: res.total
+          }
+        })
+      }
+    },
+    * getRolesTotalCount({ payload = {} }, { call, put }) {
+      const res = yield call(getRolesCount);
+      if (res.success) {
+        yield put({
+          type: 'saveRoles',
+          payload: {
+            total: res.count
           }
         })
       }
