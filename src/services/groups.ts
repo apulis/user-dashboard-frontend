@@ -65,3 +65,7 @@ export async function removeGroupUser(groupId: number, userId: number) {
     }
   })
 }
+
+export async function getGroupTotalCount() {
+  return await request('/group/count')
+}

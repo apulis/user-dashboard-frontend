@@ -1,7 +1,7 @@
 import { Reducer } from 'redux';
 import { Effect } from 'dva';
 
-import { getGroups } from '@/services/groups';
+import { getGroups, getGroupTotalCount } from '@/services/groups';
 
 interface IGroupListItem {
   name: string;
@@ -21,6 +21,7 @@ export interface GroupsModelType {
   state: groupsStateType;
   effects: {
     fetchGroups: Effect;
+    getGroupTotalCount: Effect
   };
   reducers: {
     saveGroups: Reducer;
@@ -44,6 +45,17 @@ const GroupsModel: GroupsModelType = {
             list: res.list,
             search: payload.search,
           },
+        })
+      }
+    },
+    * getGroupTotalCount({ payload = {} }, { call, put }) {
+      const res = yield call(getGroupTotalCount);
+      if (res.success) {
+        yield put({
+          type: 'saveGroups',
+          payload: {
+            total: res.count
+          }
         })
       }
     }

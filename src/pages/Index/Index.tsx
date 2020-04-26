@@ -14,6 +14,11 @@ const Index: React.FC<ConnectState & ConnectProps> = ({ users, groups, roles, di
         type: 'users/getUsersTotalCount'
       });
     }
+    if (!groupTotal) {
+      dispatch({
+        type: 'groups/getGroupTotalCount'
+      });
+    }
     
   }, [])
   return (
@@ -24,7 +29,7 @@ const Index: React.FC<ConnectState & ConnectProps> = ({ users, groups, roles, di
             title="USERS" 
             extra={<Link to="/admin/user/add">CREATE USERS</Link>} style={{ width: 300 }}
           >
-            <h2>{userTotal}</h2>
+            <h2>{userTotal || ''}</h2>
           </Card>
         </Col>
         <Col span={8}>
@@ -32,7 +37,7 @@ const Index: React.FC<ConnectState & ConnectProps> = ({ users, groups, roles, di
             title="GROUPS" 
             extra={<Link to="/admin/group/add">CREATE GROUPS</Link>} style={{ width: 300 }}
           >
-            <h2>{2}</h2>
+            <h2>{groupTotal || ''}</h2>
           </Card>
         </Col>
         <Col span={8}>
