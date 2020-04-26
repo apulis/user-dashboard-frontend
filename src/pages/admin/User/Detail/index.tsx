@@ -60,7 +60,12 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
   const saveEditing = () => {
     validateFields(async (err, values) => {
       if (err) return;
-      const cancel = message.loading('Submiting')
+      const cancel = message.loading('Submiting');
+      for (const key in values) {
+        if (!values[key]) {
+          values[key] = '';
+        }
+      }
       const res = await editUserInfo(userId, values);
       cancel();
       if (res.success) {
@@ -135,7 +140,6 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
     {
       title: 'UserName',
       render(_text, item) {
-        console.log('item', item)
         if (isEditing) {
           return (
             <FormItem>
@@ -165,7 +169,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
             <FormItem>
               {
                 getFieldDecorator('phone', {
-                  initialValue: item.note,
+                  initialValue: item.phone || '',
                   rules: [
                     
                   ]
@@ -190,7 +194,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
             <FormItem>
               {
                 getFieldDecorator('email', {
-                  initialValue: item.note,
+                  initialValue: item.email || '',
                   rules: [
                     { pattern: emailReg }
                   ]
@@ -215,7 +219,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
             <FormItem>
               {
                 getFieldDecorator('note', {
-                  initialValue: item.note,
+                  initialValue: item.note || '',
                   rules: [
                   ]
                 })(
