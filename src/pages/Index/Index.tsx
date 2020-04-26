@@ -48,8 +48,8 @@ const Index: React.FC<ConnectState & ConnectProps> = ({ users, groups, roles, di
         </Col>
         <Col span={8}>
           <Card size="small"
-            title="CUSTOME ROLE" 
-            extra={<Link to="/admin/role/add">CREATE CUSTOME ROLES</Link>} style={{ width: 300 }}
+            title="CUSTOM ROLE" 
+            extra={<Link to="/admin/role/add">CREATE CUSTOM ROLES</Link>} style={{ width: 300 }}
           >
             <h2>{roleTotal || ''}</h2>
           </Card>
