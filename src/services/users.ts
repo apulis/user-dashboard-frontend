@@ -59,3 +59,28 @@ export async function editUserInfo(id: number, userInfo: IEditUserInfo) {
     data: userInfo
   })
 }
+
+export async function removeUserRole(userId: number, roleId: number) {
+  return await request('/user-role/' + userId, {
+    method: 'DELETE',
+    params: {
+      roleId: roleId
+    }
+  })
+}
+
+export async function getUserRoleInfo(userId: number) {
+  return await request(`/user-role/${userId}/info`, {
+    method: 'GET',
+  });
+}
+
+
+export async function getUserGroups(userId: number) {
+  return await request('/group-user/group-info', {
+    method: 'GET',
+    params: {
+      userId,
+    }
+  })
+}
