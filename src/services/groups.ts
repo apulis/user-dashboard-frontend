@@ -28,7 +28,7 @@ export async function getGroups(payload: {search: string}) {
 }
 
 export async function getGroupDetail(groupId: number) {
-  return await request('/group/' + groupId);
+  return await request('/group/detail/' + groupId);
 }
 
 export async function getGroupUsers(groupId: number) {
