@@ -47,6 +47,7 @@ const Add: React.FC<FormComponentProps> = ({ form }) => {
   const [checkedKeys, setCheckedKeys] = useState<TypeKeys>(['0-0-0']);
   const [selectedKeys, setSelectedKeys] = useState<TypeKeys>([]);
   const [autoExpandParent, setAutoExpandParent] = useState<boolean>(true);
+  const [buttonLoading, setButtonLoading] = useState<boolean>(false);
   const { validateFields, getFieldDecorator } = form;
   const layout = {
     labelCol: { span: 24 },
@@ -72,15 +73,17 @@ const Add: React.FC<FormComponentProps> = ({ form }) => {
   const next = () => {
     validateFields(async (err, values) => {
       if (err) return;
+      setButtonLoading(true);
       const result = await createRole({
         name: values.name,
         note: values.note,
         permissions: selectedKeys
       });
+      setButtonLoading(false)
       if (result.success) {
         message.success('Success Create Role ' + values.name);
-      } else {
-        //
+      } else if (result.success === false) {
+        message.error(`RoleName ${name} have existed, please try another`);
       }
     });
   }
@@ -118,7 +121,7 @@ const Add: React.FC<FormComponentProps> = ({ form }) => {
         selectedKeys={selectedKeys}
         treeData={treeData}
       />
-      <Button onClick={next}>Next</Button>
+      <Button loading={buttonLoading} onClick={next}>Next</Button>
     </PageHeaderWrapper>
   )
 }
