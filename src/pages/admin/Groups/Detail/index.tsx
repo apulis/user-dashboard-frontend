@@ -4,6 +4,8 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
 import { Form } from '@ant-design/compatible';
 import { useParams } from 'react-router-dom';
+import { PageHeader } from 'antd';
+import router from 'umi/router';
 
 import { ColumnProps } from 'antd/es/table';
 
@@ -184,6 +186,12 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
   return (
     <>
       <div className="group-info">
+      <PageHeader
+        className="site-page-header"
+        onBack={() => router.push('/admin/group/list')}
+        title="User Groups"
+        subTitle=""
+      />
         <h2>Group Info</h2>
         {
           isGroupInfoEditing ?
