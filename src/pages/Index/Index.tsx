@@ -1,35 +1,46 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card, Col, Row } from 'antd';
 import { Link } from 'umi';
+import { connect } from 'dva';
+import { ConnectState, ConnectProps } from '@/models/connect';
 
 
-const Index: React.FC = () => {
-  console.log('index')
+const Index: React.FC<ConnectState & ConnectProps> = ({ users, groups, roles, dispatch }) => {
+  const userTotal = users.total;
+  const groupTotal = groups.total;
+  useEffect(() => {
+    if (!userTotal) {
+      dispatch({
+        type: 'users/getUsersTotalCount'
+      });
+    }
+    
+  }, [])
   return (
     <>
-      <Row>
+      <Row gutter={[32, 16]}>
         <Col span={8}>
           <Card size="small"
-            title="用户" 
-            extra={<Link to="/admin/user/add">创建用户</Link>} style={{ width: 300 }}
+            title="USERS" 
+            extra={<Link to="/admin/user/add">CREATE USERS</Link>} style={{ width: 300 }}
           >
-            <h2>{2} 人</h2>
+            <h2>{userTotal}</h2>
           </Card>
         </Col>
         <Col span={8}>
           <Card size="small"
-            title="用户组" 
-            extra={<Link to="/admin/group/add">创建用户组</Link>} style={{ width: 300 }}
+            title="GROUPS" 
+            extra={<Link to="/admin/group/add">CREATE GROUPS</Link>} style={{ width: 300 }}
           >
-            <h2>{2} 组</h2>
+            <h2>{2}</h2>
           </Card>
         </Col>
         <Col span={8}>
           <Card size="small"
-            title="自定义角色" 
-            extra={<Link to="/admin/role/add">创建自定义角色</Link>} style={{ width: 300 }}
+            title="CUSTOME ROLE" 
+            extra={<Link to="/admin/role/add">CREATE CUSTOME ROLES</Link>} style={{ width: 300 }}
           >
-            <h2>{2} 个</h2>
+            <h2>{2}</h2>
           </Card>
         </Col>
       </Row>
@@ -37,4 +48,4 @@ const Index: React.FC = () => {
   )
 }
 
-export default Index;
+export default connect(({ users, groups, roles }: ConnectState) => ({ users, groups, roles }))(Index);

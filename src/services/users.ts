@@ -43,7 +43,7 @@ export async function getUserRolesById(userId: number): Promise<{list: {roleId: 
 }
 
 export async function getUserById(id: number) {
-  return await request('/users/' + id);
+  return await request('/users/detail/' + id);
 }
 
 export interface IEditUserInfo {
@@ -83,4 +83,10 @@ export async function getUserGroups(userId: number) {
       userId,
     }
   })
+}
+
+export async function getTotalUsersCount() {
+  return await request('/users/count', {
+    method: 'GET'
+  });
 }

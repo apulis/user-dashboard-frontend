@@ -1,7 +1,7 @@
 import { Reducer } from 'redux';
 import { Effect } from 'dva';
 
-import { removeUsers, fetchUsers } from '@/services/users';
+import { removeUsers, fetchUsers, getTotalUsersCount } from '@/services/users';
 
 
 export interface IUsers {
@@ -29,10 +29,12 @@ export interface UsersModelType {
     createUsers: Effect;
     removeUsers: Effect;
     changePageSize: Effect;
+    getUsersTotalCount: Effect;
   };
   reducers: {
     saveUsers: Reducer;
     changePageSize: Reducer;
+    changeTotal: Reducer;
   };
 }
 
@@ -41,7 +43,7 @@ const UsersModel: UsersModelType = {
   state: {
     pageNo: 1,
     pageSize: 10,
-    total: 10,
+    total: 0,
     list: [],
     search: ''
   },
@@ -80,6 +82,17 @@ const UsersModel: UsersModelType = {
       } else {
         //
       }
+    },
+    * getUsersTotalCount({ payload={} }, { call, put }) {
+      const res = yield call(getTotalUsersCount);
+      if (res.success) {
+        yield put({
+          type: 'changeTotal',
+          payload: {
+            total: res.count
+          }
+        })
+      }
     }
   },
   
@@ -95,7 +108,13 @@ const UsersModel: UsersModelType = {
         ...state,
         pageSize: payload.pageSize,
       }
-    }
+    },
+    changeTotal(state = {}, { payload }) {
+      return {
+        ...state,
+        total: payload.total,
+      }
+    },
   },
 };
 export default UsersModel;

@@ -11,8 +11,9 @@ interface IGroupListItem {
 
 
 export interface groupsStateType {
-  list: IGroupListItem[],
-  search: string
+  list: IGroupListItem[];
+  search: string;
+  total: number;
 }
 
 export interface GroupsModelType {
@@ -30,7 +31,8 @@ const GroupsModel: GroupsModelType = {
   namespace: 'groups',
   state: {
     list: [],
-    search: ''
+    search: '',
+    total: 0,
   },
   effects: {
     * fetchGroups({ payload = {} }, { call, put }) {
