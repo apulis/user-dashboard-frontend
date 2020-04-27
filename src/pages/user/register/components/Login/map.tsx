@@ -17,6 +17,21 @@ export default {
       },
     ],
   },
+  NickName: {
+    props: {
+      size: 'large',
+      prefix: <Icon type="user" className={styles.prefixIcon} />,
+      type: 'nickname',
+      id: 'nickname',
+      placeholder: '888888',
+    },
+    rules: [
+      {
+        required: true,
+        message: 'Please enter password!',
+      },
+    ],
+  },
   Password: {
     props: {
       size: 'large',

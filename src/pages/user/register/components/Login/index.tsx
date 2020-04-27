@@ -34,6 +34,8 @@ class Login extends Component<LoginProps, LoginState> {
 
   public static UserName: React.FunctionComponent<LoginItemProps>;
 
+  public static NickName: React.FunctionComponent<LoginItemProps>;
+
   public static Password: React.FunctionComponent<LoginItemProps>;
 
   public static Mobile: React.FunctionComponent<LoginItemProps>;

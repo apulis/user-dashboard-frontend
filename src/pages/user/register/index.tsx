@@ -1,34 +1,35 @@
-import { Alert, Checkbox, Icon, message } from 'antd';
+import { Alert, Icon, message } from 'antd';
 import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
 import React, { Component } from 'react';
 
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { Dispatch, AnyAction } from 'redux';
 import { FormComponentProps } from 'antd/es/form';
-import { Link } from 'umi';
+import { Link, router } from 'umi';
 import { connect } from 'dva';
-import router from 'umi/router';
 import { StateType } from '@/models/login';
 import LoginComponents from './components/Login';
 import styles from './style.less';
-import { LoginParamsType, logInWithAccount } from '@/services/login';
+import { SignUpParamsType, signUp } from '@/services/register';
 import { ConnectState } from '@/models/connect';
 
-import IconMicrosoft from '@/components/Icon/IconMicrosoft'
+import IconMicrosoft from '@/components/Icon/IconMicrosoft';
+import { CurrentUser } from '@/models/user';
 
-const { Tab, UserName, Password, Submit } = LoginComponents;
+const { Tab, UserName, Password, NickName, Submit } = LoginComponents;
 
-interface LoginProps {
+interface RegisterProps {
   dispatch: Dispatch<AnyAction>;
   userLogin: StateType;
   submitting?: boolean;
+  currentUser?: CurrentUser
 }
 interface LoginState {
   type: string;
   autoLogin: boolean;
 }
 
-class Login extends Component<LoginProps, LoginState> {
+class Login extends Component<RegisterProps, LoginState> {
   loginForm: FormComponentProps['form'] | undefined | null = undefined;
 
   state: LoginState = {
@@ -36,19 +37,31 @@ class Login extends Component<LoginProps, LoginState> {
     autoLogin: true,
   };
 
+  componentDidMount() {
+    const { dispatch, currentUser } = this.props;
+    if (!currentUser && dispatch) {
+      dispatch({
+        type: 'user/fetchCurrent',
+      });
+    }
+  }
+
   changeAutoLogin = (e: CheckboxChangeEvent) => {
     this.setState({
       autoLogin: e.target.checked,
     });
   };
 
-  handleSubmit = async (err: unknown, values: LoginParamsType) => {
+  handleSubmit = async (err: unknown, values: SignUpParamsType) => {
     if (!err) {
-      const { dispatch } = this.props
-      dispatch({
-        type: 'login/login',
-        payload: {...values}
-      })
+      const { userName, password, nickName } = values;
+      const res = await signUp({ userName, password, nickName });
+      if (res.success === true) {
+        message.success('Success Create Account');
+        router.push('/user/login');
+      } else {
+        message.error(res.message);
+      }
     }
   };
 
@@ -70,9 +83,13 @@ class Login extends Component<LoginProps, LoginState> {
   }
 
   render() {
-    const { userLogin = {}, submitting } = this.props;
+    const { userLogin = {}, submitting, currentUser } = this.props;
+    let defaultUserName = ''
+    if (currentUser && currentUser.group === 'Microsoft' && currentUser.openId) {
+      defaultUserName = currentUser.openId.split('@', 1)[0]
+    }
     const { status, type: loginType } = userLogin;
-    const { type, autoLogin } = this.state;
+    const { type } = this.state;
     return (
       <div className={styles.main}>
         <LoginComponents
@@ -83,7 +100,7 @@ class Login extends Component<LoginProps, LoginState> {
             this.loginForm = form;
           }}
         >
-          <Tab key="account" tab={formatMessage({ id: 'user-login.login.tab-login-credentials' })}>
+          <Tab key="account" tab={formatMessage({ id: 'user-register-tab-account-register' })}>
             {status === 'error' &&
               loginType === 'account' &&
               !submitting &&
@@ -93,6 +110,7 @@ class Login extends Component<LoginProps, LoginState> {
             <UserName
               name="userName"
               placeholder={`${formatMessage({ id: 'user-login.login.userName' })}`}
+              defaultValue={defaultUserName}
               rules={[
                 {
                   required: true,
@@ -105,6 +123,26 @@ class Login extends Component<LoginProps, LoginState> {
                 {
                   max: 22,
                   message: 'Max length is 22'
+                }
+              ]}
+            />
+            <NickName
+              name="nickName"
+              placeholder={`${formatMessage({ id: 'user-register.register.nickName' })}`}
+              // 用户未注册，才展示缺省nickName
+              defaultValue={(!currentUser?.userName && currentUser) ? currentUser.nickName : ''}
+              rules={[
+                {
+                  required: true,
+                  message: formatMessage({ id: 'user-register.nickName.required' }),
+                },
+                {
+                  min: 6,
+                  message: 'Need at lease 6 letters'
+                },
+                {
+                  max: 20,
+                  message: 'Max length is 20'
                 }
               ]}
             />
@@ -133,20 +171,18 @@ class Login extends Component<LoginProps, LoginState> {
               }}
             />
           </Tab>
-          <div>
-            <Checkbox checked={autoLogin} onChange={this.changeAutoLogin}>
-              <FormattedMessage id="user-login.login.remember-me" />
-            </Checkbox>
-          </div>
+          {
+            (currentUser && !currentUser.userName) ? <Alert message="You have joined, Now need to register for DLWS" type="success" /> : <></>
+          }
           <Submit loading={submitting}>
-            <FormattedMessage id="user-login.login.login" />
+            <FormattedMessage id="user-register.register.register" />
           </Submit>
           <div className={styles.other}>
-            <FormattedMessage id="user-login.login.sign-in-with" />
+            <FormattedMessage id="user-register.register.sign-up-with" />
             <Icon onClick={() => this.toLogin('wechat')} type="wechat" className={styles.icon} theme="outlined" />
-            <IconMicrosoft style={{marginLeft: '15px'}} onClick={() => this.toLogin('microsoft')} />
-            <Link className={styles.register} to="/user/register">
-              <FormattedMessage id="user-login.login.signup" />
+            <IconMicrosoft style={{marginLeft: '20px'}} onClick={() => this.toLogin('microsoft')} />
+            <Link className={styles.register} to="/user/login">
+              <FormattedMessage id="user-register.register.signin" />
             </Link>
           </div>
         </LoginComponents>
@@ -155,7 +191,8 @@ class Login extends Component<LoginProps, LoginState> {
   }
 }
 
-export default connect(({ login, loading }: ConnectState) => ({
+export default connect(({ login, loading, user }: ConnectState) => ({
   userLogin: login,
   submitting: loading.effects['login/login'],
+  currentUser: user.currentUser
 }))(Login);
