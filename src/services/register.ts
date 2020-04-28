@@ -7,7 +7,7 @@ export interface SignUpParamsType {
 }
 
 export async function signUp(params: SignUpParamsType) {
-  return request('/signUp', {
+  return request('/auth/register', {
     method: 'POST',
     data: {
       userName: params.userName,

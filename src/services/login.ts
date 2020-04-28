@@ -7,7 +7,7 @@ export interface LoginParamsType {
 }
 
 export async function logInWithAccount(params: LoginParamsType) {
-  return request('/signIn', {
+  return request('/auth/login', {
     method: 'POST',
     data: {
       userName: params.userName,

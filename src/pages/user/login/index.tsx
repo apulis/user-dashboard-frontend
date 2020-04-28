@@ -99,8 +99,8 @@ class Login extends Component<LoginProps, LoginState> {
                   message: formatMessage({ id: 'user-login.userName.required' }),
                 },
                 {
-                  min: 6,
-                  message: 'Need at lease 6 letters'
+                  min: 4,
+                  message: 'Need at lease 4 letters'
                 },
                 {
                   max: 22,
