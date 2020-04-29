@@ -31,20 +31,4 @@ const Authorized: React.FunctionComponent<AuthorizedProps> = ({
   const dom = check(authority, childrenRender, noMatch);
   return <>{dom}</>;
 };
-/**
- * check 是一个函数，用来决定是否会渲染组件
- * authority 是组件属性，表示要渲染我需要什么角色 字符串 也可能是一个数组 ['admin','user']
- * return checkPermissions<T, K>(authority, CURRENT, target, Exception)
- * authority=['admin','user']
- * CURRENT=当前用户的角色数组 ["admin"]
- * target 要渲染的目标组件 权限判断成功了，渲染哪个组件
- * Exception 鉴权 失败了，没 有权限访问，需要渲染哪个组件
- * 
- * 
- * 从头理
- * 1.用户登录  服务器返回currentAuthority ,pro会转成数组存放到  local里 antd-pro-authority=['user']
- * 2.刷新权限  ['user'] 赋给CURRENT
- * 3.鉴权组件(Authorized)会重新刷新,如果角色匹配就会渲染，如果不匹配，则渲染noMatch组件 
- */
-
 export default Authorized as IAuthorizedType;
