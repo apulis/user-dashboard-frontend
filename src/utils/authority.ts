@@ -27,7 +27,7 @@ export function getAuthority(str?: string): string | string[] {
 export function setAuthority(authority: string | string[]): void {
   const proAuthority = typeof authority === 'string' ? [authority] : authority;
   //把角色数组放在了localStorage里去
-  localStorage.setItem('antd-pro-authority', JSON.stringify(proAuthority));
+  localStorage.setItem('apulis-authority', JSON.stringify(proAuthority));
   // auto reload
   reloadAuthorized();
 }
