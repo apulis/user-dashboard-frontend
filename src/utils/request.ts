@@ -24,8 +24,6 @@ const codeMessage = {
   504: 'Gateway timed out.',
 };
 
-const baseUrl = '/api/global-user-dashboard'
-
 /**
  * 异常处理程序
  */
@@ -51,16 +49,17 @@ const errorHandler = (error: { response: Response }): Response => {
       message: 'Network anomalies',
     });
   }
-  return response;
+  return response || {};
 };
 
 /**
  * 配置request请求时的默认参数
  */
 const request = extend({
-  prefix: baseUrl,
-  errorHandler,
-  credentials: 'include',
+  errorHandler, // 默认错误处理
+  credentials: 'include', // 默认请求是否带上cookie
+  prefix: '/custom-user-dashboard/api',
+  timeout: 3000,
 });
 
 export interface Header extends Headers {
@@ -79,3 +78,4 @@ request.interceptors.request.use((_url: string, options) => {
 }, { global: false });
 
 export default request;
+
