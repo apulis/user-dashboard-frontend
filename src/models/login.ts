@@ -92,9 +92,9 @@ const Model: LoginModelType = {
       const { loginType } = payload;
       let { redirect } = getPageQuery();
       redirect = redirect || window.location.href
-      let redirectURI = '/api/global-user-dashboard/auth/' + loginType + '?to=' + redirect
+      let redirectURI = '/api/custom-user-dashboard/auth/' + loginType + '?to=' + redirect
       if (process.env.NODE_ENV === 'development') {
-        redirectURI += `&env=dev`
+        redirectURI += `&env=dev`;
       }
       window.location.href = redirectURI;
     }
