@@ -11,6 +11,10 @@ export interface CurrentUser {
   currentAuthority?: string[];
   openId?: string;
   id: number;
+  microsoftId?: string;
+  wechatId?: string;
+  phone?: string;
+  email?: string;
 }
 
 export interface UserModelState {

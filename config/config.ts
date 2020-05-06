@@ -102,6 +102,10 @@ export default {
           // authority: ['admin', 'user'],
           routes: [
             {
+              path: '/account/info',
+              component: './account/info'
+            },
+            {
               path: '/',
               name: 'index',
               icon: 'dashboard',

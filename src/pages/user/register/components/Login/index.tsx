@@ -9,12 +9,13 @@ import LoginSubmit from './LoginSubmit';
 import LoginTab from './LoginTab';
 import styles from './index.less';
 import { LoginParamsType } from '@/services/login';
+import { SignUpParamsType } from '@/services/register';
 
 export interface LoginProps {
   defaultActiveKey?: string;
   onTabChange?: (key: string) => void;
   style?: React.CSSProperties;
-  onSubmit?: (error: unknown, values: LoginParamsType) => void;
+  onSubmit?: (error: unknown, values: SignUpParamsType) => void;
   className?: string;
   form: FormComponentProps['form'];
   onCreate?: (form?: FormComponentProps['form']) => void;

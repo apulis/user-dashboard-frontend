@@ -89,10 +89,14 @@ const Model: LoginModelType = {
       }
     },
     oauthLogin({payload}, {call, put}) {
-      const { loginType } = payload;
+      const { loginType, bindType, userId } = payload;
       let { redirect } = getPageQuery();
       redirect = redirect || window.location.href
       let redirectURI = '/custom-user-dashboard/api/auth/' + loginType + '?to=' + redirect
+      if (bindType && userId) {
+        redirectURI += `&bindType=${bindType}`;
+        redirectURI += `&userId=${userId}`
+      }
       if (process.env.NODE_ENV === 'development') {
         redirectURI += `&env=development`;
       }

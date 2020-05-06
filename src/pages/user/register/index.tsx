@@ -55,12 +55,18 @@ class Login extends Component<RegisterProps, LoginState> {
   handleSubmit = async (err: unknown, values: SignUpParamsType) => {
     if (!err) {
       const { userName, password, nickName } = values;
-      const res = await signUp({ userName, password, nickName });
+      const submitData: SignUpParamsType = { userName, password, nickName };
+      if (this.props.currentUser?.microsoftId) {
+        submitData.microsoftId = this.props.currentUser?.microsoftId;
+      } else if (this.props.currentUser?.wechatId) {
+        submitData.wechatId = this.props.currentUser.wechatId;
+      }
+      const res = await signUp(submitData);
       if (res.success === true) {
         message.success('Success Create Account');
         router.push('/user/login');
-      } else {
-        message.error(res.message);
+      } else if (res.duplicate) {
+        message.error(`userName ${userName} is in use, please try another`);
       }
     }
   };
@@ -85,9 +91,10 @@ class Login extends Component<RegisterProps, LoginState> {
   render() {
     const { userLogin = {}, submitting, currentUser } = this.props;
     let defaultUserName = ''
-    if (currentUser && currentUser.group === 'Microsoft' && currentUser.openId) {
-      defaultUserName = currentUser.openId.split('@', 1)[0]
+    if (currentUser && currentUser.microsoftId) {
+      defaultUserName = currentUser.microsoftId.split('@', 1)[0]
     }
+    console.log('current', currentUser, defaultUserName)
     const { status, type: loginType } = userLogin;
     const { type } = this.state;
     return (
@@ -95,7 +102,7 @@ class Login extends Component<RegisterProps, LoginState> {
         <LoginComponents
           defaultActiveKey={type}
           onTabChange={this.onTabChange}
-          onSubmit={this.handleSubmit}
+          onSubmit={(err, values) => this.handleSubmit(err, values)}
           onCreate={(form?: FormComponentProps['form']) => {
             this.loginForm = form;
           }}

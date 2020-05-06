@@ -56,6 +56,10 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
           <LogoutOutlined />
           <FormattedMessage id="menu.account.logout" defaultMessage="logout" />
         </Menu.Item>
+        <Menu.Item key="info">
+          <UserOutlined />
+          Account Info
+        </Menu.Item>
       </Menu>
     );
 

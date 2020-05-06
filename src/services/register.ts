@@ -4,6 +4,8 @@ export interface SignUpParamsType {
   userName: string;
   password: string;
   nickName: string;
+  microsoftId?: string;
+  wechatId?: string;
 }
 
 export async function signUp(params: SignUpParamsType) {
@@ -13,6 +15,8 @@ export async function signUp(params: SignUpParamsType) {
       userName: params.userName,
       password: params.password,
       nickName: params.nickName,
+      microsoftId: params.microsoftId,
+      wechatId: params.wechatId,
     },
   });
 }
