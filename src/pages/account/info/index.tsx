@@ -12,7 +12,7 @@ const Info: React.FC<ConnectProps & ConnectState> = ({ user, dispatch }) => {
     dispatch({
       type: 'login/oauthLogin',
       payload: {
-        bindType: 'microsoft',
+        loginType: 'microsoft',
         userId: id,
       }
     })
@@ -21,7 +21,7 @@ const Info: React.FC<ConnectProps & ConnectState> = ({ user, dispatch }) => {
     dispatch({
       type: 'login/oauthLogin',
       payload: {
-        bindType: 'wechat',
+        loginType: 'wechat',
         userId: id,
       }
     })
