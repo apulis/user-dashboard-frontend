@@ -31,11 +31,10 @@ class SecurityLayout extends React.Component<SecurityLayoutProps & SecurityLayou
 
   componentWillMount() {
     let token = '';
-    const { dispatch, location, history } = this.props;
+    const { location, history } = this.props;
     if (location && location.query && location.query.token) {
       token = location.query.token;
     }
-    console.log('tolen', token)
     if (token) {
       localStorage.token = token;
       let redirectPath = location?.pathname;
@@ -51,7 +50,7 @@ class SecurityLayout extends React.Component<SecurityLayoutProps & SecurityLayou
     this.setState({
       isReady: true,
     });
-    const { dispatch, location, history } = this.props;
+    const { dispatch } = this.props;
     if (dispatch) {
       dispatch({
         type: 'user/fetchCurrent',
@@ -73,12 +72,12 @@ class SecurityLayout extends React.Component<SecurityLayoutProps & SecurityLayou
     if ((notLogin && loading) || !isReady) {
       return <PageLoading />;
     }
-    // if (notLogin) {
-    //   return <Redirect to={`/user/login?${queryString}`}></Redirect>;
-    // }
-    // if (notRegister) {
-    //   return <Redirect to={`/user/register?${queryString}`}></Redirect>;
-    // }
+    if (notLogin) {
+      return <Redirect to={`/user/login?${queryString}`}></Redirect>;
+    }
+    if (notRegister) {
+      return <Redirect to={`/user/register?${queryString}`}></Redirect>;
+    }
     return children;
   }
 }
