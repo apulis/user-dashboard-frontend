@@ -28,14 +28,14 @@ const Info: React.FC<ConnectProps & ConnectState> = ({ user, dispatch }) => {
   }
   return (
     <>
-      <Descriptions title="Account Info">
+      <Descriptions title="Account Info" layout="vertical" bordered>
         <Descriptions.Item label="UserName">{currentUser.userName}</Descriptions.Item>
         <Descriptions.Item label="NickName">{currentUser.nickName || '-'}</Descriptions.Item>
         <Descriptions.Item label="Phone">{currentUser.phone || '-'}</Descriptions.Item>
         <Descriptions.Item label="User Id">{currentUser.id}</Descriptions.Item>
         <Descriptions.Item label="Email">{currentUser.email || '-'}</Descriptions.Item>
       </Descriptions>
-      <Descriptions title="Login Methods">
+      <Descriptions title="Login Methods" layout="vertical" bordered style={{marginTop: '35px'}}>
         <Descriptions.Item label="Wechat">
           {
             currentUser.wechatId ? <div>Bound</div> : <><span>Not Bound</span><a onClick={bindWechat} style={{marginLeft: '15px'}}>To Bind</a></>

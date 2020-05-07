@@ -30,7 +30,7 @@ const Index: React.FC<ConnectState & ConnectProps> = ({ users, groups, roles, di
   return (
     <>
       <Row gutter={[32, 16]}>
-        <Col lg={8} md={8} sm={12}>
+        <Col lg={8} md={10} sm={12}>
           <Card size="small"
             title="Users" 
             extra={<Link to="/admin/user/add">Create Users</Link>} style={{ width: 270 }}
