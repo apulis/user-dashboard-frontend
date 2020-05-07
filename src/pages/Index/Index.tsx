@@ -38,7 +38,7 @@ const Index: React.FC<ConnectState & ConnectProps> = ({ users, groups, roles, di
             <h2>{userTotal || 0}</h2>
           </Card>
         </Col>
-        <Col lg={8} md={8} sm={12}>
+        <Col lg={8} md={10} sm={12}>
           <Card size="small"
             title="Groups" 
             extra={<Link to="/admin/group/add">Create Groups</Link>} style={{ width: 270 }}
@@ -46,7 +46,7 @@ const Index: React.FC<ConnectState & ConnectProps> = ({ users, groups, roles, di
             <h2>{groupTotal || 0}</h2>
           </Card>
         </Col>
-        <Col lg={8} md={8} sm={12}>
+        <Col lg={8} md={10} sm={12}>
           <Card size="small"
             title="Custom Role" 
             extra={<Link to="/admin/role/add">Create Custom Roles</Link>} style={{ width: 270 }}
