@@ -1,7 +1,7 @@
 import { Reducer } from 'redux';
 import { Effect } from 'dva';
 
-import { getRoles, getRolesCount } from '@/services/roles';
+import { getRoles, getRolesCount, getAllPermissions } from '@/services/roles';
 
 export interface IRoleListItem {
   name: string;
@@ -15,6 +15,7 @@ export interface RolesStateType {
   list: IRoleListItem[];
   search: string;
   total: number;
+  permissions: any[];
 }
 
 export interface RolesModelType {
@@ -23,9 +24,11 @@ export interface RolesModelType {
   effects: {
     fetchRoles: Effect;
     getRolesTotalCount: Effect;
+    fetchAllPermissions: Effect;
   };
   reducers: {
     saveRoles: Reducer;
+    savePermissions: Reducer;
   };
 }
 
@@ -35,6 +38,7 @@ const RolesModel: RolesModelType = {
     list: [],
     search: '',
     total: 0,
+    permissions: []
   },
   effects: {
     * fetchRoles({ payload = {} }, { call, put }) {
@@ -59,11 +63,29 @@ const RolesModel: RolesModelType = {
           }
         })
       }
+    },
+    * fetchAllPermissions({ payload = {} }, { call, put }) {
+      const res = yield call(getAllPermissions);
+      if (res.success) {
+        console.log(111)
+        yield put({
+          type: 'savePermissions',
+          payload: {
+            permissions: res.permissions
+          }
+        })
+      }
     }
   },
   
   reducers: {
     saveRoles(state = {}, { payload }) {
+      return {
+        ...state,
+        ...payload,
+      }
+    },
+    savePermissions(state = {}, { payload }) {
       return {
         ...state,
         ...payload,

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Input, Checkbox, Tree, Button, message } from 'antd';
 import { Form } from '@ant-design/compatible'
 import { connect } from 'dva';
@@ -6,7 +6,7 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 
 import { FormComponentProps } from '@ant-design/compatible/es/form';
 import { AntTreeNodeSelectedEvent } from 'antd/lib/tree';
-import { ConnectState } from '@/models/connect';
+import { ConnectState, ConnectProps } from '@/models/connect';
 
 import { createRole } from '@/services/roles';
 
@@ -42,17 +42,23 @@ const treeData = [
     key: '0-2',
   },
 ];
-const Add: React.FC<FormComponentProps> = ({ form }) => {
+const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form, dispatch, roles }) => {
   const [expandedKeys, setExpandedKeys] = useState<TypeKeys>([]);
   const [checkedKeys, setCheckedKeys] = useState<TypeKeys>(['0-0-0']);
   const [selectedKeys, setSelectedKeys] = useState<TypeKeys>([]);
   const [autoExpandParent, setAutoExpandParent] = useState<boolean>(true);
   const [buttonLoading, setButtonLoading] = useState<boolean>(false);
   const { validateFields, getFieldDecorator } = form;
+  console.log('roles', roles)
   const layout = {
     labelCol: { span: 24 },
     wrapperCol: { span: 8 },
   };
+  useEffect(() => {
+    dispatch({
+      type: 'roles/fetchAllPermissions'
+    })
+  }, [])
   const onExpand = (expandedKeys:TypeKeys) => {
     console.log('onExpand', expandedKeys);
     // if not set autoExpandParent to false, if children expanded, parent can not collapse.
@@ -127,4 +133,4 @@ const Add: React.FC<FormComponentProps> = ({ form }) => {
 }
 
 
-export default connect(({user}: ConnectState) => user)(Form.create<FormComponentProps>()(Add));
+export default connect(({user, roles}: ConnectState) => ({user, roles}))(Form.create<FormComponentProps>()(Add));

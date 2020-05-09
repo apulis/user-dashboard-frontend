@@ -67,3 +67,8 @@ export async function editRoleToUsers(userId: number, roleIds: number[]) {
 export async function getRolesCount() {
   return await request('/role/count')
 }
+
+
+export async function getAllPermissions() {
+  return await request('/permission/all');
+}
