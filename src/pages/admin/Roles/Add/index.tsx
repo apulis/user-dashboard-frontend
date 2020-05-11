@@ -9,7 +9,7 @@ import { AntTreeNodeSelectedEvent } from 'antd/lib/tree';
 import { ConnectState, ConnectProps } from '@/models/connect';
 
 import { createRole } from '@/services/roles';
-import { TreeNodeNormal } from 'antd/lib/tree/Tree';
+import { TreeNodeNormal, AntTreeNodeCheckedEvent } from 'antd/lib/tree/Tree';
 
 const FormItem = Form.Item;
 const { TreeNode } = Tree;
@@ -60,9 +60,9 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form,
     setAutoExpandParent(false);
   };
 
-  const onCheck = (checkedKeys: TypeKeys) => {
+  const onCheck = (checkedKeys: string[] | { checked: string[]; halfChecked: string[]; }, e: AntTreeNodeCheckedEvent) => {
     console.log('onCheck', checkedKeys);
-    setCheckedKeys(checkedKeys);
+    setCheckedKeys(checkedKeys as string[] );
   };
 
   const onSelect = (selectedKeys: TypeKeys, info: AntTreeNodeSelectedEvent) => {
