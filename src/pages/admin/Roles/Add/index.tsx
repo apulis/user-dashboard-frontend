@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Input, Checkbox, Tree, Button, message } from 'antd';
 import { Form } from '@ant-design/compatible'
 import { connect } from 'dva';
@@ -9,39 +9,14 @@ import { AntTreeNodeSelectedEvent } from 'antd/lib/tree';
 import { ConnectState, ConnectProps } from '@/models/connect';
 
 import { createRole } from '@/services/roles';
+import { TreeNodeNormal } from 'antd/lib/tree/Tree';
 
 const FormItem = Form.Item;
 const { TreeNode } = Tree;
 
 type TypeKeys = string[];
 
-const treeData = [
-  {
-    title: '存储资源相关权限',
-    key: 'CCZYQX',
-    children: [
-      {
-        title: '使用存储资源',
-        key: 'SYCCZY',
-      },
-      {
-        title: '修改存储资源',
-        key: 'XGCCZY',
-      }
-    ],
-  },
-  {
-    title: '集群配置相关权限',
-    key: 'JIPZXGQX',
-    children: [
-      { title: '0-1-0-0', key: '0-1-0-0' },
-    ],
-  },
-  {
-    title: '0-2',
-    key: '0-2',
-  },
-];
+
 const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form, dispatch, roles }) => {
   const [expandedKeys, setExpandedKeys] = useState<TypeKeys>([]);
   const [checkedKeys, setCheckedKeys] = useState<TypeKeys>(['0-0-0']);
@@ -49,7 +24,25 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form,
   const [autoExpandParent, setAutoExpandParent] = useState<boolean>(true);
   const [buttonLoading, setButtonLoading] = useState<boolean>(false);
   const { validateFields, getFieldDecorator } = form;
-  console.log('roles', roles)
+  const { permissions } = roles;
+  const projectTypes = [...new Set(permissions.map(val => val.project))];
+  let treeData: TreeNodeNormal[] = projectTypes.map(val => {
+    return {
+      title: val,
+      key: val,
+      children: []
+    }
+  });
+  treeData.forEach(t => {
+    permissions.forEach(p => {
+      if (t.title === p.project) {
+        t.children?.push({
+          key: p.key,
+          title: p.name,
+        })
+      }
+    })
+  })
   const layout = {
     labelCol: { span: 24 },
     wrapperCol: { span: 8 },
@@ -57,8 +50,8 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form,
   useEffect(() => {
     dispatch({
       type: 'roles/fetchAllPermissions'
-    })
-  }, [])
+    });
+  }, []);
   const onExpand = (expandedKeys:TypeKeys) => {
     console.log('onExpand', expandedKeys);
     // if not set autoExpandParent to false, if children expanded, parent can not collapse.
@@ -83,7 +76,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form,
       const result = await createRole({
         name: values.name,
         note: values.note,
-        permissions: selectedKeys
+        permissions: checkedKeys
       });
       setButtonLoading(false)
       if (result.success) {
