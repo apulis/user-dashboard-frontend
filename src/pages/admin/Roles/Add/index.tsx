@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Input, Checkbox, Tree, Button, message } from 'antd';
 import { Form } from '@ant-design/compatible'
 import { connect } from 'dva';
+import router from 'umi/router';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 
 import { FormComponentProps } from '@ant-design/compatible/es/form';
@@ -81,6 +82,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form,
       setButtonLoading(false)
       if (result.success) {
         message.success('Success Create Role ' + values.name);
+        router.push('/admin/role/list');
       } else if (result.success === false) {
         message.error(`RoleName ${name} have existed, please try another`);
       }
