@@ -99,10 +99,12 @@ export default {
         {
           path: '/',
           component: '../layouts/BasicLayout',
+          authority: ['System Admin'],
           routes: [
             {
               path: '/account/info',
-              component: './account/info'
+              component: './account/info',
+              authority: ['System Admin'],
             },
             {
               path: '/',
@@ -114,11 +116,13 @@ export default {
               path: '/admin',
               name: 'admin',
               icon: 'crown',
+              authority: ['System Admin'],
               routes: [
                 {
                   name: 'user',
                   icon: 'UserOutlined',
                   path: '/admin/user',
+                  authority: ['System Admin'],
                   routes: [
                     {
                       name: 'list',
@@ -141,7 +145,7 @@ export default {
                   name: 'groups',
                   icon: 'TeamOutlined',
                   path: '/admin/group',
-                  authority: ['System Admin', 'user'],
+                  authority: ['System Admin'],
                   routes: [
                     {
                       name: 'list',
