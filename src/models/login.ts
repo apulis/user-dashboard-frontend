@@ -45,7 +45,7 @@ const Model: LoginModelType = {
       if (response.success) {
         localStorage.token = response.token;
         console.log('response', response)
-        setAuthority(response.currentAuthority);
+        setAuthority(response.permissionList);
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params as { redirect: string };

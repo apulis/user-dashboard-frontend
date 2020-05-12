@@ -47,8 +47,8 @@ const UserModel: UserModelType = {
           payload: response,
         });
       }
-      if (response.currentAuthority) {
-        setAuthority(response.currentAuthority);
+      if (response.permissionList) {
+        setAuthority(response.permissionList);
       }
     },
   },

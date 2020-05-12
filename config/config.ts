@@ -99,7 +99,7 @@ export default {
         {
           path: '/',
           component: '../layouts/BasicLayout',
-          authority: ['System Admin'],
+          authority: ['MANAGE_USER'],
           routes: [
             {
               path: '/account/info',
@@ -110,25 +110,25 @@ export default {
               name: 'index',
               icon: 'dashboard',
               component: './Index',
-              authority: ['System Admin'],
+              authority: ['MANAGE_USER'],
             },
             {
               path: '/admin',
               name: 'admin',
               icon: 'crown',
-              authority: ['System Admin'],
+              authority: ['MANAGE_USER'],
               routes: [
                 {
                   name: 'user',
                   icon: 'UserOutlined',
                   path: '/admin/user',
-                  authority: ['System Admin'],
+                  authority: ['MANAGE_USER'],
                   routes: [
                     {
                       name: 'list',
                       path: '/admin/user/list',
                       component: './admin/User/List',
-                      authority: ['System Admin'],
+                      authority: ['MANAGE_USER'],
                     },
                     {
                       name: 'add',
@@ -145,7 +145,7 @@ export default {
                   name: 'groups',
                   icon: 'TeamOutlined',
                   path: '/admin/group',
-                  authority: ['System Admin'],
+                  authority: ['MANAGE_USER'],
                   routes: [
                     {
                       name: 'list',
@@ -169,7 +169,7 @@ export default {
                   name: 'roles',
                   icon: 'ApartmentOutlined',
                   path: '/admin/role',
-                  authority: ['System Admin'],
+                  authority: ['MANAGE_USER'],
                   routes: [
                     {
                       name: 'add',
