@@ -18,8 +18,8 @@ type IAuthorizedType = React.FunctionComponent<AuthorizedProps> & {
 
 const Authorized: React.FunctionComponent<AuthorizedProps> = ({
   children,
-  authority,//哪个角色能渲染我这个组件
-  noMatch = (//如果说权限没有匹配上怎么办，渲染谁?
+  authority,
+  noMatch = (
     <Result
       status="403"
       title="403"

@@ -7,10 +7,10 @@ type CurrentAuthorityType = string | string[] | (() => typeof CURRENT);
  * use  authority or getAuthority
  * @param {string|()=>String} currentAuthority
  */
-//currentAuthority=['admin'] CURRENT=['admin'] 就是取最新的 local时的currentAuthority 传递给CURRENT
 const renderAuthorize = <T>(Authorized: T): ((currentAuthority: CurrentAuthorityType) => T) => (
   currentAuthority: CurrentAuthorityType,
 ): T => {
+  console.log('currentAuthority', currentAuthority)
   if (currentAuthority) {
     if (typeof currentAuthority === 'function') {
       CURRENT = currentAuthority();

@@ -99,7 +99,6 @@ export default {
         {
           path: '/',
           component: '../layouts/BasicLayout',
-          // authority: ['admin', 'user'],
           routes: [
             {
               path: '/account/info',
@@ -115,24 +114,20 @@ export default {
               path: '/admin',
               name: 'admin',
               icon: 'crown',
-              // component: './Admin',
-              // authority: ['admin'],
               routes: [
                 {
                   name: 'user',
                   icon: 'UserOutlined',
                   path: '/admin/user',
-                  // authority: ['admin', 'user'],
                   routes: [
                     {
                       name: 'list',
-                      // icon: 'UserOutlined',
                       path: '/admin/user/list',
                       component: './admin/User/List',
+                      authority: ['System Admin'],
                     },
                     {
                       name: 'add',
-                      // icon: 'UserAddOutlined',
                       path: '/admin/user/add',
                       component: './admin/User/Add',
                     },
@@ -146,7 +141,7 @@ export default {
                   name: 'groups',
                   icon: 'TeamOutlined',
                   path: '/admin/group',
-                  // authority: ['admin', 'user'],
+                  authority: ['System Admin', 'user'],
                   routes: [
                     {
                       name: 'list',
@@ -170,8 +165,7 @@ export default {
                   name: 'roles',
                   icon: 'ApartmentOutlined',
                   path: '/admin/role',
-                  // component: './admin/Role',
-                  // authority: ['admin'],
+                  authority: ['System Admin'],
                   routes: [
                     {
                       name: 'add',
@@ -185,13 +179,6 @@ export default {
                     }
                   ]
                 },
-                // {
-                //   name: '权限管理',
-                //   icon: 'smile',
-                //   path: '/admin/permission',
-                //   component: './admin/Permission',
-                //   // authority: ['admin'],
-                // },
               ]
             },
             {
