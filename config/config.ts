@@ -104,13 +104,13 @@ export default {
             {
               path: '/account/info',
               component: './account/info',
-              authority: ['System Admin'],
             },
             {
               path: '/',
               name: 'index',
               icon: 'dashboard',
               component: './Index',
+              authority: ['System Admin'],
             },
             {
               path: '/admin',
