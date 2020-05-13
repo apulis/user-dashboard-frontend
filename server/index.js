@@ -10,4 +10,4 @@ app.use(history())
 
 app.use(ecstatic({ root: path.join(__dirname, '../dist') }))
 
-http.createServer(app).listen(process.env.PORT || 3083)
+http.createServer(app).listen(process.argv[2] || 3083)
