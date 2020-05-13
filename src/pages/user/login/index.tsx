@@ -28,7 +28,7 @@ interface LoginState {
   autoLogin: boolean;
 }
 
-class Login extends Component<LoginProps, LoginState> {
+class Login extends Component<LoginProps & LoginState & ConnectState> {
   loginForm: FormComponentProps['form'] | undefined | null = undefined;
 
   state: LoginState = {
@@ -41,6 +41,14 @@ class Login extends Component<LoginProps, LoginState> {
       autoLogin: e.target.checked,
     });
   };
+
+  componentDidMount() {
+    if (this.props.config.authMethods.length === 0) {
+      this.props.dispatch({
+        type: 'config/fetchAuthMethods',
+      })
+    }
+  }
 
   handleSubmit = async (err: unknown, values: LoginParamsType) => {
     if (!err) {
@@ -70,6 +78,7 @@ class Login extends Component<LoginProps, LoginState> {
   }
 
   render() {
+    const authMethods = this.props.config.authMethods;
     const { userLogin = {}, submitting } = this.props;
     const { status, type: loginType } = userLogin;
     const { type, autoLogin } = this.state;
@@ -143,8 +152,13 @@ class Login extends Component<LoginProps, LoginState> {
           </Submit>
           <div className={styles.other}>
             <FormattedMessage id="user-login.login.sign-in-with" />
-            <Icon onClick={() => this.toLogin('wechat')} type="wechat" className={styles.icon} theme="outlined" />
-            <IconMicrosoft style={{marginLeft: '15px'}} onClick={() => this.toLogin('microsoft')} />
+            {
+              authMethods.includes('wechat') && 
+                <Icon onClick={() => this.toLogin('wechat')} type="wechat" className={styles.icon} theme="outlined" />
+            }
+            {
+              authMethods.includes('microsoft') && <IconMicrosoft style={{marginLeft: '15px'}} onClick={() => this.toLogin('microsoft')} />
+            }
             <Link className={styles.register} to="/user/register">
               <FormattedMessage id="user-login.login.signup" />
             </Link>
@@ -155,7 +169,8 @@ class Login extends Component<LoginProps, LoginState> {
   }
 }
 
-export default connect(({ login, loading }: ConnectState) => ({
+export default connect(({ login, loading, config }: ConnectState) => ({
   userLogin: login,
   submitting: loading.effects['login/login'],
+  config
 }))(Login);

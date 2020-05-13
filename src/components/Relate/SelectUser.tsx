@@ -25,7 +25,7 @@ const SelectGroup: React.FC<ISearchUserProps & FormComponentProps & ConnectProps
       payload: {
         search: search,
       }
-    })
+    });
   }
   useEffect(() => {
     fetchUsers();

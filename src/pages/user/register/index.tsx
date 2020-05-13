@@ -29,7 +29,7 @@ interface LoginState {
   autoLogin: boolean;
 }
 
-class Login extends Component<RegisterProps, LoginState> {
+class Login extends Component<RegisterProps & LoginState & ConnectState> {
   loginForm: FormComponentProps['form'] | undefined | null = undefined;
 
   state: LoginState = {
@@ -43,6 +43,11 @@ class Login extends Component<RegisterProps, LoginState> {
       dispatch({
         type: 'user/fetchCurrent',
       });
+    }
+    if (this.props.config.authMethods.length === 0) {
+      this.props.dispatch({
+        type: 'config/fetchAuthMethods',
+      })
     }
   }
 
@@ -89,6 +94,7 @@ class Login extends Component<RegisterProps, LoginState> {
   }
 
   render() {
+    const authMethods = this.props.config.authMethods;
     const { userLogin = {}, submitting, currentUser } = this.props;
     let defaultUserName = ''
     if (currentUser && currentUser.microsoftId) {
@@ -186,8 +192,13 @@ class Login extends Component<RegisterProps, LoginState> {
           </Submit>
           <div className={styles.other}>
             <FormattedMessage id="user-register.register.sign-up-with" />
-            <Icon onClick={() => this.toLogin('wechat')} type="wechat" className={styles.icon} theme="outlined" />
-            <IconMicrosoft style={{marginLeft: '20px'}} onClick={() => this.toLogin('microsoft')} />
+            {
+              authMethods.includes('wechat') && 
+                <Icon onClick={() => this.toLogin('wechat')} type="wechat" className={styles.icon} theme="outlined" />
+            }
+            {
+              authMethods.includes('microsoft') && <IconMicrosoft style={{marginLeft: '15px'}} onClick={() => this.toLogin('microsoft')} />
+            }
             <Link className={styles.register} to="/user/login">
               <FormattedMessage id="user-register.register.signin" />
             </Link>
@@ -198,8 +209,9 @@ class Login extends Component<RegisterProps, LoginState> {
   }
 }
 
-export default connect(({ login, loading, user }: ConnectState) => ({
+export default connect(({ login, loading, user, config }: ConnectState) => ({
   userLogin: login,
   submitting: loading.effects['login/login'],
-  currentUser: user.currentUser
+  currentUser: user.currentUser,
+  config
 }))(Login);
