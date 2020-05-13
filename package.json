@@ -26,7 +26,8 @@
     "test:all": "node ./tests/run-tests.js",
     "test:component": "umi test ./src/components",
     "tsc": "tsc",
-    "ui": "umi ui"
+    "ui": "umi ui",
+    "static": "nodemon server/"
   },
   "husky": {
     "hooks": {}
@@ -56,6 +57,7 @@
     "file-saver": "^2.0.2",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
+    "nodemon": "^2.0.3",
     "omit.js": "^1.0.2",
     "path-to-regexp": "2.4.0",
     "qs": "^6.9.0",
