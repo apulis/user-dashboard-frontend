@@ -7,6 +7,7 @@ import { ConnectState, ConnectProps } from '@/models/connect';
 import { CurrentUser } from '@/models/user';
 import { RouteComponentProps} from 'react-router-dom';
 import H from 'history';
+import { message } from 'antd';
 
 interface Location extends H.Location{
   query: {[key: string]: string};
@@ -31,6 +32,7 @@ class SecurityLayout extends React.Component<SecurityLayoutProps & SecurityLayou
 
   componentWillMount() {
     let token = '';
+    let error = '';
     const { location, history } = this.props;
     if (location && location.query && location.query.token) {
       token = location.query.token;
@@ -45,6 +47,20 @@ class SecurityLayout extends React.Component<SecurityLayoutProps & SecurityLayou
         history && history.push(location!.pathname);
       }
     }
+    if (location && location.query && location.query.error) {
+      error = location.query.error;
+    }
+    if (error) {
+      message.error(error);
+      let redirectPath = location?.pathname;
+      const routerBase = window.routerBase;
+      if (routerBase.includes(redirectPath) || redirectPath?.includes(routerBase)) {
+        history && history.push('/');
+      } else {
+        history && history.push(location!.pathname);
+      }
+    }
+
   }
   componentDidMount() {
     this.setState({
