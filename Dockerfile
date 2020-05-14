@@ -12,4 +12,4 @@ RUN yarn build
 
 EXPOSE 3083
 
-CMD ["node", "server", ""]
+CMD ["yarn", "run", "static"]
