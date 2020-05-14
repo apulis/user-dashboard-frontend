@@ -15,3 +15,22 @@
    
 5. 当前项目的接口路径为 `/custom-user-dashboard/api`
 
+## 2. 用户认证流程
+
+### 用户登录 
+
+跳转到` /custom-user-dashboard/user/login?redirect={redirect}`，其中，redirect 是登录后将要跳转回的地址，需要对该 url 进行 encode
+
+### 用户注册
+
+跳转到 custom-user-dashboard/user/register
+
+### 微信登录
+
+主动跳转到 `/custom-user-dashboard/api/auth/wechat?to={to}`
+
+同样的，需要携带一个查询参数 `to` 作为登录成功后提爱哦转的的地址
+
+### 微软登录
+
+主动跳转到  `http://localhost:8000/custom-user-dashboard/api/auth/microsoft?to={to}`
