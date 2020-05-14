@@ -12,4 +12,6 @@
    也可以添加参数，指定程序的运行端口，例如：`yarn run static 4000`，即可指定 4000 端口
 
 4. 当前项目的路径为 `/custom-user-dashboard`， 在 nginx 上需要将该路径转发到当前运行的端口
+   
+5. 当前项目的接口路径为 `/custom-user-dashboard/api`
 
