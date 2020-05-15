@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'dva';
 import { Form } from '@ant-design/compatible';
 import { Checkbox, Input, Row, Col } from 'antd';
+import { debounce } from 'lodash';
 
 import { FormComponentProps } from '@ant-design/compatible/lib/form';
 
@@ -45,10 +46,10 @@ const SelectGroup: React.FC<ISearchUserProps & FormComponentProps & ConnectProps
     onChange && onChange(checkedValue as number[]);
   }
 
-  const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const s = e.target.value;
+  const onSearch = debounce((value: string) => {
+    const s = value;
     fetchUsers(s);
-  }
+  }, 800);
   return (
     <div>
       <Row>
@@ -57,7 +58,7 @@ const SelectGroup: React.FC<ISearchUserProps & FormComponentProps & ConnectProps
             <div className="ant-modal-title">
               Choose Users ( total: {userList.length} )
             </div>
-            <Search placeholder="input search text" onChange={onSearch} style={{marginTop: '10px'}} />
+            <Search placeholder="input search text" onChange={(e) => onSearch(e.target.value)} style={{marginTop: '10px'}} />
             <Checkbox.Group onChange={onCheckboxSelect} style={{marginTop: '10px'}}>
               {
                 userList.map((u) => (
