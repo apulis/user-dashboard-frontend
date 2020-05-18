@@ -129,10 +129,6 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
     if (res.success === true) {
       message.success('Success');
       setAddGroupModalVisible(false);
-    } else {
-      res.duplicate && res.duplicate.forEach((dpc: any) => {
-        message.error(`role ${dpc.roleName} is already in group ${dpc.groupName}, please cancel selected`);
-      });
     }
   }
   const confirmRelateUser = async () => {
@@ -140,10 +136,6 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
     if (res.success === true) {
       message.success('Success');
       setAddUserModalVisible(false);
-    } else {
-      res.duplicate && res.duplicate.forEach((dpc: any) => {
-        message.error(`user ${dpc.roleName} is already has role ${dpc.roleName}, please cancel selected`);
-      });
     }
   }
   useEffect(() => {
