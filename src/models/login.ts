@@ -92,7 +92,7 @@ const Model: LoginModelType = {
       const { loginType, userId } = payload;
       let { redirect } = getPageQuery();
       redirect = redirect || window.location.href
-      let redirectURI = '/custom-user-dashboard/api/auth/' + loginType + '?to=' + redirect
+      let redirectURI = '/custom-user-dashboard-backend/auth/' + loginType + '?to=' + redirect
       if (userId) {
         redirectURI += `&userId=${userId}`
       }

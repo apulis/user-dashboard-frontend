@@ -13,7 +13,7 @@
 
 4. 当前项目的路径为 `/custom-user-dashboard`， 在 nginx 上需要将该路径转发到当前运行的端口
    
-5. 当前项目的接口路径为 `/custom-user-dashboard/api`
+5. 当前项目的接口路径为 `/custom-user-dashboard-backend`
 
 ## 2. 用户认证流程
 
@@ -27,10 +27,10 @@
 
 ### 微信登录
 
-主动跳转到 `/custom-user-dashboard/api/auth/wechat?to={to}`
+主动跳转到 `/custom-user-dashboard-backend/auth/wechat?to={to}`
 
 同样的，需要携带一个查询参数 `to` 作为登录成功后跳转的的地址
 
 ### 微软登录
 
-主动跳转到  `http://localhost:8000/custom-user-dashboard/api/auth/microsoft?to={to}`
+主动跳转到  `http://localhost:8000/custom-user-dashboard-backend/auth/microsoft?to={to}`
