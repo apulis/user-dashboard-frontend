@@ -71,8 +71,6 @@ const Model: LoginModelType = {
           }
         }
         window.location.href = redirect || '/'
-      } else {
-        message.error(response.message)
       }
     },
 
