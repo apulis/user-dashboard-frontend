@@ -48,4 +48,16 @@ export default {
   'menu.editor.flow': 'Flow Editor',
   'menu.editor.mind': 'Mind Editor',
   'menu.editor.koni': 'Koni Editor',
+
+  'menu.index': 'Dashboard',
+  'menu.admin.user': 'User',
+  'menu.admin.user.add': 'New User',
+  'menu.admin.user.list': 'User List',
+  'menu.admin.groups': 'Group',
+  'menu.admin.groups.add': 'New Group',
+  'menu.admin.groups.list': 'Group List',
+  'menu.admin.roles': 'Role',
+  'menu.admin.roles.add': 'New Role',
+  'menu.admin.roles.list': 'Role List',
+
 };
