@@ -106,7 +106,6 @@ export default {
               path: '/',
               name: 'index',
               icon: 'dashboard',
-              component: './Index',
               authority: ['MANAGE_USER'],
             },
             {
