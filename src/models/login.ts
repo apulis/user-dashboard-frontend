@@ -3,7 +3,7 @@ import { Effect } from 'dva';
 import { stringify } from 'querystring';
 import { router } from 'umi';
 
-import { logInWithAccount } from '@/services/login';
+import { logInWithAccount, userLogout } from '@/services/login';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 import { message } from 'antd';
@@ -44,7 +44,6 @@ const Model: LoginModelType = {
       // Login successfully
       if (response.success) {
         localStorage.token = response.token;
-        console.log('response', response)
         setAuthority(response.permissionList);
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
@@ -74,9 +73,10 @@ const Model: LoginModelType = {
       }
     },
 
-    logout() {
+    * logout({payload}, {call, put}) {
       const { redirect } = getPageQuery();
-      // Note: There may be security issues, please note
+      if (localStorage.token) delete localStorage.token;
+      yield call(userLogout);
       if (window.location.pathname !== '/user/login' && !redirect) {
         router.replace({
           pathname: '/user/login',

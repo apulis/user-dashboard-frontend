@@ -15,3 +15,7 @@ export async function logInWithAccount(params: LoginParamsType) {
     },
   })
 }
+
+export async function userLogout() {
+  return await request('/auth/logout')
+}
