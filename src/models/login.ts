@@ -47,12 +47,12 @@ const Model: LoginModelType = {
         setAuthority(response.permissionList);
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
+        const routerBase = window.routerBase;
         let { redirect } = params as { redirect: string };
         if (redirect) {
           const redirectUrlParams = new URL(redirect);
           if (redirectUrlParams.origin === urlParams.origin) {
             redirect = redirect.substr(urlParams.origin.length);
-            const routerBase = window.routerBase;
             if (routerBase && routerBase !== '/') {
               if (redirect.includes(routerBase)) {
                 redirect = redirect.split(routerBase).join('');
@@ -69,7 +69,7 @@ const Model: LoginModelType = {
             return;
           }
         }
-        window.location.href = redirect || '/'
+        window.location.href = redirect || routerBase || '/'
       }
     },
 
