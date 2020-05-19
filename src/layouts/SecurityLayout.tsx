@@ -82,13 +82,12 @@ class SecurityLayout extends React.Component<SecurityLayoutProps & SecurityLayou
     const notLogin = !currentUser;
     const notRegister = currentUser && (!currentUser.userName && currentUser.openId);
     const queryString = stringify({
-      redirect: window.location.href.replace('/user/login', ''),
+      redirect: window.location.href.replace(/\/user\/login$/, ''),
     });
 
     if ((notLogin && loading) || !isReady) {
       return <PageLoading />;
     }
-    console.log('queryString', queryString)
     if (notLogin) {
       return <Redirect to={`/user/login?${queryString}`}></Redirect>;
     }
