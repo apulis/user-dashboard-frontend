@@ -53,6 +53,7 @@
     "antd": "^3.23.6",
     "classnames": "^2.2.6",
     "dva": "^2.6.0-beta.16",
+    "ecstatic": "^4.1.4",
     "exceljs": "^3.8.2",
     "file-saver": "^2.0.2",
     "lodash": "^4.17.11",
