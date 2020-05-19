@@ -18,16 +18,18 @@ const AuthorizedHOC: React.FC<IAuthorizedHOC & ConnectState> = ({children, needP
   const { currentAuthority } = currentUser;
   if (needPermission) {
     if (Array.isArray(needPermission)) {
-      needPermission.forEach(p => {
+      let c: React.ReactNode = null;
+      needPermission.some(p => {
         if (currentAuthority?.includes(p)) {
-          return (<>
+          c = (<>
             { children }
           </>)
         }
       })
+      return c;
     } else {
       if (currentAuthority?.includes(needPermission)) {
-        return (<>
+         (<>
           { children }
         </>)
       }
