@@ -142,11 +142,11 @@ class Login extends Component<LoginProps & LoginState & ConnectState> {
               }}
             />
           </Tab>
-          <div>
+          {/* <div>
             <Checkbox checked={autoLogin} onChange={this.changeAutoLogin}>
               <FormattedMessage id="user-login.login.remember-me" />
             </Checkbox>
-          </div>
+          </div> */}
           <Submit loading={submitting}>
             <FormattedMessage id="user-login.login.login" />
           </Submit>

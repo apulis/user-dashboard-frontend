@@ -98,7 +98,6 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
     if (currentUser && currentUser.microsoftId) {
       defaultUserName = currentUser.microsoftId.split('@', 1)[0]
     }
-    console.log('current', currentUser, defaultUserName)
     const { status, type: loginType } = userLogin;
     const { type } = this.state;
     return (
