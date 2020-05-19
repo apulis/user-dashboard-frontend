@@ -255,7 +255,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
   const confirmAddRoleToUser = async () => {
     const res = await editRoleToUsers(currentHandleUserId, selectedRoleIds);
     if (res.success) {
-      message.success('Success add role');
+      message.success('Success edit role');
       setCurrentHandleUserId(0);
       setCurrentUserRoles([]);
       setAddRoleForUserModalVisible(false);
