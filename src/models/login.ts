@@ -61,8 +61,7 @@ const Model: LoginModelType = {
             return;
           }
         }
-        console.log('redirect', redirect)
-        // window.location.href = redirect || routerBase || '/'
+        window.location.href = redirect || routerBase || '/'
       }
     },
 
