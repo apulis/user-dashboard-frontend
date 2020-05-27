@@ -196,7 +196,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
   const addToGroup = () => {
     setAddGroupModalVisible(true);
   }
-  const removeUser = (userName: string) => {
+  const removeUser = (userName?: string) => {
     
     confirm({
       title: 'Do you Want to delete these items?',
@@ -231,7 +231,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
         <UsergroupAddOutlined />
         Add To Group
       </Menu.Item>
-      <Menu.Item key="2" onClick={removeUser}>
+      <Menu.Item key="2" onClick={() => removeUser()}>
         <UserDeleteOutlined />
         Delete Current User
       </Menu.Item>
