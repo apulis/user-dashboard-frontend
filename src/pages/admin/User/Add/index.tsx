@@ -125,7 +125,6 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
           setStep(step + 1)
         } else if (step === 3) {
           submitUser(userMessage, selectedUserRole)
-          // setStep(step + 1)
         } 
         
       }
@@ -290,7 +289,6 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
         <div className="step-2">
           {
             getFieldDecorator('role', {
-              initialValue: ['User'],
               rules: [
                 { required: true, message: 'Need choose at least one role' }
               ]
