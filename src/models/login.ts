@@ -53,14 +53,6 @@ const Model: LoginModelType = {
           const redirectUrlParams = new URL(redirect);
           if (redirectUrlParams.origin === urlParams.origin) {
             redirect = redirect.substr(urlParams.origin.length);
-            if (routerBase && routerBase !== '/') {
-              if (redirect.includes(routerBase)) {
-                redirect = redirect.split(routerBase).join('');
-              } else {
-                window.location.href = redirect;
-                return;
-              }
-            }
             if (redirect.match(/^\/.*#/)) {
               redirect = redirect.substr(redirect.indexOf('#') + 1);
             }
@@ -69,7 +61,8 @@ const Model: LoginModelType = {
             return;
           }
         }
-        window.location.href = redirect || routerBase || '/'
+        console.log('redirect', redirect)
+        // window.location.href = redirect || routerBase || '/'
       }
     },
 
