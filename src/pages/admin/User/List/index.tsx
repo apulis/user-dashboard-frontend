@@ -147,7 +147,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
             <Dropdown
               overlay={<Menu>
               <Menu.Item onClick={() => {addToGroup();setCurrentHandleUserId(item.id)}} key="1">Add To User Group</Menu.Item>
-              <Menu.Item onClick={() => {setCurrentHandleUserId(item.id);removeUser()}} key="2">Delete</Menu.Item>
+              <Menu.Item onClick={() => {setCurrentHandleUserId(item.id);removeUser(item.userName)}} key="2">Delete</Menu.Item>
             </Menu>}
             >
             <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
@@ -196,7 +196,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
   const addToGroup = () => {
     setAddGroupModalVisible(true);
   }
-  const removeUser = () => {
+  const removeUser = (userName: string) => {
     
     confirm({
       title: 'Do you Want to delete these items?',
@@ -205,7 +205,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       okText: 'OK',
       cancelText: 'CANCEL',
       onOk() {
-        starRemoveUsers();
+        starRemoveUsers(userName);
       },
       onCancel() {
         //
