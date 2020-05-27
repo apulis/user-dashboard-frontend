@@ -287,15 +287,17 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
       </div> }
       { step === 2 &&
         <div className="step-2">
+          <FormItem>
           {
-            getFieldDecorator('role', {
-              rules: [
-                { required: true, message: 'Need choose at least one role' }
-              ]
-            })(<Checkbox.Group
-              options={userRoleOptions}
-            />)
-          }
+              getFieldDecorator('role', {
+                rules: [
+                  { required: true, message: 'Need choose at least one role' }
+                ]
+              })(<Checkbox.Group
+                options={userRoleOptions}
+              />)
+            }
+          </FormItem>
         </div>
       }
       {
