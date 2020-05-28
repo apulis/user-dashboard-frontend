@@ -70,7 +70,7 @@ const SelectGroup: React.FC<ISearchGroupProps & FormComponentProps & ConnectProp
                 ))
               }
               {
-                currentGroupList.length === 0 && <div>No eligible groups</div>
+                currentGroupList.length === 0 && <div>No availble groups</div>
               }
             </Checkbox.Group>
           </div>
