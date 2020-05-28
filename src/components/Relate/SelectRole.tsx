@@ -33,9 +33,13 @@ const SelectGroup: React.FC<ISearchRoleProps & FormComponentProps & ConnectProps
       }
     })
   };
-  console.log('currentUserRoles', currentUserRoles)
   useEffect(() => {
     fetchRoles();
+  }, [])
+
+  useEffect(() => {
+    // 初始化选择的角色
+    onCheckboxSelect(currentUserRoles || []);
   }, [])
 
   const { total: roleTotal } = roles;
@@ -46,7 +50,7 @@ const SelectGroup: React.FC<ISearchRoleProps & FormComponentProps & ConnectProps
     }
   }, [roleTotal])
   const [selectedRoles, setSelectedRoles] = useState<IRoleListItem[]>([]);
-
+  console.log('cu', currentUserRoles)
   const onCheckboxSelect = (checkedValue: CheckboxValueType[]) => {
     const selectedRoles: IRoleListItem[] = []
     checkedValue.forEach(id => {
