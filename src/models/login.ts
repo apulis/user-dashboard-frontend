@@ -67,7 +67,9 @@ const Model: LoginModelType = {
           type: 'changeLoginStatus',
           payload: response,
         });
-        message.error('username or password dont match');
+        if (response.status === 401) {
+          message.error('username or password dont match');
+        }
       }
     },
 

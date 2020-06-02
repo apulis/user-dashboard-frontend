@@ -30,7 +30,6 @@ interface LoginState {
 }
 
 class Login extends Component<LoginProps & LoginState & ConnectState> {
-  private passwordRef = React.createRef();
   loginForm: FormComponentProps['form'] | undefined | null = undefined;
 
   state: LoginState = {
@@ -133,7 +132,6 @@ class Login extends Component<LoginProps & LoginState & ConnectState> {
             <Password
               name="password"
               placeholder={`${formatMessage({ id: 'user-login.login.password' })}`}
-              ref={this.passwordRef}
               rules={[
                 {
                   required: true,

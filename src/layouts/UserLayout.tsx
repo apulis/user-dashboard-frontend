@@ -57,13 +57,16 @@ const UserLayout: React.FC<UserLayoutProps> = props => {
           </div>
         </Col>
         <Col span={9}>
-          <div className={styles.lang}>
+          {/* <div className={styles.lang}>
             <SelectLang />
+          </div> */}
+          <div className={styles.right}>
+            <Link to="/">
+              <div className={styles.title}>Deep Learning Workspace</div>
+            </Link>
+            {children}
           </div>
-          <Link to="/">
-            <div className={styles.title}>Deep Learning Workspace</div>
-          </Link>
-          {children}
+          
         </Col>
        
       </Row>
