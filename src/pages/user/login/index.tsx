@@ -1,6 +1,6 @@
 import { Alert, Checkbox, Icon, message } from 'antd';
 import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
-import React, { Component } from 'react';
+import React, { Component, RefObject } from 'react';
 
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { Dispatch, AnyAction } from 'redux';
@@ -18,6 +18,7 @@ import IconMicrosoft from '@/components/Icon/IconMicrosoft'
 
 const { Tab, UserName, Password, Submit } = LoginComponents;
 
+
 interface LoginProps {
   dispatch: Dispatch<AnyAction>;
   userLogin: StateType;
@@ -29,6 +30,7 @@ interface LoginState {
 }
 
 class Login extends Component<LoginProps & LoginState & ConnectState> {
+  private passwordRef = React.createRef();
   loginForm: FormComponentProps['form'] | undefined | null = undefined;
 
   state: LoginState = {
@@ -53,10 +55,15 @@ class Login extends Component<LoginProps & LoginState & ConnectState> {
   handleSubmit = async (err: unknown, values: LoginParamsType) => {
     if (!err) {
       const { dispatch } = this.props
-      dispatch({
-        type: 'login/login',
-        payload: {...values}
-      })
+      try {
+        await dispatch({
+          type: 'login/login',
+          payload: {...values}
+        })
+      } catch (err) {
+        console.log('err', err)
+      }
+      
     }
   };
 
@@ -75,6 +82,12 @@ class Login extends Component<LoginProps & LoginState & ConnectState> {
         loginType, 
       }
     })
+  }
+
+  componentDidUpdate(currentProps: LoginProps, prevProps: LoginProps) {
+    if (currentProps.userLogin?.status !== prevProps.userLogin?.status) {
+      this.loginForm?.resetFields(['password']);
+    }
   }
 
   render() {
@@ -120,6 +133,7 @@ class Login extends Component<LoginProps & LoginState & ConnectState> {
             <Password
               name="password"
               placeholder={`${formatMessage({ id: 'user-login.login.password' })}`}
+              ref={this.passwordRef}
               rules={[
                 {
                   required: true,

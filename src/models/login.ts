@@ -9,7 +9,7 @@ import { getPageQuery } from '@/utils/utils';
 import { message } from 'antd';
 
 export interface StateType {
-  status?: 'ok' | 'error';
+  status?: 'ok' | 'error' | 401;
   type?: string;
   currentAuthority?: string[];
 }
@@ -37,12 +37,12 @@ const Model: LoginModelType = {
   effects: {
     *login({ payload }, { call, put }) {
       const response = yield call(logInWithAccount, payload);
-      yield put({
-        type: 'changeLoginStatus',
-        payload: response,
-      });
       // Login successfully
       if (response.success) {
+        yield put({
+          type: 'changeLoginStatus',
+          payload:  {...response, status: 'ok' },
+        });
         localStorage.token = response.token;
         setAuthority(response.permissionList);
         const urlParams = new URL(window.location.href);
@@ -62,6 +62,12 @@ const Model: LoginModelType = {
           }
         }
         window.location.href = redirect || routerBase || '/'
+      } else {
+        yield put({
+          type: 'changeLoginStatus',
+          payload: response,
+        });
+        message.error('username or password dont match');
       }
     },
 
