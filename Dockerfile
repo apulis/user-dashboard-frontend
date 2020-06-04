@@ -5,11 +5,11 @@ RUN mkdir -p /home/custom-user-dashboard
 WORKDIR /home/custom-user-dashboard
 COPY . /home/custom-user-dashboard
 
-RUN yarn config set registry 'https://registry.npm.taobao.org'
-RUN yarn
-RUN yarn build
+RUN npm config set registry 'https://registry.npm.taobao.org'
+RUN npm i
+RUN npm build
 
 
 EXPOSE 3083
 
-CMD ["yarn", "run", "static"]
+CMD ["npm", "run", "static"]
