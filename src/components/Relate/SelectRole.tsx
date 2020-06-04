@@ -50,7 +50,6 @@ const SelectGroup: React.FC<ISearchRoleProps & FormComponentProps & ConnectProps
     }
   }, [roleTotal])
   const [selectedRoles, setSelectedRoles] = useState<IRoleListItem[]>([]);
-  console.log('cu', currentUserRoles)
   const onCheckboxSelect = (checkedValue: CheckboxValueType[]) => {
     const selectedRoles: IRoleListItem[] = []
     checkedValue.forEach(id => {
