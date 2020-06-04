@@ -7,7 +7,7 @@ COPY . /home/custom-user-dashboard
 
 RUN npm config set registry 'https://registry.npm.taobao.org'
 RUN npm i
-RUN npm build
+RUN npm run build
 
 
 EXPOSE 3083
