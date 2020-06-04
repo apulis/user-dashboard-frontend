@@ -101,6 +101,8 @@ const UsersModel: UsersModelType = {
       return {
         ...state,
         ...payload,
+        pageSize: payload.pageSize || state.pageSize || 10,
+        pageNo: payload.pageNo || state.pageNo || 1,
       }
     },
     changePageSize(state = {}, { payload }) {
