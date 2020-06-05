@@ -1,4 +1,4 @@
-import { Tooltip } from 'antd';
+import { Tooltip, Button } from 'antd';
 import React from 'react';
 import { connect } from 'dva';
 import { formatMessage } from 'umi-plugin-react/locale';
@@ -24,7 +24,8 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
   }
 
   return (
-    <div className={className}>
+    <div className={className} style={{marginRight: '30px'}}>
+      <Button type="primary" href="/" style={{marginRight: '20px'}}>DLWS dashboard</Button>
       {/* <HeaderSearch
         className={`${styles.action} ${styles.search}`}
         placeholder={formatMessage({
