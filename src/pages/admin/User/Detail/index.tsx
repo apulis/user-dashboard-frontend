@@ -196,7 +196,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
                 getFieldDecorator('email', {
                   initialValue: item.email || '',
                   rules: [
-                    { pattern: emailReg }
+                    { pattern: emailReg, message: 'Irregular input' }
                   ]
                 })(
                     <Input />
