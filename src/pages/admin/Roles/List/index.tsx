@@ -144,7 +144,8 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
       type: 'groups/fetchGroups'
     })
   }, [])
-  
+  console.log('selectRows', selectRows)
+  const buttonDisabled = !!selectRows.find(val => val.isPreset === 1);
   return (
     <PageHeaderWrapper>
       <div className={styles.top}>
@@ -152,7 +153,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
           <Link to="/admin/role/add">
             <Button style={{marginRight: '20px'}} type="primary">Add Role</Button>
           </Link>
-          <Button onClick={() => removeCurrentSelectedRole()} disabled={selectRows.length === 0}>Delete Current Role</Button>
+          <Button onClick={() => removeCurrentSelectedRole()} disabled={buttonDisabled}>Delete Current Role</Button>
         </div>
         <Search onSearch={onSearchRoles} style={{width: '200px' }}/>
       </div>
