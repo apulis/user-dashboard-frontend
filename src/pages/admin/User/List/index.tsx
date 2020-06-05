@@ -291,7 +291,11 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
         }}
         dataSource={list}
         columns={columns}
-        pagination={false}
+        pagination={{
+          current: pageNo || 1,
+          pageSize: pageSize || 10
+        }}
+        
         loading={tableLoading}
       />
       <div className={styles.bottom}>
