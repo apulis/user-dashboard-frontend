@@ -82,6 +82,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
         const res = await removeUserRole(userId, roleId);
         if (res.success) {
           fetchUserById();
+          fetchUserRoles();
           message.success(`Success delete ${roleName} `)
         }
       }
@@ -93,6 +94,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
       async onOk() {
         const res = await removeGroupUser(groupId, userId);
         if (res.success) {
+          fetchUserById();
           fetchUserGroups();
           message.success(`Success delete ${groupName} `)
         }
@@ -249,7 +251,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
           )
         }
         return (
-          <a onClick={editCurrentUser}>EDIT</a>
+          <a onClick={editCurrentUser}>Edit</a>
         )
       }
     }
