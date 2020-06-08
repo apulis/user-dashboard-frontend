@@ -145,7 +145,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
     })
   }, [])
   console.log('selectRows', selectRows)
-  const buttonDisabled = !!selectRows.find(val => val.isPreset === 1);
+  const buttonDisabled = !!(selectRows.find(val => val.isPreset === 1) || selectRows.length === 0);
   return (
     <PageHeaderWrapper>
       <div className={styles.top}>
