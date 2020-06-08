@@ -78,7 +78,7 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
         if (editing[index]) {
           return <FormItem>{getFieldDecorator(`userMessage[${index}].password`, {
             initialValue: item.password,
-            rules: [{ required: true, message: 'Password is required'}],
+            rules: [{ required: true, message: 'Password is required'}, { min: 6 }],
           })(<Input placeholder="Password" />)}</FormItem>
         } else {
           return item.password
