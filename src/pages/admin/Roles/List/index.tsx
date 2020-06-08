@@ -88,17 +88,23 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
     setSelectedUserId([]);
   }
   const removeCurrentSelectedRole = async (currentRole?: number) => {
-    let res;
-    if (typeof currentRole === 'number') {
-      res = await removeRoles([currentRole])
-    } else {
-      const currentRemoveUserRoleNames = selectRows.map(r => r.id);
-      res = await removeRoles(currentRemoveUserRoleNames)
-    }
-    if (res.success === true) {
-      message.success(`Success`);
-      fetchUsers()
-    }
+    Modal.confirm({
+      title: 'Will delete current selected role?',
+      async onOk() {
+        let res;
+        if (typeof currentRole === 'number') {
+          res = await removeRoles([currentRole])
+        } else {
+          const currentRemoveUserRoleNames = selectRows.map(r => r.id);
+          res = await removeRoles(currentRemoveUserRoleNames)
+        }
+        if (res.success === true) {
+          message.success(`Success`);
+          fetchUsers()
+        }
+      }
+    })
+    
   }
   const fetchUsers = (s?: string, page?: number) => {
     dispatch({
