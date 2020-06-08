@@ -27,6 +27,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form,
   const { validateFields, getFieldDecorator } = form;
   const { permissions } = roles;
   const projectTypes = [...new Set(permissions.map(val => val.project))];
+
   let treeData: TreeNodeNormal[] = projectTypes.map(val => {
     return {
       title: val,
@@ -52,8 +53,11 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form,
     dispatch({
       type: 'roles/fetchAllPermissions'
     });
-    onExpand(projectTypes);
   }, []);
+  useEffect(() => {
+    // console.log('projectTypes', projectTypes)
+    // onExpand(projectTypes);
+  }, [projectTypes])
   const onExpand = (expandedKeys:TypeKeys) => {
     // if not set autoExpandParent to false, if children expanded, parent can not collapse.
     // or, you can remove all expanded children keys.
@@ -112,7 +116,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form,
       <Tree
         checkable
         onExpand={onExpand}
-        expandedKeys={expandedKeys}
+        expandedKeys={projectTypes}
         autoExpandParent={autoExpandParent}
         onCheck={onCheck}
         checkedKeys={checkedKeys}
