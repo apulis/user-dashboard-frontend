@@ -217,7 +217,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
   const onSearch = (s: string) => {
     setSearch(s);
     fetchUsers({
-      pageNo,
+      pageNo: 1,
       pageSize,
       search: s,
     })
