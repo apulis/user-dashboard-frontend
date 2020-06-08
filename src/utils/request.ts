@@ -36,12 +36,13 @@ const errorHandler = (error: { response: Response }): Response => {
       const href = window.location.href;
       if (!/\/login/.test(href) && !/\/register/.test(href)) {
         router.push('/user/login');
+        notification.error({
+          message: `Request error`,
+          description: errorText,
+        });
       }
     }
-    notification.error({
-      message: `Request error ${status}: ${url}`,
-      description: errorText,
-    });
+    
   } else if (!response) {
     notification.error({
       description: 'Network anomalies, please try again later',
