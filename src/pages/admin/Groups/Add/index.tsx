@@ -73,6 +73,8 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
           if (res.success) {
             message.success('Success');
             router.push('/admin/group/list');
+          } else {
+            message.error(`Group name ${submitData?.name} has exist, please try another`);
           }
         })
     }
