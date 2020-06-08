@@ -279,6 +279,9 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
     {
       title: 'Action',
       render(_text, item) {
+        if (userInfo.id === 0) {
+          return <div>-</div>;
+        }
         return (
           <a onClick={() => removeRoleForUser(item.id, item.name)}>Remove</a>
         )
