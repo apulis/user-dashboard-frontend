@@ -182,6 +182,33 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
                 }
               }}
             />
+            <Password
+              name="password2"
+              placeholder={`${formatMessage({ id: 'user-login.login.password2' })}`}
+              rules={[
+                {
+                  validator: async (rule, value, callback) => {
+                    const password2Error = await this.loginForm?.getFieldError('password2');
+                    if (password2Error) {
+                      callback(password2Error);
+                      return;
+                    }
+                    const values = await this.loginForm?.getFieldsValue();
+                    if (!values) return;
+                    if (values.password !== values.password2) {
+                      callback('Password inconsistent');
+                    }
+                    
+                  }
+                },
+              ]}
+              onPressEnter={e => {
+                e.preventDefault();
+                if (this.loginForm) {
+                  this.loginForm.validateFields(this.handleSubmit);
+                }
+              }}
+            />
           </Tab>
           {
             (currentUser && !currentUser.userName) ? <Alert message="You have joined, Now need to register for DLWS" type="success" /> : <></>
