@@ -132,6 +132,11 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
   };
   const removeUser = (createTime: number) => {
     const currentFormUserMessage: IUserMessage[] = getFieldsValue().userMessage;
+    console.log('currentFormUserMessage', currentFormUserMessage)
+    if (currentFormUserMessage.length === 1) {
+      message.warn('Should keep at least one user')
+      return;
+    }
     currentFormUserMessage.forEach((item, index) => {
       item.createTime = userMessage[index].createTime;
     })
