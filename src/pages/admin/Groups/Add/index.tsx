@@ -195,7 +195,7 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
         step >=  2 &&
         <Button style={{marginRight: '15px'}} onClick={pre}>PREVIOUS</Button>
       }
-      <Button style={{marginTop: '20px'}} type="primary" onClick={next}>{ step === 3 ? 'FINISH' : 'SUBMIT'}</Button>
+      <Button style={{marginTop: '20px'}} type="primary" onClick={next}>{ step === 3 ? 'SUBMIT' : 'Next'}</Button>
     </PageHeaderWrapper>
   );
 }
