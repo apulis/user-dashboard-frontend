@@ -1,6 +1,7 @@
 export default {
   'user-register.login.userName': 'userName',
   'user-login.login.password': 'password',
+  'user-login.login.password2': 'confirm password',
   'user-login.login.message-invalid-credentials':
     'Invalid username or password（admin/ant.design）',
   'user-login.login.message-invalid-verification-code': 'Invalid verification code',
@@ -23,6 +24,7 @@ export default {
   'user-login.email.wrong-format': 'The email address is in the wrong format!',
   'user-login.userName.required': 'Please enter your userName!',
   'user-login.password.required': 'Please enter your password!',
+  'user-login.password2.required': 'Please confirm your password!',
   'user-login.password.twice': 'The passwords entered twice do not match!',
   'user-login.strength.msg':
     "Please enter at least 6 characters and don't use passwords that are easy to guess.",
