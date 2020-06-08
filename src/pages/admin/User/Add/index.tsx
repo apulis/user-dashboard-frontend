@@ -250,6 +250,9 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
                       initialValue: userMessage[index].userName,
                       rules: [
                         { required: true, message: 'UserName is required'},
+                        {
+                          min: 4, message: 'min length is 4'
+                        },
                         { validator: (...args) => {
                             const newArgs = args.slice(0, 4);
                             validateUniqueUserName(index, getFieldsValue().userMessage, ...newArgs)
