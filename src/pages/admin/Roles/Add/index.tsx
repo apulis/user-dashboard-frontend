@@ -19,8 +19,8 @@ type TypeKeys = string[];
 
 
 const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form, dispatch, roles }) => {
-  const [expandedKeys, setExpandedKeys] = useState<TypeKeys>([]);
-  const [checkedKeys, setCheckedKeys] = useState<TypeKeys>(['0-0-0']);
+  const [expandedKeys, setExpandedKeys] = useState<TypeKeys>(['DLWORKSPACE']);
+  const [checkedKeys, setCheckedKeys] = useState<TypeKeys>([]);
   const [selectedKeys, setSelectedKeys] = useState<TypeKeys>([]);
   const [autoExpandParent, setAutoExpandParent] = useState<boolean>(true);
   const [buttonLoading, setButtonLoading] = useState<boolean>(false);
@@ -52,9 +52,9 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form,
     dispatch({
       type: 'roles/fetchAllPermissions'
     });
+    onExpand(projectTypes);
   }, []);
   const onExpand = (expandedKeys:TypeKeys) => {
-    console.log('onExpand', expandedKeys);
     // if not set autoExpandParent to false, if children expanded, parent can not collapse.
     // or, you can remove all expanded children keys.
     setExpandedKeys(expandedKeys);
@@ -62,12 +62,10 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form,
   };
 
   const onCheck = (checkedKeys: string[] | { checked: string[]; halfChecked: string[]; }, e: AntTreeNodeCheckedEvent) => {
-    console.log('onCheck', checkedKeys);
     setCheckedKeys(checkedKeys as string[] );
   };
 
   const onSelect = (selectedKeys: TypeKeys, info: AntTreeNodeSelectedEvent) => {
-    console.log('onSelect', info);
     setSelectedKeys(selectedKeys);
   };
   const next = () => {
@@ -121,8 +119,9 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form,
         onSelect={onSelect}
         selectedKeys={selectedKeys}
         treeData={treeData}
+        defaultExpandAll
       />
-      <Button loading={buttonLoading} onClick={next}>Next</Button>
+      <Button style={{marginTop: '20px'}} loading={buttonLoading} onClick={next}>Submit</Button>
     </PageHeaderWrapper>
   )
 }
