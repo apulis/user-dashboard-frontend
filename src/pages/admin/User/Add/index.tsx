@@ -301,9 +301,17 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
                 rules: [
                   { required: true, message: 'Need choose at least one role' }
                 ]
-              })(<Checkbox.Group
-                options={userRoleOptions}
-              />)
+              })(<Checkbox.Group style={{ width: '100%'}}>
+              <Row>
+                {
+                  userRoleOptions.map(r => (
+                    <Col span={8}>
+                      <Checkbox style={{marginTop: '4px', marginBottom: '4px'}} value={r.value}>{r.label}</Checkbox>
+                    </Col>
+                  ))
+                }
+              </Row>
+            </Checkbox.Group>)
             }
           </FormItem>
         </div>
