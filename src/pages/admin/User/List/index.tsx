@@ -143,11 +143,14 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       render(_text, item): React.ReactNode {
         return (
           <div style={{display: 'flex', justifyContent: 'space-between'}}>
-            <a onClick={() => addRolesForUser(item.id)}>Edit Role</a>
+            {
+              item.id !== 1 && 
+              <a onClick={() => addRolesForUser(item.id)}>Edit Role</a>
+            }
             <Dropdown
               overlay={<Menu>
               <Menu.Item onClick={() => {addToGroup();setCurrentHandleUserId(item.id)}} key="1">Add To User Group</Menu.Item>
-              <Menu.Item onClick={() => {setCurrentHandleUserId(item.id);removeUser(item.userName)}} key="2">Delete</Menu.Item>
+              <Menu.Item disabled={item.id === 1} onClick={() => {setCurrentHandleUserId(item.id);removeUser(item.userName)}} key="2">Delete</Menu.Item>
             </Menu>}
             >
             <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
@@ -231,7 +234,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
         <UsergroupAddOutlined />
         Add To Group
       </Menu.Item>
-      <Menu.Item key="2" onClick={() => removeUser()}>
+      <Menu.Item key="2" disabled={!!selectRows.find(val => val.id === 1)} onClick={() => removeUser()}>
         <UserDeleteOutlined />
         Delete Current User
       </Menu.Item>
@@ -291,11 +294,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
         }}
         dataSource={list}
         columns={columns}
-        pagination={{
-          current: pageNo || 1,
-          pageSize: pageSize || 10
-        }}
-        
+        pagination={false}
         loading={tableLoading}
       />
       <div className={styles.bottom}>
