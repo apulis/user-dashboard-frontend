@@ -68,7 +68,7 @@ const Model: LoginModelType = {
           payload: response,
         });
         if (response.status === 401) {
-          message.error('username or password dont match');
+          message.error('Incorrect username or password.');
         }
       }
     },
