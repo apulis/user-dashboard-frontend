@@ -175,7 +175,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
         pagination={false}
       />
       <Pagination
-        style={{marginTop: '20px'}}
+        style={{marginTop: '20px', float: 'right'}}
         onChange={onPageNationChange}
         // pageSize={pageSize}
         total={total}
