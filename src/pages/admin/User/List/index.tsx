@@ -311,6 +311,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
         <Pagination
           style={{marginTop: '20px'}}
           onChange={onPageNationChange}
+          defaultCurrent={pageNo || 1}
           pageSize={pageSize}
           total={total}
         />
