@@ -88,25 +88,33 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
     setSelectedUserId([]);
   }
   const removeCurrentSelectedRole = async (currentRole?: number) => {
+    let tempRoleList;
     Modal.confirm({
       title: 'Will delete current selected role?',
       async onOk() {
         let res;
         if (typeof currentRole === 'number') {
+          tempRoleList = [currentRole]
           res = await removeRoles([currentRole])
         } else {
           const currentRemoveUserRoleNames = selectRows.map(r => r.id);
+          tempRoleList = currentRemoveUserRoleNames;
           res = await removeRoles(currentRemoveUserRoleNames)
         }
         if (res.success === true) {
           message.success(`Success`);
-          fetchUsers()
+          if (tempRoleList.length === list.length) {
+            // 删掉最后一页的全部内容
+            fetchRoles(undefined, pageNo - 1);
+          } else {
+            fetchRoles()
+          }
         }
       }
     })
     
   }
-  const fetchUsers = (s?: string, page?: number) => {
+  const fetchRoles = (s?: string, page?: number) => {
     dispatch({
       type: 'roles/fetchRoles',
       payload: {
@@ -118,7 +126,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
   }
   const onPageNationChange = (pageNo: number) => {
     setPageNo(pageNo);
-    fetchUsers(search, pageNo);
+    fetchRoles(search, pageNo);
     setSelectRows([]);
     setSelectRowKeys([]);
   }
@@ -128,7 +136,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
   }
   const onSearchRoles = (search: string) => {
     setSearch(search);
-    fetchUsers(search);
+    fetchRoles(search);
   }
   const confirmRelateGroup = async () => {
     const res = await addRoleToGroups([currentHandleRoleId], selectedGroupId);
@@ -145,12 +153,11 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
     }
   }
   useEffect(() => {
-    fetchUsers();
+    fetchRoles();
     dispatch({
       type: 'groups/fetchGroups'
     })
   }, [])
-  console.log('selectRows', selectRows)
   const buttonDisabled = !!(selectRows.find(val => val.isPreset === 1) || selectRows.length === 0);
   return (
     <PageHeaderWrapper>

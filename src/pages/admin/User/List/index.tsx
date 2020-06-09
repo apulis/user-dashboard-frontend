@@ -69,11 +69,16 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
     }
     removeUsers(userNames)
       .then(res => {
+        let tag = false;
+        if (list.length === userNames.length) {
+          // 最后一页的数据全部删除的情况
+          tag = true;
+        }
         if (res.success) {
           message.success('Success Delete User: ' + userNames.join(', '))
           fetchUsers({
             pageSize,
-            pageNo,
+            pageNo: tag ? pageNo - 1 : pageNo,
           })
           clearRowSelection();
           setCurrentHandleUserId(0);
@@ -164,7 +169,9 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
   ];
   
   const onPageNationChange: (page: number, pageSize?: number) => void = (pageNo, pageSize) => {
-    fetchUsers({ pageSize, pageNo })
+    fetchUsers({ pageSize, pageNo });
+    setSelectRows([]);
+    setSelectRowKeys([]);
   }
   const onPageSizeChange = (pageSize: number) => {
     dispatch({

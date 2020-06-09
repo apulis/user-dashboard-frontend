@@ -8,6 +8,7 @@ import { FormComponentProps } from '@ant-design/compatible/es/form';
 import Excel from 'exceljs/dist/exceljs.bare';
 import { emailReg, validateUniqueUserName, mobilePattern } from '../../../../utils/validates';
 import { IUserMessage } from './index';
+import styles from '../Detail/index.less';
 
 interface User extends IUserMessage {
 
@@ -43,7 +44,10 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
         if (editing[index]) {
           return <FormItem>{getFieldDecorator(`userMessage[${index}].nickName`, {
             initialValue: item.nickName,
-            rules: [{ min: 4, message: 'min length is 4' }]
+            rules: [
+              { min: 4, message: 'NickName need at least 4 characters' },
+              { max: 20, message: 'NickName cannot be longer than 20 characters' },
+            ]
           })(<Input placeholder="Nickname" />)}</FormItem>
         } else {
           return item.nickName;
@@ -58,7 +62,8 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
             initialValue: item.userName,
             rules: [
               { required: true, message: 'UserName is required'},
-              { min: 4, message: 'min length is 4' },
+              { min: 4, message: 'UserName need at least 4 characters' },
+              { max: 20, message: 'UserName cannot be longer than 20 characters' },
               { validator: (...args) => {
                 const newArgs = args.slice(0, 4);
                 validateUniqueUserName(index, dataSource, ...newArgs);
@@ -76,7 +81,7 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
         if (editing[index]) {
           return <FormItem>{getFieldDecorator(`userMessage[${index}].password`, {
             initialValue: item.password,
-            rules: [{ required: true, message: 'Password is required'}, { min: 6, message: 'password must be at least 6 characters' }],
+            rules: [{ required: true, message: 'Password is required'}, { min: 6, message: 'Need at least 6 characters' }],
           })(<Input placeholder="Password" />)}</FormItem>
         } else {
           return item.password
@@ -131,8 +136,8 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
         if (editing[index]) {
           return (
             <>
-              <a style={{marginRight: '4px'}} onClick={() => saveEditingTable(index)}>Save</a>
-              <a style={{marginLeft: '4px'}}  onClick={() => toggleEditing(index)}>Cancel</a>
+              <a style={{ marginRight: 10 }} onClick={() => saveEditingTable(index)}>Save</a>
+              <a onClick={() => toggleEditing(index)}>Cancel</a>
             </>
           )
         } else {
@@ -194,10 +199,10 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
 
   }
   return (
-    <>
-      <Button type="primary" onClick={download}>Download</Button>
+    <div className={styles.editTableWrap}>
+      {/* <Button type="primary" onClick={download}>Download</Button> */}
       <Table columns={columns} dataSource={dataSource} style={{...style, marginTop: '20px'}} />
-    </>
+    </div>
   )
 }
 

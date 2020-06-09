@@ -125,7 +125,7 @@ class Login extends Component<LoginProps & LoginState & ConnectState> {
                 },
                 {
                   max: 22,
-                  message: 'Max length is 22'
+                  message: 'Cannot be longer than 22 characters'
                 }
               ]}
             />
@@ -143,7 +143,7 @@ class Login extends Component<LoginProps & LoginState & ConnectState> {
                 },
                 {
                   max: 20,
-                  message: 'Max length is 20'
+                  message: 'Cannot be longer than 20 characters'
                 }
               ]}
               onPressEnter={e => {

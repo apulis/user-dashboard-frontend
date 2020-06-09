@@ -57,6 +57,7 @@
     "exceljs": "^3.8.2",
     "file-saver": "^2.0.2",
     "lodash": "^4.17.11",
+    "md5-typescript": "^1.0.5",
     "moment": "^2.24.0",
     "nodemon": "^2.0.3",
     "omit.js": "^1.0.2",

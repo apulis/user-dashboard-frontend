@@ -239,7 +239,11 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
                   <FormItem { ...formItemLayout }>
                     {getFieldDecorator(`userMessage[${index}].nickName`, {
                       initialValue: userMessage[index].nickName,
-                      rules: [{ required: true, message: 'NickName is required'}],
+                      rules: [
+                        { required: true, message: 'NickName is required'},
+                        { min: 4, message: 'NickName need at least 4 characters' },
+                        { max: 20, message: 'NickName cannot be longer than 20 characters' },
+                      ],
                     })(<Input placeholder="nickName" />)}
                   </FormItem>
                 </Col>
@@ -249,9 +253,8 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
                       initialValue: userMessage[index].userName,
                       rules: [
                         { required: true, message: 'UserName is required'},
-                        {
-                          min: 4, message: 'min length is 4'
-                        },
+                        { min: 4, message: 'UserName need at least 4 characters' },
+                        { max: 20, message: 'UserName cannot be longer than 20 characters' },
                         { validator: (...args) => {
                             const newArgs = args.slice(0, 4);
                             validateUniqueUserName(index, getFieldsValue().userMessage, ...newArgs)

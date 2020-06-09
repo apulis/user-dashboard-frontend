@@ -60,6 +60,9 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
     } else if (step === 2) {
       validateFields((err, values) => {
         if (!err) {
+          if (!values.role) {
+            values.role = [];
+          }
           setSubmitData({
             ...submitData,
             ...values,
@@ -73,7 +76,7 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
           if (res.success) {
             message.success('Success');
             router.push('/admin/group/list');
-          } else {
+          } else if (res.success === false) {
             message.error(`Group name ${submitData?.name} has exist, please try another`);
           }
         })
@@ -136,9 +139,19 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
       note: item ? item.note : '',
     };
   });
-  console.log(tableDataSource)
   return (
     <PageHeaderWrapper>
+      <Breadcrumb style={{marginBottom: '16px'}}>
+        { step >= 1 && <Breadcrumb.Item>
+          1. Group Info
+        </Breadcrumb.Item> }
+        { step >= 2 && <Breadcrumb.Item>
+          2. Role
+        </Breadcrumb.Item> }
+        { step >= 3 && <Breadcrumb.Item>
+          3. Preview
+        </Breadcrumb.Item> }
+      </Breadcrumb>
       {
         step === 1 && <div className="step-1">
           <FormItem label="Group Name" {...layout}>
@@ -147,7 +160,8 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
                 initialValue: submitData?.name || '',
                 rules: [
                   { required: true, message: 'group name is required' },
-                  { max: 20 }
+                  { max: 20, message: 'Group Name Cannot be longer than 20 characters' },
+                  { whitespace: true, message: 'group name cannot be empty' }
                 ],
               })(<Input />)
             }
@@ -158,7 +172,7 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
                 initialValue: submitData?.note || '',
                 rules: [
                   { required: true, message: 'Description is required'},
-                  { max: 50 }
+                  { max: 50, message: 'Description Cannot be longer than 50 characters'}
                 ],
               })(<TextArea />)
             }
@@ -171,7 +185,7 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
             getFieldDecorator('role', {
               initialValue: submitData?.role,
               rules: [
-                { required: true }
+                // { required: true },
               ]
             })(<Checkbox.Group style={{ width: '100%'}}>
               <Row>
@@ -190,9 +204,9 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
       {
         step === 3 && <div className="step-3">
           <h1>Group Info</h1>
-          <div>
-            <div>Group Name：{submitData?.name}</div>
-            <div>Description: {submitData?.note}</div>
+          <div style={{ marginBottom: 16 }}>
+            <p>Group Name：{submitData?.name}</p>
+            <p>Description: {submitData?.note}</p>
           </div>
           <h1>Role  ({submitData?.role.length})</h1> 
           <Table dataSource={tableDataSource} columns={columns} />
