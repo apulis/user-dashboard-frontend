@@ -180,6 +180,8 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
         message.success('Edit success');
         setIsGroupInfoEditing(false);
         fetchGroupDetail(Number(id));
+      } else if (res.success === false) {
+        message.error(res.message)
       }
     });
     
@@ -238,8 +240,8 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
           {
             isGroupInfoEditing ? 
             <>
-              <Button onClick={confirmEditing} type="primary">CONFIRM</Button>
-              <Button onClick={toggleEditing}>CANCEL</Button>
+              <Button style={{marginRight: '20px'}} onClick={confirmEditing} type="primary">Confirm</Button>
+              <Button onClick={toggleEditing}>Cancel</Button>
             </>
             :
             <a onClick={toggleEditing}>Edit</a>
