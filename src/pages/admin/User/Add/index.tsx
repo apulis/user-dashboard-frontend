@@ -251,7 +251,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
                       rules: [
                         { required: true, message: 'UserName is required'},
                         {
-                          min: 4, message: 'min length is 4'
+                          min: 4, message: 'Need at least 4 characters'
                         },
                         { validator: (...args) => {
                             const newArgs = args.slice(0, 4);

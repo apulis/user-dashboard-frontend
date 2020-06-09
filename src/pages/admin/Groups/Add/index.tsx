@@ -150,7 +150,7 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
                 initialValue: submitData?.name || '',
                 rules: [
                   { required: true, message: 'group name is required' },
-                  { max: 10, message: 'max length is 10' },
+                  { max: 10, message: 'Cannot be longer than 10 characters' },
                   { whitespace: true, message: 'group name cannot be empty' }
                 ],
               })(<Input />)
@@ -162,7 +162,7 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
                 initialValue: submitData?.note || '',
                 rules: [
                   { required: true, message: 'note is required'},
-                  { max: 40, message: 'max length is 40'}
+                  { max: 40, message: 'Cannot be longer than 40 characters'}
                 ],
               })(<TextArea />)
             }

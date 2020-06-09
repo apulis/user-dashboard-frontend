@@ -134,7 +134,7 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
                 },
                 {
                   max: 22,
-                  message: 'Max length is 22'
+                  message: 'Cannot be longer than 22 characters'
                 }
               ]}
             />
@@ -150,11 +150,11 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
                 },
                 {
                   min: 6,
-                  message: 'Need at lease 6 letters'
+                  message: 'Need at least 6 characters'
                 },
                 {
                   max: 20,
-                  message: 'Max length is 20'
+                  message: 'Cannot be longer than 20 characters'
                 }
               ]}
             />
@@ -172,7 +172,7 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
                 },
                 {
                   max: 20,
-                  message: 'Max length is 20'
+                  message: 'Cannot be longer than 20 characters'
                 }
               ]}
               onPressEnter={e => {

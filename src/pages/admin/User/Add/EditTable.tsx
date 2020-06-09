@@ -61,7 +61,7 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
             initialValue: item.userName,
             rules: [
               { required: true, message: 'UserName is required'},
-              { min: 4, message: 'min length is 4' },
+              { min: 4, message: 'Need at least 4 characters' },
               { validator: (...args) => {
                 const newArgs = args.slice(0, 4);
                 validateUniqueUserName(index, dataSource, ...newArgs);
@@ -79,7 +79,7 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
         if (editing[index]) {
           return <FormItem>{getFieldDecorator(`userMessage[${index}].password`, {
             initialValue: item.password,
-            rules: [{ required: true, message: 'Password is required'}, { min: 6, message: 'min length is 6' }],
+            rules: [{ required: true, message: 'Password is required'}, { min: 6, message: 'Need at least 6 characters' }],
           })(<Input placeholder="Password" />)}</FormItem>
         } else {
           return item.password
