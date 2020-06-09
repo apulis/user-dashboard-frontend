@@ -80,6 +80,10 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
     }
   }
   const removeRole = (index: number) => {
+    if ([...submitData!.role].length === 1) {
+      message.warn('Need at least one role');
+      return;
+    }
     const newRoleList = [...submitData!.role].splice(index, 1);
     setSubmitData({
       ...submitData,
