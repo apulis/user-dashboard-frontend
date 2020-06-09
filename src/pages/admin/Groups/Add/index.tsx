@@ -147,7 +147,8 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
                 initialValue: submitData?.name || '',
                 rules: [
                   { required: true, message: 'group name is required' },
-                  { max: 10, message: 'max length is 10' }
+                  { max: 10, message: 'max length is 10' },
+                  { whitespace: true, message: 'group name cannot be empty' }
                 ],
               })(<Input />)
             }
@@ -171,7 +172,7 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
             getFieldDecorator('role', {
               initialValue: submitData?.role,
               rules: [
-                { required: true }
+                { required: true },
               ]
             })(<Checkbox.Group style={{ width: '100%'}}>
               <Row>

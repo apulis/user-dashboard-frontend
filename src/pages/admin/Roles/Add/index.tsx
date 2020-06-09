@@ -97,7 +97,8 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form,
           getFieldDecorator('name', {
             rules: [
               { required: true },
-              { max: 15 }
+              { max: 15 },
+              { whitespace: true, message: 'role name cannot be empty' }
             ]
           })(<Input />)
         }
