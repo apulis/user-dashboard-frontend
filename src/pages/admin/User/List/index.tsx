@@ -57,7 +57,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
     setTableLoading(false);
   }
   useEffect(() => {
-    fetchUsers({pageNo, pageSize});
+    fetchUsers({pageNo: pageNo || 1, pageSize: pageSize || 10});
     fetchUserGroups();
   }, [])
   const starRemoveUsers = (currentHandleUserId?: string) => {
