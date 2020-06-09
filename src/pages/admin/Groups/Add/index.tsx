@@ -84,7 +84,8 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
       message.warn('Need at least one role');
       return;
     }
-    const newRoleList = [...submitData!.role].splice(index, 1);
+    const newRoleList = [...submitData!.role]
+    newRoleList.splice(index, 1);
     setSubmitData({
       ...submitData,
       role: newRoleList,
