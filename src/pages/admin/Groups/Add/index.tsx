@@ -60,6 +60,9 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
     } else if (step === 2) {
       validateFields((err, values) => {
         if (!err) {
+          if (!values.role) {
+            values.role = [];
+          }
           setSubmitData({
             ...submitData,
             ...values,
@@ -73,7 +76,7 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
           if (res.success) {
             message.success('Success');
             router.push('/admin/group/list');
-          } else {
+          } else if (res.success === false) {
             message.error(`Group name ${submitData?.name} has exist, please try another`);
           }
         })
@@ -172,7 +175,7 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
             getFieldDecorator('role', {
               initialValue: submitData?.role,
               rules: [
-                { required: true },
+                // { required: true },
               ]
             })(<Checkbox.Group style={{ width: '100%'}}>
               <Row>
