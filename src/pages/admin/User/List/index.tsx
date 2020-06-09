@@ -142,7 +142,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       align: 'center',
       render(_text, item): React.ReactNode {
         return (
-          <div style={{display: 'flex', justifyContent: 'space-between'}}>
+          <div style={{display: 'flex', justifyContent: 'space-around'}}>
             {
               item.id !== 1 && 
               <a onClick={() => addRolesForUser(item.id)}>Edit Role</a>
