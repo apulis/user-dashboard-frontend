@@ -61,7 +61,7 @@ const SelectGroup: React.FC<ISearchGroupProps & FormComponentProps & ConnectProp
               Choose Groups ( total: {currentGroupList.length} )
             </div>
             <Search placeholder="input search text" onChange={(e) => onSearch(e.target.value)} style={{marginTop: '10px'}} />
-            <Checkbox.Group onChange={onCheckboxSelect} style={{marginTop: '10px'}}>
+            <Checkbox.Group className={styles.checkbox} onChange={onCheckboxSelect} style={{marginTop: '10px'}}>
               {
                 currentGroupList.map((g) => (
                   <Col span={24}>

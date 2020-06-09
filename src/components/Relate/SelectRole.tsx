@@ -75,7 +75,7 @@ const SelectGroup: React.FC<ISearchRoleProps & FormComponentProps & ConnectProps
               Choose Roles ( total: {roleList.length} )
             </div>
             {/* <Search placeholder="input search text" onChange={onSearch} style={{marginTop: '10px'}} /> */}
-            <Checkbox.Group defaultValue={currentUserRoles} onChange={onCheckboxSelect} style={{marginTop: '10px'}}>
+            <Checkbox.Group className={styles.checkbox} defaultValue={currentUserRoles} onChange={onCheckboxSelect} style={{marginTop: '10px'}}>
               {
                 roleList.map((r) => (
                   <Col span={24} key={r.id}>
