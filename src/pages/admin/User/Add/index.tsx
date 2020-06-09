@@ -211,7 +211,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
           2. Role
         </Breadcrumb.Item> }
         { step >= 3 && <Breadcrumb.Item>
-          3. Review
+          3. Preview
         </Breadcrumb.Item> }
       </Breadcrumb>
       { step === 1 && <div className="step-1">
