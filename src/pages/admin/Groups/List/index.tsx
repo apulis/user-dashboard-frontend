@@ -152,6 +152,9 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, groups }) => {
       <Table
         columns={columns}
         dataSource={list}
+        pagination={{
+          onChange: () => {setSelectedRows([])}
+        }}
         rowSelection={{
           type: "checkbox",
           onChange: onRowSelection,

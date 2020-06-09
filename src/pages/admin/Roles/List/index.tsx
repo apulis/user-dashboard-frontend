@@ -150,7 +150,6 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
       type: 'groups/fetchGroups'
     })
   }, [])
-  console.log('selectRows', selectRows)
   const buttonDisabled = !!(selectRows.find(val => val.isPreset === 1) || selectRows.length === 0);
   return (
     <PageHeaderWrapper>

@@ -164,7 +164,9 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
   ];
   
   const onPageNationChange: (page: number, pageSize?: number) => void = (pageNo, pageSize) => {
-    fetchUsers({ pageSize, pageNo })
+    fetchUsers({ pageSize, pageNo });
+    setSelectRows([]);
+    setSelectRowKeys([]);
   }
   const onPageSizeChange = (pageSize: number) => {
     dispatch({
