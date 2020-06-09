@@ -76,6 +76,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form,
     validateFields(async (err, values) => {
       if (err) return;
       setButtonLoading(true);
+      const name = values.RoleName;
       const result = await createRole({
         name: values.name,
         note: values.note,
@@ -83,7 +84,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form,
       });
       setButtonLoading(false)
       if (result.success) {
-        message.success('Success Create Role ' + values.name);
+        message.success('Success Create Role ' + name);
         router.push('/admin/role/list');
       } else if (result.success === false) {
         message.error(`RoleName ${name} have existed, please try another`);
@@ -94,21 +95,21 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form,
     <PageHeaderWrapper>
       <FormItem label="RoleName" {...layout} style={{width: '80%'}}>
         {
-          getFieldDecorator('name', {
+          getFieldDecorator('RoleName', {
             rules: [
               { required: true },
-              { max: 15 },
+              { max: 20 },
               { whitespace: true, message: 'role name cannot be empty' }
             ]
           })(<Input />)
         }
       </FormItem>
-      <FormItem label="Decription" {...layout} style={{width: '80%'}}>
+      <FormItem label="Description" {...layout} style={{width: '80%'}}>
         {
           getFieldDecorator('note', {
             rules: [
               { required: true },
-              { max: 15 }
+              { max: 50 }
             ]
           })(<Input.TextArea />)
         }

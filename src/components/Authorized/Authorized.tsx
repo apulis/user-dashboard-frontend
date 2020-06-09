@@ -22,8 +22,8 @@ const Authorized: React.FunctionComponent<AuthorizedProps> = ({
   noMatch = (
     <Result
       status="403"
-      title="403"
-      subTitle="Sorry, you are not authorized to access this page."
+      title=""
+      subTitle={<><p>Sorry, you are not authorized to access this page.</p><p>Please contact the administrator to add permissions</p></>}
     />
   ),
 }) => {

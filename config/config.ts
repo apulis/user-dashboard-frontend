@@ -247,7 +247,8 @@ export default {
   // chainWebpack: webpackPlugin,
   proxy: {
     '/custom-user-dashboard-backend': {
-      target: 'http://localhost:5001/',
+      // target: 'http://localhost:5001/',
+      target: 'http://sandbox2-master.sigsus.cn:52080/custom-user-dashboard-backend',
       changeOrigin: true,
       pathRewrite: {
         '^/custom-user-dashboard-backend': '',

@@ -154,7 +154,7 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
       key: 'email'
     },
     {
-      title: 'Note',
+      title: 'Description',
       dataIndex: 'note',
       key: 'note'
     },

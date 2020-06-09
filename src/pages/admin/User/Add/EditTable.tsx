@@ -3,15 +3,12 @@ import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Table, Input, Button } from 'antd';
 import { saveAs } from 'file-saver'
-
 import { ColumnProps } from 'antd/lib/table';
 import { FormComponentProps } from '@ant-design/compatible/es/form';
 import Excel from 'exceljs/dist/exceljs.bare';
-
-
-import { emailReg, validateUniqueUserName } from '../../../../utils/validates';
+import { emailReg, validateUniqueUserName, mobilePattern } from '../../../../utils/validates';
 import { IUserMessage } from './index';
-
+import styles from '../Detail/index.less';
 
 interface User extends IUserMessage {
 
@@ -47,6 +44,10 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
         if (editing[index]) {
           return <FormItem>{getFieldDecorator(`userMessage[${index}].nickName`, {
             initialValue: item.nickName,
+            rules: [
+              { min: 4, message: 'NickName need at least 4 characters' },
+              { max: 20, message: 'NickName cannot be longer than 20 characters' },
+            ]
           })(<Input placeholder="Nickname" />)}</FormItem>
         } else {
           return item.nickName;
@@ -61,7 +62,8 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
             initialValue: item.userName,
             rules: [
               { required: true, message: 'UserName is required'},
-              { min: 4, message: 'Need at least 4 characters' },
+              { min: 4, message: 'UserName need at least 4 characters' },
+              { max: 20, message: 'UserName cannot be longer than 20 characters' },
               { validator: (...args) => {
                 const newArgs = args.slice(0, 4);
                 validateUniqueUserName(index, dataSource, ...newArgs);
@@ -92,6 +94,7 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
         if (editing[index]) {
           return <FormItem>{getFieldDecorator(`userMessage[${index}].phone`, {
             initialValue: item.phone,
+            rules: [mobilePattern]
           })(<Input placeholder="Phone" />)}</FormItem>
         } else {
           return item.phone
@@ -114,13 +117,13 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
         }
       }
     }, {
-      title: 'Note',
+      title: 'Description',
       dataIndex: 'note',
       render(_text: any, item: User, index: number) {
         if (editing[index]) {
           return <FormItem>{getFieldDecorator(`userMessage[${index}].note`, {
             initialValue: item.note
-          })(<Input placeholder="Note" />)}</FormItem>
+          })(<Input placeholder="Description" />)}</FormItem>
         } else {
           return item.note;
         }
@@ -133,8 +136,8 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
         if (editing[index]) {
           return (
             <>
-              <a style={{marginRight: '4px'}} onClick={() => saveEditingTable(index)}>Save</a>
-              <a style={{marginLeft: '4px'}}  onClick={() => toggleEditing(index)}>Cancel</a>
+              <a style={{ marginRight: 10 }} onClick={() => saveEditingTable(index)}>Save</a>
+              <a onClick={() => toggleEditing(index)}>Cancel</a>
             </>
           )
         } else {
@@ -186,7 +189,7 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
       { header: 'UserName', key: 'userName', width: 36},
       { header: 'Phone', key: 'phone', width: 36},
       { header: 'Email', key: 'email', width: 36},
-      { header: 'Note', key: 'note', width: 36},
+      { header: 'Description', key: 'note', width: 36},
     ]
     dataSource.forEach(val => {
       worksheet.addRow(val);
@@ -196,10 +199,10 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
 
   }
   return (
-    <>
+    <div className={styles.editTableWrap}>
       {/* <Button type="primary" onClick={download}>Download</Button> */}
       <Table columns={columns} dataSource={dataSource} style={{...style, marginTop: '20px'}} />
-    </>
+    </div>
   )
 }
 

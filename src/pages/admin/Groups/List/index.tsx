@@ -68,7 +68,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, groups }) => {
       }
     },
     {
-      title: 'Note',
+      title: 'Description',
       key: 'note',
       dataIndex: 'note',
     },
