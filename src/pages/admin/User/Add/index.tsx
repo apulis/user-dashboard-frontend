@@ -6,8 +6,7 @@ import { FormComponentProps } from '@ant-design/compatible/es/form';
 import { connect } from 'dva';
 import router from 'umi/router';
 import { ConnectProps, ConnectState } from '@/models/connect';
-import { validateUniqueUserName, emailReg } from '@/utils/validates';
-
+import { validateUniqueUserName, emailReg, mobilePattern } from '@/utils/validates';
 import EditTable from './EditTable';
 import styles from './index.less';
 import { createUsers } from '@/services/users';
@@ -266,6 +265,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
                   <FormItem { ...formItemLayout }>
                     {getFieldDecorator(`userMessage[${index}].phone`, {
                       initialValue: userMessage[index].phone,
+                      rules: [mobilePattern]
                     })(<Input placeholder="phone" />)}
                   </FormItem>
                 </Col>

@@ -3,15 +3,11 @@ import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Table, Input, Button } from 'antd';
 import { saveAs } from 'file-saver'
-
 import { ColumnProps } from 'antd/lib/table';
 import { FormComponentProps } from '@ant-design/compatible/es/form';
 import Excel from 'exceljs/dist/exceljs.bare';
-
-
-import { emailReg, validateUniqueUserName } from '../../../../utils/validates';
+import { emailReg, validateUniqueUserName, mobilePattern } from '../../../../utils/validates';
 import { IUserMessage } from './index';
-
 
 interface User extends IUserMessage {
 
@@ -47,6 +43,7 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
         if (editing[index]) {
           return <FormItem>{getFieldDecorator(`userMessage[${index}].nickName`, {
             initialValue: item.nickName,
+            rules: [{ min: 4, message: 'min length is 4' }]
           })(<Input placeholder="Nickname" />)}</FormItem>
         } else {
           return item.nickName;
@@ -79,7 +76,7 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
         if (editing[index]) {
           return <FormItem>{getFieldDecorator(`userMessage[${index}].password`, {
             initialValue: item.password,
-            rules: [{ required: true, message: 'Password is required'}, { min: 6, message: 'min length is 6' }],
+            rules: [{ required: true, message: 'Password is required'}, { min: 6, message: 'password must be at least 6 characters' }],
           })(<Input placeholder="Password" />)}</FormItem>
         } else {
           return item.password
@@ -92,6 +89,7 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
         if (editing[index]) {
           return <FormItem>{getFieldDecorator(`userMessage[${index}].phone`, {
             initialValue: item.phone,
+            rules: [mobilePattern]
           })(<Input placeholder="Phone" />)}</FormItem>
         } else {
           return item.phone
@@ -114,13 +112,13 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
         }
       }
     }, {
-      title: 'Note',
+      title: 'Description',
       dataIndex: 'note',
       render(_text: any, item: User, index: number) {
         if (editing[index]) {
           return <FormItem>{getFieldDecorator(`userMessage[${index}].note`, {
             initialValue: item.note
-          })(<Input placeholder="Note" />)}</FormItem>
+          })(<Input placeholder="Description" />)}</FormItem>
         } else {
           return item.note;
         }
@@ -186,7 +184,7 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
       { header: 'UserName', key: 'userName', width: 36},
       { header: 'Phone', key: 'phone', width: 36},
       { header: 'Email', key: 'email', width: 36},
-      { header: 'Note', key: 'note', width: 36},
+      { header: 'Description', key: 'note', width: 36},
     ]
     dataSource.forEach(val => {
       worksheet.addRow(val);

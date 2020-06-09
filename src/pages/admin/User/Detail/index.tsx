@@ -4,26 +4,18 @@ import { Form } from '@ant-design/compatible';
 import { PageHeader, Table, Input, message, Modal } from 'antd';
 import { router } from 'umi';
 import { useParams } from 'react-router-dom';
-
-
 import { FormComponentProps } from 'antd/lib/form';
 import { ColumnProps } from 'antd/es/table';
-
 import { getUserById, getUserRolesById, editUserInfo, removeUserRole, getUserRoleInfo, getUserGroups } from '@/services/users';
 import { removeGroupUser} from '@/services/groups';
-
- 
 import { ConnectState, ConnectProps } from '@/models/connect';
 import { IRoleListItem } from '@/models/roles';
 import { IUsers } from '@/models/users';
-
-import { emailReg } from '@/utils/validates';
+import { emailReg, mobilePattern } from '@/utils/validates';
 import { IGroup } from '../../Groups/List';
-
+import styles from './index.less';
 
 const FormItem = Form.Item;
-
-
 
 const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form, users, groups }) => {
   const { id } = useParams();
@@ -172,9 +164,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
               {
                 getFieldDecorator('phone', {
                   initialValue: item.phone || '',
-                  rules: [
-                    
-                  ]
+                  rules: [mobilePattern]
                 })(
                     <Input />
                   )
@@ -198,7 +188,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
                 getFieldDecorator('email', {
                   initialValue: item.email || '',
                   rules: [
-                    { pattern: emailReg, message: 'Irregular input' }
+                    { pattern: emailReg, message: 'please check email format' }
                   ]
                 })(
                     <Input />
@@ -214,7 +204,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
       }
     },
     {
-      title: 'Note',
+      title: 'Description',
       render(_text, item) {
         if (isEditing) {
           return (
@@ -244,10 +234,10 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
       render() {
         if (isEditing) {
           return (
-            <div style={{display: 'flex', width: '100px', justifyContent: 'space-between'}}>
-              <div><a onClick={saveEditing}>SAVE</a></div>
-              <div><a onClick={() => setIsEditing(false)}>CANCEL</a></div>
-            </div>
+            <>
+              <a onClick={saveEditing} style={{ marginRight: 10 }}>SAVE</a>
+              <a onClick={() => setIsEditing(false)}>CANCEL</a>
+            </>
           )
         }
         return (
@@ -311,7 +301,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
   ]
 
   return (
-    <>
+    <div className={styles.detailWrap}>
       <PageHeader
         className="site-page-header"
         onBack={() => router.push('/admin/user/list')}
@@ -337,7 +327,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
         dataSource={groupInfo}
       />
 
-    </>
+    </div>
   )
 }
 

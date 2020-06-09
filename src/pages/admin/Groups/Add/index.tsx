@@ -147,18 +147,18 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
                 initialValue: submitData?.name || '',
                 rules: [
                   { required: true, message: 'group name is required' },
-                  { max: 10, message: 'max length is 10' }
+                  { max: 20 }
                 ],
               })(<Input />)
             }
           </FormItem>
-          <FormItem label="Note" {...layout}>
+          <FormItem label="Description" {...layout}>
             {
               getFieldDecorator('note', {
                 initialValue: submitData?.note || '',
                 rules: [
-                  { required: true, message: 'note is required'},
-                  { max: 40, message: 'max length is 40'}
+                  { required: true, message: 'Description is required'},
+                  { max: 50 }
                 ],
               })(<TextArea />)
             }
