@@ -200,6 +200,13 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
     })
     return result;
   })
+  const toPrevious = () => {
+    if (step === 2) {
+      const role = getFieldsValue().role || [];
+      setSelectedUserRole(role);
+    }
+    setStep(step - 1);
+  }
   return (
     <PageHeaderWrapper>
     <div className={styles.add}>
@@ -298,6 +305,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
           <FormItem>
           {
               getFieldDecorator('role', {
+                initialValue: selectedUserRole,
                 rules: [
                   { required: true, message: 'Need choose at least one role' }
                 ]
@@ -331,6 +339,10 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
         </div>
       }
       <div style={{marginTop: '40px'}}>
+        {
+          step !== 1 &&
+          <Button onClick={toPrevious} style={{ marginRight: '20px' }}>Previous</Button>
+        }
         <Button disabled={isEditingTableEditing} onClick={submit} type="primary">{step === 3 ? 'Submit' : 'Next'}</Button>
       </div>
     </div>
