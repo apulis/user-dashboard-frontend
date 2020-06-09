@@ -197,7 +197,7 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
   }
   return (
     <>
-      <Button type="primary" onClick={download}>Download</Button>
+      {/* <Button type="primary" onClick={download}>Download</Button> */}
       <Table columns={columns} dataSource={dataSource} style={{...style, marginTop: '20px'}} />
     </>
   )
