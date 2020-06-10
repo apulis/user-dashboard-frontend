@@ -11,7 +11,7 @@ import { removeGroupUser} from '@/services/groups';
 import { ConnectState, ConnectProps } from '@/models/connect';
 import { IRoleListItem } from '@/models/roles';
 import { IUsers } from '@/models/users';
-import { emailReg, mobilePattern } from '@/utils/validates';
+import { emailReg, mobilePattern, textPattern } from '@/utils/validates';
 import { IGroup } from '../../Groups/List';
 import styles from './index.less';
 
@@ -116,7 +116,8 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
                 getFieldDecorator('nickName', {
                   initialValue: item.nickName,
                   rules: [
-                    { required: true, message: 'nickName is required' }
+                    { required: true, message: 'nickName is required' },
+                    textPattern
                   ]
                 })(
                     <Input />
@@ -140,9 +141,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
               {
                 getFieldDecorator('userName', {
                   initialValue: item.userName,
-                  rules: [
-                    
-                  ]
+                  rules: [textPattern]
                 })(
                     <Input disabled />
                   )
@@ -209,16 +208,10 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
         if (isEditing) {
           return (
             <FormItem>
-              {
-                getFieldDecorator('note', {
+              {getFieldDecorator('note', {
                   initialValue: item.note || '',
-                  rules: [
-                  ]
-                })(
-                    <Input />
-                  )
-              }
-              
+                  rules: [textPattern]
+                })(<Input />)}
             </FormItem>
             
           )

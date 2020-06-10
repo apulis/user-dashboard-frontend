@@ -35,10 +35,11 @@ const Info: React.FC<ConnectProps & ConnectState> = ({ user, dispatch, config })
   return (
     <>
       <Descriptions title="Account Info" layout="vertical" bordered>
+      <Descriptions.Item label="User Id">{currentUser.id}</Descriptions.Item>
         <Descriptions.Item label="Username">{currentUser.userName}</Descriptions.Item>
         <Descriptions.Item label="Nickname">{currentUser.nickName || '-'}</Descriptions.Item>
+        <Descriptions.Item label="Current Role">{currentUser.currentRole.join(',')}</Descriptions.Item>
         <Descriptions.Item label="Phone">{currentUser.phone || '-'}</Descriptions.Item>
-        <Descriptions.Item label="User Id">{currentUser.id}</Descriptions.Item>
         <Descriptions.Item label="Email">{currentUser.email || '-'}</Descriptions.Item>
       </Descriptions>
       <Descriptions title="Login Methods" layout="vertical" bordered style={{marginTop: '35px'}}>

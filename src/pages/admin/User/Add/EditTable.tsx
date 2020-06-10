@@ -6,7 +6,7 @@ import { saveAs } from 'file-saver'
 import { ColumnProps } from 'antd/lib/table';
 import { FormComponentProps } from '@ant-design/compatible/es/form';
 import Excel from 'exceljs/dist/exceljs.bare';
-import { emailReg, validateUniqueUserName, mobilePattern } from '../../../../utils/validates';
+import { emailReg, validateUniqueUserName, mobilePattern, textPattern } from '@/utils/validates';
 import { IUserMessage } from './index';
 import styles from '../Detail/index.less';
 
@@ -47,6 +47,7 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
             rules: [
               { min: 4, message: 'Nickname need at least 4 characters' },
               { max: 20, message: 'Nickname cannot be longer than 20 characters' },
+              textPattern
             ]
           })(<Input placeholder="Nickname" />)}</FormItem>
         } else {
@@ -67,7 +68,8 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
               { validator: (...args) => {
                 const newArgs = args.slice(0, 4);
                 validateUniqueUserName(index, dataSource, ...newArgs);
-              }}
+              }},
+              textPattern
             ],
           })(<Input placeholder="Username" />)}</FormItem>
         } else {
@@ -122,7 +124,8 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
       render(_text: any, item: User, index: number) {
         if (editing[index]) {
           return <FormItem>{getFieldDecorator(`userMessage[${index}].note`, {
-            initialValue: item.note
+            initialValue: item.note,
+            rules: [textPattern]
           })(<Input placeholder="Description" />)}</FormItem>
         } else {
           return item.note;

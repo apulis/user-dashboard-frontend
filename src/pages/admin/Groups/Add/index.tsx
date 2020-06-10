@@ -9,6 +9,7 @@ import { ConnectProps, ConnectState } from '@/models/connect';
 import { addGroup } from '@/services/groups';
 import { ColumnProps } from 'antd/lib/table';
 import { IRoleListItem } from '@/models/roles';
+import { textPattern } from '@/utils/validates';
 
 export interface IAddUserGroup {
   name: string;
@@ -160,7 +161,8 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
                 rules: [
                   { required: true, message: 'group name is required' },
                   { max: 20, message: 'Group Name Cannot be longer than 20 characters' },
-                  { whitespace: true, message: 'group name cannot be empty' }
+                  { whitespace: true, message: 'group name cannot be empty' },
+                  textPattern
                 ],
               })(<Input />)
             }
@@ -171,7 +173,8 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
                 initialValue: submitData?.note || '',
                 rules: [
                   { required: true, message: 'Description is required'},
-                  { max: 50, message: 'Description Cannot be longer than 50 characters'}
+                  { max: 50, message: 'Description Cannot be longer than 50 characters'},
+                  textPattern
                 ],
               })(<TextArea />)
             }
