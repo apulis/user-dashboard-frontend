@@ -101,7 +101,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
     } else if (res.success === false) {
       if (res.conflictedUserName && res.conflictedUserName.length > 0) {
         res.conflictedUserName.forEach((dpc: any) => {
-          message.error(`user ${dpc.userName} is already existed, please cancel selected`);
+          message.error(`User ${dpc.userName} is already existed!`);
         })
       }
     }
