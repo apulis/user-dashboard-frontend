@@ -1,4 +1,6 @@
 import request from '@/utils/request';
+import { encodePassword } from '@/utils/utils';
+
 
 export interface LoginParamsType {
   userName: string;
@@ -11,7 +13,7 @@ export async function logInWithAccount(params: LoginParamsType) {
     method: 'POST',
     data: {
       userName: params.userName,
-      password: params.password
+      password: encodePassword(params.password),
     },
   })
 }
