@@ -1,8 +1,15 @@
 import request from '@/utils/request';
+import { IUserMessage } from '@/pages/admin/User/Add';
+import { encodePassword } from '@/utils/utils';
 
 interface IFetchUserPayload {
   pageSize: number;
   pageNo: number;
+}
+
+interface ICreateUser {
+  userMessage: IUserMessage[],
+  userRole: number[]
 }
 
 export async function fetchUsers(payload: IFetchUserPayload): Promise<any> {
@@ -11,7 +18,10 @@ export async function fetchUsers(payload: IFetchUserPayload): Promise<any> {
   });
 }
 
-export async function createUsers(payload: any) {
+export async function createUsers(payload: ICreateUser) {
+  payload.userMessage.forEach(u => {
+    u.password = encodePassword(u.password as string);
+  })
   return await request('/users', {
     method: 'POST',
     data: payload

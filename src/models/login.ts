@@ -50,16 +50,22 @@ const Model: LoginModelType = {
         const routerBase = window.routerBase;
         let { redirect } = params as { redirect: string };
         if (redirect) {
-          const redirectUrlParams = new URL(redirect);
-          if (redirectUrlParams.origin === urlParams.origin) {
-            redirect = redirect.substr(urlParams.origin.length);
-            if (redirect.match(/^\/.*#/)) {
-              redirect = redirect.substr(redirect.indexOf('#') + 1);
+          if (new RegExp(routerBase).test(redirect)) {
+            const redirectUrlParams = new URL(redirect);
+            if (redirectUrlParams.origin === urlParams.origin) {
+              redirect = redirect.substr(urlParams.origin.length);
+              if (redirect.match(/^\/.*#/)) {
+                redirect = redirect.substr(redirect.indexOf('#') + 1);
+              }
+            } else {
+              window.location.href = '/';
+              return;
             }
           } else {
-            window.location.href = '/';
+            window.location.href = redirect + '?token=' + response.token;
             return;
           }
+          
         }
         window.location.href = redirect || routerBase || '/'
       } else {
