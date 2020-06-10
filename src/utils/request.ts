@@ -33,15 +33,19 @@ const errorHandler = (error: { response: Response }): Response => {
     const errorText = codeMessage[response.status] || response.statusText;
     const { status, url } = response;
     if (status === 401) {
-      const href = window.location.href;
-      if (!/\/login/.test(href) && !/\/register/.test(href)) {
-        router.push('/user/login');
-        notification.error({
-          message: `Request error`,
-          description: errorText,
-        });
-        return response;
-      }
+      setTimeout(() => {
+        const href = window.location.href;
+        if (!/\/login/.test(href) && !/\/register/.test(href)) {
+          console.log('href', href)
+          router.push('/user/login');
+          notification.error({
+            message: `Request error`,
+            description: errorText,
+          });
+          return response;
+        }
+      }, 20);
+      
     } else {
       notification.error({
         message: `Request error`,
