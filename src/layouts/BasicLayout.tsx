@@ -72,8 +72,11 @@ const footerRender: BasicLayoutProps['footerRender'] = () => {
     <>
       <div
         style={{
-          padding: '10px 24px 10px 10px',
+          paddingBottom: 40,
           textAlign: 'center',
+          position: 'absolute',
+          bottom: 0,
+          width: '100%'
         }}
       >
         DLWS User Dashboard
