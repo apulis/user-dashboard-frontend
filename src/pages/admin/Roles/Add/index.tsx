@@ -77,7 +77,6 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form,
       if (err) return;
       setButtonLoading(true);
       const name = values.RoleName;
-      console.log('values', values)
       const result = await createRole({
         name: name,
         note: values.note,
@@ -109,7 +108,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form,
         {
           getFieldDecorator('note', {
             rules: [
-              { required: true },
+              { required: true, message: 'Description is required' },
               { max: 50 }
             ]
           })(<Input.TextArea />)
