@@ -77,7 +77,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form,
       setButtonLoading(true);
       const name = values.RoleName;
       const result = await createRole({
-        name: values.name,
+        name: name,
         note: values.note,
         permissions: checkedKeys
       });
@@ -108,7 +108,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form,
         {
           getFieldDecorator('note', {
             rules: [
-              { required: true },
+              { required: true, message: 'Description is required' },
               { max: 50 },
               textPattern
             ]
