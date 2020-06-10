@@ -40,7 +40,13 @@ const errorHandler = (error: { response: Response }): Response => {
           message: `Request error`,
           description: errorText,
         });
+        return response;
       }
+    } else {
+      notification.error({
+        message: `Request error`,
+        description: errorText,
+      });
     }
     
   } else if (!response) {
