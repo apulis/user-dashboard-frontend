@@ -107,7 +107,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
 
   const userInfoColumns: ColumnProps<IUsers>[] = [
     {
-      title: 'NickName',
+      title: 'Nickname',
       render(_text, item) {
         if (isEditing) {
           return (
@@ -132,7 +132,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
       }
     },
     {
-      title: 'UserName',
+      title: 'Username',
       render(_text, item) {
         if (isEditing) {
           return (

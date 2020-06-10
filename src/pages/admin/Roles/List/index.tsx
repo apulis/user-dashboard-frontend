@@ -42,7 +42,6 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
     setAddGroupModalVisible(true);
   }
   const { list: groupList } = groups;
-  console.log('groupList', groupList)
   const columns: ColumnProps<IRoleListItem>[] = [
     {
       title: 'Role Name',

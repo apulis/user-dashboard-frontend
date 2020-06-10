@@ -99,7 +99,6 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
       title: 'Role',
       dataIndex: 'role',
       render(_text, item) {
-        console.log(_text, item)
         return (
           <div>{rolesList.find(r => r.id === item.role)?.name}</div>
         )

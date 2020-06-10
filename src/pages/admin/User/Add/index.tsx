@@ -131,7 +131,6 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
   };
   const removeUser = (createTime: number) => {
     const currentFormUserMessage: IUserMessage[] = getFieldsValue().userMessage;
-    console.log('currentFormUserMessage', currentFormUserMessage)
     if (currentFormUserMessage.length === 1) {
       message.warn('Should keep at least one user')
       return;
@@ -216,19 +215,19 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
       { step === 1 && <div className="step-1">
         <Row>
           <Col span={4}>
-            NickName *
+            Nickname *
           </Col>
           <Col span={4}>
-            UserName *
+            Username *
           </Col>
           <Col span={4}>
-            phone
+            Phone
           </Col>
           <Col span={4}>
-            email
+            Email
           </Col>
           <Col span={4}>
-            note
+            Notes
           </Col>
         </Row>
         {
@@ -240,9 +239,9 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
                     {getFieldDecorator(`userMessage[${index}].nickName`, {
                       initialValue: userMessage[index].nickName,
                       rules: [
-                        { required: true, message: 'NickName is required'},
-                        { min: 4, message: 'NickName need at least 4 characters' },
-                        { max: 20, message: 'NickName cannot be longer than 20 characters' },
+                        { required: true, message: 'Nickname is required'},
+                        { min: 4, message: 'Nickname need at least 4 characters' },
+                        { max: 20, message: 'Nickname cannot be longer than 20 characters' },
                       ],
                     })(<Input placeholder="nickName" />)}
                   </FormItem>
@@ -252,9 +251,9 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
                     {getFieldDecorator(`userMessage[${index}].userName`, {
                       initialValue: userMessage[index].userName,
                       rules: [
-                        { required: true, message: 'UserName is required'},
-                        { min: 4, message: 'UserName need at least 4 characters' },
-                        { max: 20, message: 'UserName cannot be longer than 20 characters' },
+                        { required: true, message: 'Username is required'},
+                        { min: 4, message: 'Username need at least 4 characters' },
+                        { max: 20, message: 'Username cannot be longer than 20 characters' },
                         { validator: (...args) => {
                             const newArgs = args.slice(0, 4);
                             validateUniqueUserName(index, getFieldsValue().userMessage, ...newArgs)

@@ -134,12 +134,12 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
 
   const usersColumns: ColumnProps<any>[] = [
     {
-      title: 'NickName',
+      title: 'Nickname',
       dataIndex: 'nickName',
       key: 'nickName'
     },
     {
-      title: 'UserName',
+      title: 'Username',
       dataIndex: 'userName',
       key: 'userName'
     },
@@ -240,7 +240,7 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
           {
             isGroupInfoEditing ? 
             <>
-              <Button style={{marginRight: '20px'}} onClick={confirmEditing} type="primary">Confirm</Button>
+              <Button style={{marginRight: '20px'}} onClick={confirmEditing} type="primary">Save</Button>
               <Button onClick={toggleEditing}>Cancel</Button>
             </>
             :
