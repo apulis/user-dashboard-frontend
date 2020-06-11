@@ -72,3 +72,8 @@ export async function getRolesCount() {
 export async function getAllPermissions() {
   return await request('/permission/all');
 }
+
+
+export async function getRoleGroup(roleId: number) {
+  return await request('/group-role/role/' + roleId + '/group');
+}
