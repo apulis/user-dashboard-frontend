@@ -42,7 +42,6 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
     setAddGroupModalVisible(true);
   }
   const { list: groupList } = groups;
-  console.log('groupList', groupList)
   const columns: ColumnProps<IRoleListItem>[] = [
     {
       title: 'Role Name',
@@ -73,7 +72,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
           <div style={{display: 'flex', justifyContent: 'space-around'}}>
             <a onClick={() => addRoleToUser(item.id)}>Related To User</a>
             <a onClick={() => addRoleToGroup(item.id)}>Related To Group</a>
-            {item.isPreset === 0 && <a onClick={() => removeCurrentSelectedRole(item.id)}>Delete</a>}
+            {item.isPreset === 0 && <a style={{ color: 'red' }} onClick={() => removeCurrentSelectedRole(item.id)}>Delete</a>}
           </div>
         )
       }

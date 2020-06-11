@@ -18,3 +18,8 @@ export const mobilePattern = {
   pattern: /^[1]([3-9])[0-9]{9}$/,
   message: "please enter a valid phone number"
 };
+
+export const textPattern = {
+  pattern: /^[\w\.]+$/,
+  message: "Must be composed of letter, numbers, underscore or point"
+};

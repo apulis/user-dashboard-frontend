@@ -6,13 +6,11 @@ import { Form } from '@ant-design/compatible';
 import { useParams } from 'react-router-dom';
 import { PageHeader } from 'antd';
 import router from 'umi/router';
-
 import { ColumnProps } from 'antd/es/table';
-
 import { ConnectProps, ConnectState } from '@/models/connect';
 import { FormComponentProps } from 'antd/lib/form';
-
 import { getGroupDetail, getGroupRoles, getGroupUsers, editGroupDetail, removeGroupRole, removeGroupUser } from '@/services/groups';
+import { textPattern } from '@/utils/validates';
 
 const FormItem = Form.Item;
 
@@ -134,12 +132,12 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
 
   const usersColumns: ColumnProps<any>[] = [
     {
-      title: 'NickName',
+      title: 'Nickname',
       dataIndex: 'nickName',
       key: 'nickName'
     },
     {
-      title: 'UserName',
+      title: 'Username',
       dataIndex: 'userName',
       key: 'userName'
     },
@@ -206,9 +204,7 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
             <FormItem label="Group Name">
               {
                 getFieldDecorator('name', {
-                  rules: [{
-                    required: true,
-                  }],
+                  rules: [{ required: true }, textPattern],
                   initialValue: groupInfo.name
                 })(
                   <Input />
@@ -219,9 +215,7 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
             <FormItem label="Description">
               {
                 getFieldDecorator('note', {
-                  rules: [{
-                    required: true,
-                  }],
+                  rules: [{ required: true }, textPattern],
                   initialValue: groupInfo.note
                 })(
                   <Input />
@@ -240,7 +234,7 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
           {
             isGroupInfoEditing ? 
             <>
-              <Button style={{marginRight: '20px'}} onClick={confirmEditing} type="primary">Confirm</Button>
+              <Button style={{marginRight: '20px'}} onClick={confirmEditing} type="primary">Save</Button>
               <Button onClick={toggleEditing}>Cancel</Button>
             </>
             :

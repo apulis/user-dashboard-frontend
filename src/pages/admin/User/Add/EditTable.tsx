@@ -6,7 +6,7 @@ import { saveAs } from 'file-saver'
 import { ColumnProps } from 'antd/lib/table';
 import { FormComponentProps } from '@ant-design/compatible/es/form';
 import Excel from 'exceljs/dist/exceljs.bare';
-import { emailReg, validateUniqueUserName, mobilePattern } from '../../../../utils/validates';
+import { emailReg, validateUniqueUserName, mobilePattern, textPattern } from '@/utils/validates';
 import { IUserMessage } from './index';
 import styles from '../Detail/index.less';
 
@@ -45,8 +45,9 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
           return <FormItem>{getFieldDecorator(`userMessage[${index}].nickName`, {
             initialValue: item.nickName,
             rules: [
-              { min: 4, message: 'NickName need at least 4 characters' },
-              { max: 20, message: 'NickName cannot be longer than 20 characters' },
+              { min: 4, message: 'Nickname need at least 4 characters' },
+              { max: 20, message: 'Nickname cannot be longer than 20 characters' },
+              textPattern
             ]
           })(<Input placeholder="Nickname" />)}</FormItem>
         } else {
@@ -61,15 +62,16 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
           return <FormItem>{getFieldDecorator(`userMessage[${index}].userName`, {
             initialValue: item.userName,
             rules: [
-              { required: true, message: 'UserName is required'},
-              { min: 4, message: 'UserName need at least 4 characters' },
-              { max: 20, message: 'UserName cannot be longer than 20 characters' },
+              { required: true, message: 'Username is required'},
+              { min: 4, message: 'Username need at least 4 characters' },
+              { max: 20, message: 'Username cannot be longer than 20 characters' },
               { validator: (...args) => {
                 const newArgs = args.slice(0, 4);
                 validateUniqueUserName(index, dataSource, ...newArgs);
-              }}
+              }},
+              textPattern
             ],
-          })(<Input placeholder="UserName" />)}</FormItem>
+          })(<Input placeholder="Username" />)}</FormItem>
         } else {
           return item.userName;
         }
@@ -122,7 +124,8 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
       render(_text: any, item: User, index: number) {
         if (editing[index]) {
           return <FormItem>{getFieldDecorator(`userMessage[${index}].note`, {
-            initialValue: item.note
+            initialValue: item.note,
+            rules: [textPattern]
           })(<Input placeholder="Description" />)}</FormItem>
         } else {
           return item.note;
@@ -185,8 +188,8 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
     workbook.addWorksheet('userMessage');
     const worksheet = workbook.getWorksheet('userMessage');
     worksheet.columns = [
-      { header: 'NickName', key: 'nickName', width: 36},
-      { header: 'UserName', key: 'userName', width: 36},
+      { header: 'Nickname', key: 'nickName', width: 36},
+      { header: 'Username', key: 'userName', width: 36},
       { header: 'Phone', key: 'phone', width: 36},
       { header: 'Email', key: 'email', width: 36},
       { header: 'Description', key: 'note', width: 36},

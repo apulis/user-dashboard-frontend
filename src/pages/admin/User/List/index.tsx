@@ -104,7 +104,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
   }
   const columns: ColumnProps<IUsers>[] = [
     {
-      title: 'UserName',
+      title: 'Username',
       dataIndex: 'userName',
       render(_text, item) {
         return (
@@ -113,7 +113,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       }
     },
     {
-      title: 'NickName',
+      title: 'Nickname',
       dataIndex: 'nickName',
       render(_text, item) {
         return (
@@ -148,18 +148,16 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       render(_text, item): React.ReactNode {
         return (
           <div style={{display: 'flex', justifyContent: 'space-around'}}>
-            {
-              item.id !== 1 && 
-              <a onClick={() => addRolesForUser(item.id)}>Edit Role</a>
-            }
             <Dropdown
-              overlay={<Menu>
-              <Menu.Item onClick={() => {addToGroup();setCurrentHandleUserId(item.id)}} key="1">Add To User Group</Menu.Item>
-              <Menu.Item disabled={item.id === 1} onClick={() => {setCurrentHandleUserId(item.id);removeUser(item.userName)}} key="2">Delete</Menu.Item>
-            </Menu>}
+              overlay={
+              <Menu>
+                {item.id !== 1 && <Menu.Item onClick={() => addRolesForUser(item.id)} key="0">Edit Role</Menu.Item>}
+                <Menu.Item onClick={() => {addToGroup();setCurrentHandleUserId(item.id)}} key="1">Add To User Group</Menu.Item>
+                <Menu.Item disabled={item.id === 1} onClick={() => {setCurrentHandleUserId(item.id);removeUser(item.userName)}} key="2">Delete</Menu.Item>
+              </Menu>}
             >
             <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                More Operator <DownOutlined />
+                More <DownOutlined />
               </a>
             </Dropdown>
           </div>
@@ -209,9 +207,9 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
   const removeUser = (userName?: string) => {
     
     confirm({
-      title: 'Do you Want to delete these items?',
+      title: 'Are you sure you want to delete selected item(s)?',
       icon: <ExclamationCircleOutlined />,
-      content: 'Then these users will not be allowed to platform',
+      content: 'Selected users will be disabled',
       okText: 'OK',
       cancelText: 'CANCEL',
       onOk() {
@@ -276,7 +274,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       <div className={styles.top}>
         <div className={styles.left}>
           <Link to="/admin/user/add">
-            <Button type="primary">Add User</Button>
+            <Button type="primary">Create User</Button>
           </Link>
           <Dropdown disabled={selectRows.length === 0} overlay={menu}>
             <Button style={{marginLeft: '15px'}}>
@@ -305,7 +303,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
         loading={tableLoading}
       />
       <div className={styles.bottom}>
-        <div style={{ height: '24px', marginRight: '10px' }}>Count per page:</div>
+        <div style={{ height: '24px', marginRight: '10px' }}>Items per page:</div>
         <Select
           style={{ width: 100, marginRight: '20px' }}
           onChange={onPageSizeChange}

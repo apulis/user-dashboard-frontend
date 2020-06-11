@@ -4,13 +4,12 @@ import { Form } from '@ant-design/compatible'
 import { connect } from 'dva';
 import router from 'umi/router';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-
 import { FormComponentProps } from '@ant-design/compatible/es/form';
 import { AntTreeNodeSelectedEvent } from 'antd/lib/tree';
 import { ConnectState, ConnectProps } from '@/models/connect';
-
 import { createRole } from '@/services/roles';
 import { TreeNodeNormal, AntTreeNodeCheckedEvent } from 'antd/lib/tree/Tree';
+import { textPattern } from '@/utils/validates';
 
 const FormItem = Form.Item;
 const { TreeNode } = Tree;
@@ -99,7 +98,8 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form,
             rules: [
               { required: true },
               { max: 20 },
-              { whitespace: true, message: 'role name cannot be empty' }
+              { whitespace: true, message: 'role name cannot be empty' },
+              textPattern
             ]
           })(<Input />)
         }
@@ -109,7 +109,8 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form,
           getFieldDecorator('note', {
             rules: [
               { required: true, message: 'Description is required' },
-              { max: 50 }
+              { max: 50 },
+              textPattern
             ]
           })(<Input.TextArea />)
         }

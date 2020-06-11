@@ -95,7 +95,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, groups }) => {
             <a onClick={() => addUserToCurrentGroups(item.id)} style={{marginRight: '18px', marginLeft: '-20px'}}>
               Add Users
             </a>
-            <a onClick={() => removeGroups([item.name], [item.id])}>
+            <a onClick={() => removeGroups([item.name], [item.id])} style={{ color: 'red' }}>
               Delete
             </a>
           </div>

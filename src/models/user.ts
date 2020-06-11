@@ -5,6 +5,7 @@ import { setAuthority } from '@/utils/authority';
 import { queryCurrent } from '@/services/user';
 
 export interface CurrentUser {
+  currentRole: any;
   userName?: string;
   group?: string;
   nickName?: string;

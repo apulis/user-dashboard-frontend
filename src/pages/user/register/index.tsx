@@ -1,7 +1,6 @@
 import { Alert, Icon, message } from 'antd';
 import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
 import React, { Component } from 'react';
-
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { Dispatch, AnyAction } from 'redux';
 import { FormComponentProps } from 'antd/es/form';
@@ -12,9 +11,9 @@ import LoginComponents from './components/Login';
 import styles from './style.less';
 import { SignUpParamsType, signUp } from '@/services/register';
 import { ConnectState } from '@/models/connect';
-
 import IconMicrosoft from '@/components/Icon/IconMicrosoft';
 import { CurrentUser } from '@/models/user';
+import { textPattern } from '@/utils/validates';
 
 const { Tab, UserName, Password, NickName, Submit } = LoginComponents;
 
@@ -135,7 +134,8 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
                 {
                   max: 22,
                   message: 'Cannot be longer than 22 characters'
-                }
+                },
+                textPattern
               ]}
             />
             <NickName
@@ -155,7 +155,8 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
                 {
                   max: 20,
                   message: 'Cannot be longer than 20 characters'
-                }
+                },
+                textPattern
               ]}
             />
             <Password

@@ -48,7 +48,7 @@ const RolesModel: RolesModelType = {
           type: 'saveRoles',
           payload: {
             list: res.list,
-            total: res.total
+            total: res.total 
           }
         })
       }
@@ -67,7 +67,6 @@ const RolesModel: RolesModelType = {
     * fetchAllPermissions({ payload = {} }, { call, put }) {
       const res = yield call(getAllPermissions);
       if (res.success) {
-        console.log(111)
         yield put({
           type: 'savePermissions',
           payload: {
