@@ -14,7 +14,7 @@ import { textPattern } from '@/utils/validates';
 
 const FormItem = Form.Item;
 
-interface IGroupUserInfo {
+export interface IGroupUserInfo {
   userName: string;
   password: string;
   nickName: string;

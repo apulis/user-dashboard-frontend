@@ -14,11 +14,12 @@ import { IUsers } from '@/models/users';
 
 interface ISearchUserProps {
   onChange?: (selectedUserId: number[]) => void;
+  defaultSelected: number[];
 }
 
 const { Search } = Input;
 
-const SelectGroup: React.FC<ISearchUserProps & FormComponentProps & ConnectProps & ConnectState> = ({ users, onChange, dispatch }) => {
+const SelectUser: React.FC<ISearchUserProps & FormComponentProps & ConnectProps & ConnectState> = ({ users, onChange, dispatch, defaultSelected = [] }) => {
   const { list: userList } = users;
   const fetchUsers = (search?: string) => {
     dispatch({
@@ -59,11 +60,11 @@ const SelectGroup: React.FC<ISearchUserProps & FormComponentProps & ConnectProps
               Choose Users ( total: {userList.length} )
             </div>
             <Search placeholder="input search text" onChange={(e) => onSearch(e.target.value)} style={{marginTop: '10px'}} />
-            <Checkbox.Group className={styles.checkbox} onChange={onCheckboxSelect} style={{marginTop: '10px'}}>
+            <Checkbox.Group className={styles.checkbox} defaultValue={defaultSelected} onChange={onCheckboxSelect} style={{marginTop: '10px'}}>
               {
                 userList.map((u) => (
                   <Col span={24}>
-                    <Checkbox style={{marginTop: '5px'}} key={u.id} value={u.id}>{u.userName}</Checkbox>
+                    <Checkbox disabled={defaultSelected.includes(u.id)} style={{marginTop: '5px'}} key={u.id} value={u.id}>{u.userName}</Checkbox>
                   </Col>
                 ))
               }
@@ -91,4 +92,4 @@ const SelectGroup: React.FC<ISearchUserProps & FormComponentProps & ConnectProps
 }
 
 
-export default connect(({ users }: ConnectState) => ({ users }))(Form.create<FormComponentProps & ConnectProps & ISearchUserProps>()(SelectGroup));
+export default connect(({ users }: ConnectState) => ({ users }))(Form.create<FormComponentProps & ConnectProps & ISearchUserProps>()(SelectUser));

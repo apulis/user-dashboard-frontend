@@ -13,8 +13,10 @@ import { ConnectProps, ConnectState } from '@/models/connect';
 import { removeGroup } from '@/services/groups'
 
 import { addUsersToGroups } from '@/services/users';
+import { getGroupUsers } from '@/services/groups';
 
 import SelectUser from '../../../../components/Relate/SelectUser';
+import { IGroupUserInfo } from '../Detail/index';
 import styles from './index.less';
 
 export interface IGroup {
@@ -31,6 +33,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, groups }) => {
   const [addGroupModalVisible, setAddGroupModalVisible] = useState<boolean>(false);
   const [currentGroupId, setCurrentGroupId] = useState<number>(0);
   const [selectedUserIds, setSelectedUserIds] = useState<number[]>([]);
+  const [groupUserList, setGroupUserList] = useState<number[]>([]);
   const { list } = groups;
   const fetchUsers = (search?: string) => {
     dispatch({
@@ -39,6 +42,14 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, groups }) => {
         search: search ? search : ''
       }
     })
+  }
+  const fetchGroupUsers = async (groupId: number) => {
+    const res = await getGroupUsers(groupId);
+    if (res.success) {
+      const data = res.list;
+      const groupUserList = data.map((val: IGroupUserInfo) => val.id);
+      await setGroupUserList(groupUserList);
+    }
   }
   useEffect(() => {
     fetchUsers()
@@ -110,7 +121,11 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, groups }) => {
   const onRowSelection: (selectedRowKeys: string[] | number[], selectedRows: IGroup[]) => void = (selectedRowKeys, selectedRows) => {
     setSelectedRows(selectedRows);
   }
-  const addUserToCurrentGroups = (currentGroupId?: number) => {
+  const addUserToCurrentGroups = async (currentGroupId?: number) => {
+    setGroupUserList([]);
+    if (currentGroupId) {
+      await fetchGroupUsers(currentGroupId);
+    }
     setCurrentGroupId(currentGroupId || 0);
     setAddGroupModalVisible(true);
   }
@@ -159,16 +174,20 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, groups }) => {
           type: "checkbox",
           onChange: onRowSelection,
         }} />
-        <Modal
-          visible={addGroupModalVisible}
-          onCancel={cancelAddGroup}
-          onOk={() => confirmAddGroup()}
-          width="65%"
-        >
-          <SelectUser
-            onChange={(userIds) => {onSelectUserIds(userIds)}}
-          />
-        </Modal>
+        {
+          addGroupModalVisible && <Modal
+            visible={addGroupModalVisible}
+            onCancel={cancelAddGroup}
+            onOk={() => confirmAddGroup()}
+            width="65%"
+          >
+            <SelectUser
+              onChange={(userIds) => {onSelectUserIds(userIds)}}
+              defaultSelected={groupUserList}
+            />
+          </Modal>
+        }
+        
     </PageHeaderWrapper>
   )
 }
