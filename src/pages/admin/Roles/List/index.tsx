@@ -15,6 +15,7 @@ import SelectGroup from '@/components/Relate/SelectGroup';
 import SelectUser from "@/components/Relate/SelectUser";
 
 import { addRoleToGroups, addRoleToUsers } from '@/services/roles';
+import { getRoleGroup } from '@/services/roles';
 
 import { removeRoles } from '@/services/roles';
 import { IRoleListItem } from '@/models/roles';
@@ -33,12 +34,15 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
   const [addUserModalVisible, setAddUserModalVisible] = useState<boolean>(false);
   const [selectedUserId, setSelectedUserId] = useState<number[]>([]);
   const [selectedGroupId, setSelectedGroupId] = useState<number[]>([]);
-  const addRoleToUser = (roleName: number) => {
-    setCurrentHandleRoleId(roleName);
+  const [selectedRoleGroup, setSelectedRoleGroup] = useState<number[]>([]);
+  const addRoleToUser = async (roleId: number) => {
+    setCurrentHandleRoleId(roleId);
     setAddUserModalVisible(true);
   }
-  const addRoleToGroup = (roleName: number) => {
-    setCurrentHandleRoleId(roleName);
+  const addRoleToGroup = async (roleId: number) => {
+    setSelectedRoleGroup([]);
+    await fetchRoleGroups(roleId);
+    setCurrentHandleRoleId(roleId);
     setAddGroupModalVisible(true);
   }
   const { list: groupList } = groups;
@@ -85,6 +89,13 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
     setAddGroupModalVisible(false);
     setSelectedGroupId([]);
     setSelectedUserId([]);
+  }
+  const fetchRoleGroups = async (roleId: number) => {
+    const res = await getRoleGroup(roleId);
+    if (res.success) {
+      const { list } = res;
+      await setSelectedRoleGroup(list);
+    }
   }
   const removeCurrentSelectedRole = async (currentRole?: number) => {
     let tempRoleList;
@@ -138,6 +149,10 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
     fetchRoles(search);
   }
   const confirmRelateGroup = async () => {
+    if (selectedGroupId.length === 0) {
+      setAddGroupModalVisible(false);
+      return;
+    }
     const res = await addRoleToGroups([currentHandleRoleId], selectedGroupId);
     if (res.success === true) {
       message.success('Success');
@@ -194,6 +209,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
       >
         <SelectGroup
           groupList={groupList}
+          defaultSelected={selectedRoleGroup}
           onChange={(selectedGroupId) => setSelectedGroupId(selectedGroupId)}
         />
       </Modal>
@@ -205,6 +221,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
         onOk={confirmRelateUser}
       >
         <SelectUser
+          defaultSelected={selectedRoleGroup}
           onChange={(selectedUserId) => setSelectedUserId(selectedUserId)}
         />
       </Modal> 

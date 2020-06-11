@@ -16,11 +16,12 @@ import { CheckboxValueType } from 'antd/lib/checkbox/Group';
 interface ISearchGroupProps {
   groupList: IGroup[];
   onChange?: (selectedGroupId: number[]) => void;
+  defaultSelected?: number[];
 }
 
 const { Search } = Input;
 
-const SelectGroup: React.FC<ISearchGroupProps & FormComponentProps & ConnectProps> = ({ groupList, onChange }) => {
+const SelectGroup: React.FC<ISearchGroupProps & FormComponentProps & ConnectProps> = ({ groupList, onChange, defaultSelected=[] }) => {
   
   const [selectedGroup, setSelectedGroup] = useState<IGroup[]>([]);
 
@@ -61,11 +62,11 @@ const SelectGroup: React.FC<ISearchGroupProps & FormComponentProps & ConnectProp
               Select Groups ( total: {currentGroupList.length} )
             </div>
             <Search placeholder="input search text" onChange={(e) => onSearch(e.target.value)} style={{marginTop: '10px'}} />
-            <Checkbox.Group className={styles.checkbox} onChange={onCheckboxSelect} style={{marginTop: '10px'}}>
+            <Checkbox.Group className={styles.checkbox} defaultValue={defaultSelected} onChange={onCheckboxSelect} style={{marginTop: '10px'}}>
               {
                 currentGroupList.map((g) => (
                   <Col span={24}>
-                    <Checkbox style={{marginTop: '5px'}} key={g.id} value={g.id}>{g.name}</Checkbox>
+                    <Checkbox disabled={defaultSelected.includes(g.id)} style={{marginTop: '5px'}} key={g.id} value={g.id}>{g.name}</Checkbox>
                   </Col>
                 ))
               }
