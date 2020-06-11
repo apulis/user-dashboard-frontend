@@ -343,7 +343,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
       <div style={{marginTop: '40px'}}>
         {
           step !== 1 &&
-          <Button onClick={toPrevious} style={{ marginRight: '20px' }}>Previous</Button>
+          <Button disabled={isEditingTableEditing} onClick={toPrevious} style={{ marginRight: '20px' }}>Previous</Button>
         }
         <Button disabled={isEditingTableEditing} onClick={submit} type="primary">{step === 3 ? 'Submit' : 'Next'}</Button>
       </div>

@@ -14,7 +14,7 @@ import { IUsers } from '@/models/users';
 
 import SelectRole from '@/components/Relate/SelectRole'
 
-import { removeUsers, addUsersToGroups, getUserRolesById } from '@/services/users';
+import { removeUsers, addUsersToGroups, getUserRolesById, getUserGroups } from '@/services/users';
 import { addRoleToUsers, editRoleToUsers } from '@/services/roles';
 import SelectGroup from '../../../../components/Relate/SelectGroup';
 
@@ -44,6 +44,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
   const [currentHandleUserId, setCurrentHandleUserId] = useState<number>(0);
   const [selectedRoleIds, setSelectedRoleIds] = useState<number[]>([]);
   const [currentUserRoles, setCurrentUserRoles] = useState<number[]>([]);
+  const [userGroupId, setUserGroupId] = useState<number[]>([]);
   const fetchUsers = async (params: IFetchUserParam) => {
     setTableLoading(true);
     await dispatch({
@@ -58,8 +59,14 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
   }
   useEffect(() => {
     fetchUsers({pageNo: pageNo || 1, pageSize: pageSize || 10});
-    fetchUserGroups();
+    fetchGroups();
   }, [])
+  const fetchUserGroups = async (userId: number) => {
+    const res = await getUserGroups(userId);
+    if (res.success) {
+      await setUserGroupId(res.list.map((val: any) => val.id));
+    }
+  }
   const starRemoveUsers = (currentHandleUserId?: string) => {
     let userNames: string[];
     if (currentHandleUserId) {
@@ -152,7 +159,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
               overlay={
               <Menu>
                 {item.id !== 1 && <Menu.Item onClick={() => addRolesForUser(item.id)} key="0">Edit Role</Menu.Item>}
-                <Menu.Item onClick={() => {addToGroup();setCurrentHandleUserId(item.id)}} key="1">Add To User Group</Menu.Item>
+                <Menu.Item onClick={async () => {await addToGroup(item.id);setCurrentHandleUserId(item.id)}} key="1">Add To User Group</Menu.Item>
                 <Menu.Item disabled={item.id === 1} onClick={() => {setCurrentHandleUserId(item.id);removeUser(item.userName)}} key="2">Delete</Menu.Item>
               </Menu>}
             >
@@ -187,13 +194,13 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
     setSelectRowKeys([]);
   }
   const onRowSelection: (selectedRowKeys: string[] | number[], selectedRows: IUsers[]) => void = (selectedRowKeys, selectedRows) => {
-    setSelectRowKeys(selectedRowKeys)
+    setSelectRowKeys(selectedRowKeys);
     setSelectRows(selectedRows);
   }
   const handleMenuClick: ((param: ClickParam) => void) = (e) => {
     //
   }
-  const fetchUserGroups = (search?: string) => {
+  const fetchGroups = (search?: string) => {
     dispatch({
       type: 'groups/fetchGroups',
       payload: {
@@ -201,7 +208,10 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       }
     })
   }
-  const addToGroup = () => {
+  const addToGroup = async (userId?: number) => {
+    if (userId) {
+      await fetchUserGroups(userId);
+    }
     setAddGroupModalVisible(true);
   }
   const removeUser = (userName?: string) => {
@@ -216,7 +226,6 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
         starRemoveUsers(userName);
       },
       onCancel() {
-        //
         setCurrentHandleUserId(0);
       },
     })
@@ -235,7 +244,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
   }
   const menu = (
     <Menu onClick={handleMenuClick}>
-      <Menu.Item key="1" onClick={addToGroup}>
+      <Menu.Item key="1" onClick={() => addToGroup()}>
         <UsergroupAddOutlined />
         Add To Group
       </Menu.Item>
@@ -331,6 +340,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
         {
           addGroupModalVisible && <SelectGroup
             groupList={groupList}
+            defaultSelected={userGroupId}
             onChange={(selectedGroupId) => onSelectedGroupChange(selectedGroupId)}
           />
         }
