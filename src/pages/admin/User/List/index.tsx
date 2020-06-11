@@ -31,7 +31,8 @@ const { confirm } = Modal;
 const { Search } = Input;
 
 const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props) => {
-  const { dispatch, users, form, groups } = props;
+  const { dispatch, users, form, groups, config } = props;
+  const { adminUsers } = config;
   const { list, pageNo, pageSize, total } = users || {};
   const { list: groupList } = groups;
   const [selectRows, setSelectRows] = useState<IUsers[]>([]);
@@ -158,9 +159,9 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
             <Dropdown
               overlay={
               <Menu>
-                {item.id !== 1 && <Menu.Item onClick={() => addRolesForUser(item.id)} key="0">Edit Role</Menu.Item>}
+                {adminUsers.includes(item.userName) && <Menu.Item onClick={() => addRolesForUser(item.id)} key="0">Edit Role</Menu.Item>}
                 <Menu.Item onClick={async () => {await addToGroup(item.id);setCurrentHandleUserId(item.id)}} key="1">Add To User Group</Menu.Item>
-                <Menu.Item disabled={item.id === 1} onClick={() => {setCurrentHandleUserId(item.id);removeUser(item.userName)}} key="2">Delete</Menu.Item>
+                <Menu.Item disabled={adminUsers.includes(item.userName) } onClick={() => {setCurrentHandleUserId(item.id);removeUser(item.userName)}} key="2">Delete</Menu.Item>
               </Menu>}
             >
             <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
@@ -248,7 +249,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
         <UsergroupAddOutlined />
         Add To Group
       </Menu.Item>
-      <Menu.Item key="2" disabled={!!selectRows.find(val => val.id === 1)} onClick={() => removeUser()}>
+      <Menu.Item key="2" disabled={!!selectRows.find(val => adminUsers.includes(val.userName))} onClick={() => removeUser()}>
         <UserDeleteOutlined />
         Delete Current User
       </Menu.Item>
@@ -366,4 +367,4 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
   )
 };
 
-export default connect(({ users, groups }: ConnectState) => ({ users, groups }))(Form.create<FormComponentProps & ConnectProps>()(List));
+export default connect(({ users, groups, config }: ConnectState) => ({ users, groups, config }))(Form.create<FormComponentProps & ConnectProps>()(List));

@@ -1,17 +1,19 @@
 import { Reducer } from 'redux';
 import { Effect } from 'dva';
 
-import { getOAuth2Methods } from '@/services/config';
+import { getOAuth2Methods, getAdminUsers } from '@/services/config';
 
 export interface ConfigStateType {
   authMethods: string[];
+  adminUsers: string[];
 }
 
 export interface ConfigModelType {
   namespace: 'config';
   state: ConfigStateType;
   effects: {
-    fetchAuthMethods: Effect
+    fetchAuthMethods: Effect;
+    fetchAdminUsers: Effect;
   };
   reducers: {
     save: Reducer;
@@ -21,7 +23,8 @@ export interface ConfigModelType {
 const ConfigModel: ConfigModelType = {
   namespace: 'config',
   state: {
-    authMethods: []
+    authMethods: [],
+    adminUsers: [],
   },
   effects: {
     * fetchAuthMethods({ payload }, { call, put }) {
@@ -35,6 +38,17 @@ const ConfigModel: ConfigModelType = {
         })
       }
     },
+    * fetchAdminUsers({ payload }, { call, put }) {
+      const res = yield call(getAdminUsers);
+      if (res.success) {
+        yield put({
+          type: 'save',
+          payload: {
+            adminUsers: res.list,
+          }
+        })
+      }
+    }
   },
   
   reducers: {
