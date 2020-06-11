@@ -170,6 +170,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, groups }) => {
         pagination={{
           onChange: () => {setSelectedRows([])}
         }}
+        rowKey={record => String(record.id)}
         rowSelection={{
           type: "checkbox",
           onChange: onRowSelection,
