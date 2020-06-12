@@ -115,7 +115,8 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
       const { newPassword } = result;
       const res = await apiResetPassword(id, newPassword);
       if (res.success) {
-        message.success('Success reset password')
+        message.success('Success reset password');
+        setModalVisible(false);
       }
     });
   }
