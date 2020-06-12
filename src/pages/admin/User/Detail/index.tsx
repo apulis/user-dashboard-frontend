@@ -27,7 +27,6 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
   const [groupInfo, setGroupInfo] = useState<IGroup[]>([]);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const { adminUsers } = config;
   const fetchUserById = async () => {
     if (isNaN(userId)) return;
     const res = await getUserById(userId);
@@ -252,7 +251,6 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
           )
         }
         const currentRole = currentUser?.currentRole;
-        console.log('currentRole', currentRole)
         return (
           <div>
             <a style={{marginRight: '15px'}} onClick={editCurrentUser}>Edit</a>

@@ -31,8 +31,9 @@ const { confirm } = Modal;
 const { Search } = Input;
 
 const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props) => {
-  const { dispatch, users, form, groups, config } = props;
+  const { dispatch, users, form, groups, config, user } = props;
   const { adminUsers } = config;
+  const { currentUser } = user;
   const { list, pageNo, pageSize, total } = users || {};
   const { list: groupList } = groups;
   const [selectRows, setSelectRows] = useState<IUsers[]>([]);
@@ -46,6 +47,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
   const [selectedRoleIds, setSelectedRoleIds] = useState<number[]>([]);
   const [currentUserRoles, setCurrentUserRoles] = useState<number[]>([]);
   const [userGroupId, setUserGroupId] = useState<number[]>([]);
+  const currentRole = currentUser?.currentRole;
   const fetchUsers = async (params: IFetchUserParam) => {
     setTableLoading(true);
     await dispatch({
@@ -159,9 +161,9 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
             <Dropdown
               overlay={
               <Menu>
-                {adminUsers.includes(item.userName) && <Menu.Item onClick={() => addRolesForUser(item.id)} key="0">Edit Role</Menu.Item>}
+                {(currentRole.includes('System Admin') || adminUsers.includes(item.userName)) && <Menu.Item onClick={() => addRolesForUser(item.id)} key="0">Edit Role</Menu.Item>}
                 <Menu.Item onClick={async () => {await addToGroup(item.id);setCurrentHandleUserId(item.id)}} key="1">Add To User Group</Menu.Item>
-                <Menu.Item disabled={adminUsers.includes(item.userName) } onClick={() => {setCurrentHandleUserId(item.id);removeUser(item.userName)}} key="2">Delete</Menu.Item>
+                <Menu.Item disabled={!currentRole.includes('System Admin') || adminUsers.includes(item.userName) } onClick={() => {setCurrentHandleUserId(item.id);removeUser(item.userName)}} key="2">Delete</Menu.Item>
               </Menu>}
             >
             <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
@@ -249,7 +251,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
         <UsergroupAddOutlined />
         Add To Group
       </Menu.Item>
-      <Menu.Item key="2" disabled={!!selectRows.find(val => adminUsers.includes(val.userName))} onClick={() => removeUser()}>
+      <Menu.Item key="2" disabled={!!selectRows.find(val => !currentRole.includes('System Admin') || adminUsers.includes(val.userName))} onClick={() => removeUser()}>
         <UserDeleteOutlined />
         Delete Current User
       </Menu.Item>
@@ -367,4 +369,4 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
   )
 };
 
-export default connect(({ users, groups, config }: ConnectState) => ({ users, groups, config }))(Form.create<FormComponentProps & ConnectProps>()(List));
+export default connect(({ users, groups, config, user }: ConnectState) => ({ users, groups, config, user }))(Form.create<FormComponentProps & ConnectProps>()(List));
