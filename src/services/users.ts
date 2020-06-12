@@ -100,3 +100,12 @@ export async function getTotalUsersCount() {
     method: 'GET'
   });
 }
+
+export async function resetPassword(userId: number, newPassword: string) {
+  return await request(`/users/${userId}/resetPassword`, {
+    method: 'PATCH',
+    data: {
+      newPassword: encodePassword(newPassword),
+    }
+  })
+}

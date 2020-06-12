@@ -6,7 +6,7 @@ import { router } from 'umi';
 import { useParams } from 'react-router-dom';
 import { FormComponentProps } from 'antd/lib/form';
 import { ColumnProps } from 'antd/es/table';
-import { getUserById, getUserRolesById, editUserInfo, removeUserRole, getUserRoleInfo, getUserGroups } from '@/services/users';
+import { getUserById, resetPassword as apiResetPassword, editUserInfo, removeUserRole, getUserRoleInfo, getUserGroups } from '@/services/users';
 import { removeGroupUser} from '@/services/groups';
 import { ConnectState, ConnectProps } from '@/models/connect';
 import { IRoleListItem } from '@/models/roles';
@@ -25,6 +25,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
   const [roleInfo, setRoleInfo] = useState<IRoleListItem[]>([]);
   const [groupInfo, setGroupInfo] = useState<IGroup[]>([]);
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
   const fetchUserById = async () => {
     if (isNaN(userId)) return;
     const res = await getUserById(userId);
@@ -104,6 +105,20 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
     fetchUserRoles();
     fetchUserGroups();
   }, [])
+
+  const resetPassword = () => {
+    setModalVisible(true);
+  }
+
+  const confirmEditPassword = () => {
+    validateFields(['newPassword'], async (err, result) => {
+      const { newPassword } = result;
+      const res = await apiResetPassword(id, newPassword);
+      if (res.success) {
+        message.success('Success reset password')
+      }
+    });
+  }
 
   const userInfoColumns: ColumnProps<IUsers>[] = [
     {
@@ -234,7 +249,10 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
           )
         }
         return (
-          <a onClick={editCurrentUser}>Edit</a>
+          <div>
+            <a style={{marginRight: '15px'}} onClick={editCurrentUser}>Edit</a>
+            <a onClick={resetPassword}>Reset password</a>
+          </div>
         )
       }
     }
@@ -319,6 +337,37 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
         title={() => <h1>User Groups</h1>}
         dataSource={groupInfo}
       />
+
+      <Modal
+        visible={modalVisible}
+        onCancel={() => {setModalVisible(false)}}
+        onOk={confirmEditPassword}
+      
+      >
+        <FormItem label="New password">
+          {
+            getFieldDecorator('newPassword', {
+              rules: [
+                {
+                  required: true,
+                  message: 'New password is required',
+                },
+                {
+                  min: 6,
+                  message: 'New password must be at least 6 characters',
+                },
+                {
+                  max: 20,
+                  message: 'New password cannot be longer than 20 characters',
+                }
+              ]
+            })(
+              <Input />
+            )
+          }
+        </FormItem>
+
+      </Modal>
 
     </div>
   )
