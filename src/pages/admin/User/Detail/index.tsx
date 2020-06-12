@@ -17,7 +17,7 @@ import styles from './index.less';
 
 const FormItem = Form.Item;
 
-const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form, users, groups }) => {
+const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form, users, groups, config }) => {
   const { id } = useParams();
   const { getFieldDecorator, validateFields } = form;
   const userId = Number(id);
@@ -26,6 +26,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
   const [groupInfo, setGroupInfo] = useState<IGroup[]>([]);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const { adminUsers } = config;
   const fetchUserById = async () => {
     if (isNaN(userId)) return;
     const res = await getUserById(userId);
@@ -252,7 +253,10 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
         return (
           <div>
             <a style={{marginRight: '15px'}} onClick={editCurrentUser}>Edit</a>
-            <a onClick={resetPassword}>Reset password</a>
+            {
+              adminUsers.includes(userInfo.userName) && 
+              <a onClick={resetPassword}>Reset password</a>
+            }
           </div>
         )
       }
@@ -376,4 +380,4 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
 
 
 
-export default connect(({ users, groups, roles }: ConnectState) => ({ users, groups, roles }))(Form.create<FormComponentProps & ConnectProps>()(UserDetail))
+export default connect(({ users, groups, roles, config }: ConnectState) => ({ users, groups, roles, config }))(Form.create<FormComponentProps & ConnectProps>()(UserDetail))
