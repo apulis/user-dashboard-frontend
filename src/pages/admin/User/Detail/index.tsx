@@ -17,8 +17,9 @@ import styles from './index.less';
 
 const FormItem = Form.Item;
 
-const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form, users, groups, config }) => {
+const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form, users, groups, config, user }) => {
   const { id } = useParams();
+  const { currentUser } = user;
   const { getFieldDecorator, validateFields } = form;
   const userId = Number(id);
   const [userInfo, setUserInfo] = useState<IUsers>({userName: '', nickName: '', id: 0});
@@ -250,11 +251,13 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
             </>
           )
         }
+        const currentRole = currentUser?.currentRole;
+        console.log('currentRole', currentRole)
         return (
           <div>
             <a style={{marginRight: '15px'}} onClick={editCurrentUser}>Edit</a>
             {
-              adminUsers.includes(userInfo.userName) && 
+              currentRole.includes('System Admin') && 
               <a onClick={resetPassword}>Reset password</a>
             }
           </div>
@@ -380,4 +383,4 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
 
 
 
-export default connect(({ users, groups, roles, config }: ConnectState) => ({ users, groups, roles, config }))(Form.create<FormComponentProps & ConnectProps>()(UserDetail))
+export default connect(({ users, groups, roles, config, user }: ConnectState) => ({ users, groups, roles, config, user }))(Form.create<FormComponentProps & ConnectProps>()(UserDetail))
