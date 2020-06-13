@@ -159,7 +159,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, groups }) => {
           <Button onClick={() => addUserToCurrentGroups()} disabled={selectedRows.length === 0} style={{marginLeft: '20px'}}>Add Users</Button>
         </div>
         <Search
-          placeholder="input search text"
+          placeholder="search groups"
           onSearch={onSearch}
           style={{ width: 200 }}
         />

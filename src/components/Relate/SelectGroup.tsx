@@ -61,7 +61,7 @@ const SelectGroup: React.FC<ISearchGroupProps & FormComponentProps & ConnectProp
             <div className="ant-modal-title">
               Select Groups ( total: {currentGroupList.length} )
             </div>
-            <Search placeholder="input search text" onChange={(e) => onSearch(e.target.value)} style={{marginTop: '10px'}} />
+            <Search placeholder="search groups" onChange={(e) => onSearch(e.target.value)} style={{marginTop: '10px'}} />
             <Checkbox.Group className={styles.checkbox} defaultValue={defaultSelected} onChange={onCheckboxSelect} style={{marginTop: '10px'}}>
               {
                 currentGroupList.map((g) => (

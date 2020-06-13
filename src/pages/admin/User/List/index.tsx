@@ -296,7 +296,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
         </div>
         
         <Search
-          placeholder="input search text"
+          placeholder="search users"
           onSearch={onSearch}
           style={{ width: 200 }}
         />

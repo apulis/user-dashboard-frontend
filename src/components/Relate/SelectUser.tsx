@@ -59,7 +59,7 @@ const SelectUser: React.FC<ISearchUserProps & FormComponentProps & ConnectProps 
             <div className="ant-modal-title">
               Choose Users ( total: {userList.length} )
             </div>
-            <Search placeholder="input search text" onChange={(e) => onSearch(e.target.value)} style={{marginTop: '10px'}} />
+            <Search placeholder="search users" onChange={(e) => onSearch(e.target.value)} style={{marginTop: '10px'}} />
             <Checkbox.Group className={styles.checkbox} defaultValue={defaultSelected} onChange={onCheckboxSelect} style={{marginTop: '10px'}}>
               {
                 userList.map((u) => (
