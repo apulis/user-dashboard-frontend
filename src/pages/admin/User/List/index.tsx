@@ -92,6 +92,8 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
           })
           clearRowSelection();
           setCurrentHandleUserId(0);
+        } else if (res.success === false) {
+          message.warn(res.message);
         }
       })
   }
