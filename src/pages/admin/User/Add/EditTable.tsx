@@ -6,7 +6,7 @@ import { saveAs } from 'file-saver'
 import { ColumnProps } from 'antd/lib/table';
 import { FormComponentProps } from '@ant-design/compatible/es/form';
 import Excel from 'exceljs/dist/exceljs.bare';
-import { emailReg, validateUniqueUserName, mobilePattern, textPattern } from '@/utils/validates';
+import { emailReg, validateUniqueUserName, mobilePattern, textPattern, userNamePattern } from '@/utils/validates';
 import { IUserMessage } from './index';
 import styles from '../Detail/index.less';
 
@@ -69,7 +69,7 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
                 const newArgs = args.slice(0, 4);
                 validateUniqueUserName(index, dataSource, ...newArgs);
               }},
-              textPattern
+              userNamePattern
             ],
           })(<Input placeholder="Username" />)}</FormItem>
         } else {

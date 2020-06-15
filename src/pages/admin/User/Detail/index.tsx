@@ -11,7 +11,7 @@ import { removeGroupUser} from '@/services/groups';
 import { ConnectState, ConnectProps } from '@/models/connect';
 import { IRoleListItem } from '@/models/roles';
 import { IUsers } from '@/models/users';
-import { emailReg, mobilePattern, textPattern } from '@/utils/validates';
+import { emailReg, mobilePattern, textPattern, userNamePattern } from '@/utils/validates';
 import { IGroup } from '../../Groups/List';
 import styles from './index.less';
 
@@ -158,7 +158,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
               {
                 getFieldDecorator('userName', {
                   initialValue: item.userName,
-                  rules: [textPattern]
+                  rules: [userNamePattern]
                 })(
                     <Input disabled />
                   )

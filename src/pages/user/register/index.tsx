@@ -13,7 +13,7 @@ import { SignUpParamsType, signUp } from '@/services/register';
 import { ConnectState } from '@/models/connect';
 import IconMicrosoft from '@/components/Icon/IconMicrosoft';
 import { CurrentUser } from '@/models/user';
-import { textPattern } from '@/utils/validates';
+import { textPattern, userNamePattern } from '@/utils/validates';
 
 const { Tab, UserName, Password, NickName, Submit } = LoginComponents;
 
@@ -135,7 +135,7 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
                   max: 22,
                   message: 'Cannot be longer than 22 characters'
                 },
-                textPattern
+                userNamePattern
               ]}
             />
             <NickName

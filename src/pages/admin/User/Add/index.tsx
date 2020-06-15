@@ -6,7 +6,7 @@ import { FormComponentProps } from '@ant-design/compatible/es/form';
 import { connect } from 'dva';
 import router from 'umi/router';
 import { ConnectProps, ConnectState } from '@/models/connect';
-import { validateUniqueUserName, emailReg, mobilePattern, textPattern } from '@/utils/validates';
+import { validateUniqueUserName, emailReg, mobilePattern, textPattern, userNamePattern } from '@/utils/validates';
 import EditTable from './EditTable';
 import styles from './index.less';
 import { createUsers } from '@/services/users';
@@ -259,7 +259,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
                         { required: true, message: 'Username is required'},
                         { min: 4, message: 'Username need at least 4 characters' },
                         { max: 20, message: 'Username cannot be longer than 20 characters' },
-                        textPattern,
+                        userNamePattern,
                         { validator: (...args) => {
                             const newArgs = args.slice(0, 4);
                             validateUniqueUserName(index, getFieldsValue().userMessage, ...newArgs)
@@ -292,7 +292,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
                     {getFieldDecorator(`userMessage[${index}].note`, {
                       initialValue: userMessage[index].note,
                       rules: [textPattern]
-                    })(<Input placeholder="note" />)}
+                    })(<Input placeholder="description" />)}
                   </FormItem>
                 </Col>
                 <Col style={{marginTop: '8px'}} span={2}><a onClick={() => removeUser(user.createTime) }>Remove</a></Col>
