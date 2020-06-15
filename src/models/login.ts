@@ -50,6 +50,7 @@ const Model: LoginModelType = {
         const routerBase = window.routerBase;
         let { redirect } = params as { redirect: string };
         if (redirect) {
+          console.log('redirect', redirect, routerBase)
           if (new RegExp(routerBase).test(redirect)) {
             const redirectUrlParams = new URL(redirect);
             if (redirectUrlParams.origin === urlParams.origin) {
