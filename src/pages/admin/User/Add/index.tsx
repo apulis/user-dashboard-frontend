@@ -231,7 +231,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
             Email
           </Col>
           <Col span={4}>
-            Notes
+          Description
           </Col>
         </Row>
         {
