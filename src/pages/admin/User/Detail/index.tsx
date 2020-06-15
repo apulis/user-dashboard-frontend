@@ -343,37 +343,38 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
         title={() => <h1>User Groups</h1>}
         dataSource={groupInfo}
       />
+      {
+        modalVisible && <Modal
+          visible={modalVisible}
+          onCancel={() => {setModalVisible(false)}}
+          onOk={confirmEditPassword}
+        
+        >
+          <FormItem label="New password">
+            {
+              getFieldDecorator('newPassword', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'New password is required',
+                  },
+                  {
+                    min: 6,
+                    message: 'New password must be at least 6 characters',
+                  },
+                  {
+                    max: 20,
+                    message: 'New password cannot be longer than 20 characters',
+                  }
+                ]
+              })(
+                <Input />
+              )
+            }
+          </FormItem>
 
-      <Modal
-        visible={modalVisible}
-        onCancel={() => {setModalVisible(false)}}
-        onOk={confirmEditPassword}
-      
-      >
-        <FormItem label="New password">
-          {
-            getFieldDecorator('newPassword', {
-              rules: [
-                {
-                  required: true,
-                  message: 'New password is required',
-                },
-                {
-                  min: 6,
-                  message: 'New password must be at least 6 characters',
-                },
-                {
-                  max: 20,
-                  message: 'New password cannot be longer than 20 characters',
-                }
-              ]
-            })(
-              <Input />
-            )
-          }
-        </FormItem>
-
-      </Modal>
+        </Modal>
+      }
 
     </div>
   )
