@@ -128,7 +128,7 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
                   message: formatMessage({ id: 'user-login.userName.required' }),
                 },
                 {
-                  min: 6,
+                  min: 4,
                   message: 'Need at lease 6 letters'
                 },
                 {
