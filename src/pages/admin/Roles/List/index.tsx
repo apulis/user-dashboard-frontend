@@ -182,7 +182,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
           </Link>
           <Button onClick={() => removeCurrentSelectedRole()} disabled={buttonDisabled}>Delete Current Role</Button>
         </div>
-        <Search onSearch={onSearchRoles} style={{width: '200px' }}/>
+        <Search onSearch={onSearchRoles} placeholder="search roles" style={{width: '200px' }}/>
       </div>
       <Table
         style={{marginTop: '20px'}}
