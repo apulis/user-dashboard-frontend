@@ -32,7 +32,7 @@ interface IGroupRoleInfo {
 
 const Detail: React.FC<FormComponentProps> = ({ form }) => {
   const { id } = useParams();
-  const { getFieldDecorator, validateFields } = form;
+  const { getFieldDecorator, validateFields, getFieldValue } = form;
   const [isGroupInfoEditing, setIsGroupInfoEditing] = useState(false);
   const [groupInfo, setGroupInfo] = useState<{name?: string; note?: string}>({});
   const [groupUserDataSource, setGroupUserDataSorce] = useState<IGroupUserInfo[]>([]);
@@ -168,6 +168,10 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
     },
   ];
   const confirmEditing = async () => {
+    if (getFieldValue('name') === groupInfo.name) {
+      setIsGroupInfoEditing(false);
+      return;
+    }
     validateFields(['name', 'note'], async (err, values) => {
       if (err) return
       const res = await editGroupDetail(Number(id), {
