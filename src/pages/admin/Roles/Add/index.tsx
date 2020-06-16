@@ -109,7 +109,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form,
           getFieldDecorator('note', {
             rules: [
               { required: true, message: 'Description is required' },
-              { max: 50 },
+              { max: 50, message: 'Description cannot be longer than 50 characters' },
               textPattern
             ]
           })(<Input.TextArea />)
