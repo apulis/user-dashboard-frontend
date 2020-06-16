@@ -45,6 +45,10 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
     setCurrentHandleRoleId(roleId);
     setAddGroupModalVisible(true);
   }
+  const clearSelect = () => {
+    setSelectRowKeys([]);
+    setSelectRows([]);
+  }
   const { list: groupList } = groups;
   const columns: ColumnProps<IRoleListItem>[] = [
     {
@@ -113,6 +117,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
         }
         if (res.success === true) {
           message.success(`Success`);
+          clearSelect();
           if (tempRoleList.length === list.length) {
             // 删掉最后一页的全部内容
             fetchRoles(undefined, pageNo - 1);
