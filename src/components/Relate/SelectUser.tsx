@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'dva';
 import { Form } from '@ant-design/compatible';
-import { Checkbox, Input, Row, Col } from 'antd';
+import { Checkbox, Input, Row, Col, Spin } from 'antd';
 import { debounce } from 'lodash';
 
+import 'react-virtualized/styles.css';
+import List from 'react-virtualized/dist/es/List';
 import { FormComponentProps } from '@ant-design/compatible/lib/form';
 
 import { ConnectProps, ConnectState } from '@/models/connect';
@@ -51,6 +53,23 @@ const SelectUser: React.FC<ISearchUserProps & FormComponentProps & ConnectProps 
     const s = value;
     fetchUsers(s);
   }, 800);
+  const rowRenderer = () => {
+    return (
+      <Checkbox.Group defaultValue={defaultSelected} onChange={onCheckboxSelect} style={{marginTop: '10px'}}>
+        {
+          userList.map((u) => (
+            <Col span={24}>
+              <Checkbox disabled={defaultSelected.includes(u.id)} style={{marginTop: '5px', height: '30px'}} key={u.id} value={u.id}>{u.userName}</Checkbox>
+            </Col>
+          ))
+        }
+        {
+          userList.length === 0 && <div>No availble users</div>
+        }
+        
+      </Checkbox.Group>
+    )
+  }
   return (
     <div>
       <Row>
@@ -60,19 +79,17 @@ const SelectUser: React.FC<ISearchUserProps & FormComponentProps & ConnectProps 
               Choose Users ( total: {userList.length} )
             </div>
             <Search placeholder="search users" onChange={(e) => onSearch(e.target.value)} style={{marginTop: '10px'}} />
-            <Checkbox.Group className={styles.checkbox} defaultValue={defaultSelected} onChange={onCheckboxSelect} style={{marginTop: '10px'}}>
-              {
-                userList.map((u) => (
-                  <Col span={24}>
-                    <Checkbox disabled={defaultSelected.includes(u.id)} style={{marginTop: '5px'}} key={u.id} value={u.id}>{u.userName}</Checkbox>
-                  </Col>
-                ))
-              }
-              {
-                userList.length === 0 && <div>No availble users</div>
-              }
-              
-            </Checkbox.Group>
+            {
+              userList.length > 0 ? <List
+                width={300}
+                height={300}
+                rowCount={userList.length + 5}
+                rowHeight={30}
+                style={{paddingLeft: '10px', paddingBottom: '10px', paddingTop: '10px'}}
+                rowRenderer={rowRenderer}
+              /> : <Spin className="demo-loading" style={{marginLeft: '30px', marginTop: '30px'}} />
+            }
+            
           </div>
         </Col>
         <Col span={11} offset={2}>

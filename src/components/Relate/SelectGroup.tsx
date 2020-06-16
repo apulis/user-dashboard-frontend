@@ -22,7 +22,6 @@ interface ISearchGroupProps {
 const { Search } = Input;
 
 const SelectGroup: React.FC<ISearchGroupProps & FormComponentProps & ConnectProps> = ({ groupList, onChange, defaultSelected=[] }) => {
-  console.log('default', defaultSelected)
   const [selectedGroup, setSelectedGroup] = useState<IGroup[]>([]);
 
   const [currentGroupList, setCurrentGroupList] = useState<IGroup[]>(groupList); 
