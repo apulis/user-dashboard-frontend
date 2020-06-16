@@ -23,12 +23,13 @@ interface ISearchRoleProps {
 const { Search } = Input;
 
 const SelectGroup: React.FC<ISearchRoleProps & FormComponentProps & ConnectProps & ConnectState> = ({ roles, onChange, dispatch, currentUserId, currentUserRoles }) => {
+  const { total: roleTotal } = roles;
   const fetchRoles = (pageSize?: number, search?: string) => {
     dispatch({
       type: 'roles/fetchRoles',
       payload: {
         pageNo: 1,
-        pageSize: pageSize || 20,
+        pageSize: pageSize || roleTotal || 20,
         search,
       }
     })
@@ -46,7 +47,6 @@ const SelectGroup: React.FC<ISearchRoleProps & FormComponentProps & ConnectProps
     onCheckboxSelect(currentUserRoles || []);
   }, [])
 
-  const { total: roleTotal } = roles;
   const roleList: IRoleListItem[] = roles.list;
   useEffect(() => {
     if (roleTotal > 20) {
