@@ -290,11 +290,13 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
           <Link to="/admin/user/add">
             <Button type="primary">Create User</Button>
           </Link>
-          <Dropdown disabled={selectRows.length === 0} overlay={menu}>
+          <Button type="primary" disabled={selectRows.length === 0} onClick={() => addToGroup()} style={{ margin: '0 20px' }}>Add To Group</Button>
+          <Button disabled={!!selectRows.find(val => !currentRole.includes('System Admin') || adminUsers.includes(val.userName)) || selectRows.length === 0} onClick={() => removeUser()}>Delete Current User</Button>
+          {/* <Dropdown disabled={selectRows.length === 0} overlay={menu}>
             <Button style={{marginLeft: '15px'}}>
               Actions <DownOutlined />
             </Button>
-          </Dropdown>
+          </Dropdown> */}
         </div>
         
         <Search
