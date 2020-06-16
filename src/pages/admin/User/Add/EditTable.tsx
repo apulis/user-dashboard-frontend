@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Table, Input, Button } from 'antd';
-import { saveAs } from 'file-saver'
+// import { saveAs } from 'file-saver'
 import { ColumnProps } from 'antd/lib/table';
 import { FormComponentProps } from '@ant-design/compatible/es/form';
-import Excel from 'exceljs/dist/exceljs.bare';
+// import Excel from 'exceljs/dist/exceljs.bare';
 import { emailReg, validateUniqueUserName, mobilePattern, textPattern, userNamePattern } from '@/utils/validates';
 import { IUserMessage } from './index';
 import styles from '../Detail/index.less';
