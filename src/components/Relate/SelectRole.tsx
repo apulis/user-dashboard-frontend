@@ -29,15 +29,17 @@ const SelectGroup: React.FC<ISearchRoleProps & FormComponentProps & ConnectProps
       payload: {
         pageNo: 1,
         pageSize: pageSize || 20,
-        search
+        search,
       }
     })
   };
   useEffect(() => {
     dispatch({
       type: 'roles/getRolesTotalCount'
+    }).then(() => {
+      
+      fetchRoles(roles.total);
     });
-    fetchRoles(roles.total);
   }, [])
 
   useEffect(() => {
