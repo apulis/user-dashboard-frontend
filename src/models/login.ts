@@ -97,7 +97,13 @@ const Model: LoginModelType = {
     oauthLogin({payload}, {call, put}) {
       const { loginType, userId } = payload;
       let { redirect } = getPageQuery();
-      redirect = redirect || window.location.href
+      if (redirect) {
+        redirect = redirect;
+      } else if (/login/.test(window.location.href) || /resigter/.test(window.location.href)) {
+        redirect = window.location.host + window.routerBase;
+      } else {
+        redirect = window.location.href;
+      }
       let redirectURI = '/custom-user-dashboard-backend/auth/' + loginType + '?to=' + redirect
       if (userId) {
         redirectURI += `&userId=${userId}`
