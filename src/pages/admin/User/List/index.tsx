@@ -85,7 +85,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
           tag = true;
         }
         if (res.success) {
-          message.success('Success Delete User: ' + userIds.join(', '))
+          message.success('Success Delete')
           fetchUsers({
             pageSize,
             pageNo: tag ? pageNo - 1 : pageNo,
