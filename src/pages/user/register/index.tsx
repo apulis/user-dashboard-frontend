@@ -129,7 +129,7 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
                 },
                 {
                   min: 4,
-                  message: 'Need at lease 6 letters'
+                  message: 'Need at lease 4 letters'
                 },
                 {
                   max: 22,
