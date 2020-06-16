@@ -291,7 +291,10 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
                   <FormItem { ...formItemLayout }>
                     {getFieldDecorator(`userMessage[${index}].note`, {
                       initialValue: userMessage[index].note,
-                      rules: [textPattern]
+                      rules: [textPattern, {
+                        max: 50,
+                        message: 'Description Cannot be longer than 50 character'
+                      }]
                     })(<Input placeholder="description" />)}
                   </FormItem>
                 </Col>
