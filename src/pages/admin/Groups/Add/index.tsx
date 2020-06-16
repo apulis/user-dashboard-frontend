@@ -183,24 +183,27 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
       }
       {
         step === 2 && <div className="step-2">
-          {
-            getFieldDecorator('role', {
-              initialValue: submitData?.role,
-              rules: [
-                // { required: true },
-              ]
-            })(<Checkbox.Group style={{ width: '100%'}}>
-              <Row>
-                {
-                  rolesList.map(r => (
-                    <Col span={8}>
-                      <Checkbox style={{marginTop: '4px', marginBottom: '4px'}} value={r.id}>{r.name}</Checkbox>
-                    </Col>
-                  ))
-                }
-              </Row>
-            </Checkbox.Group>)
-          }
+          <FormItem label="">
+            {
+              getFieldDecorator('role', {
+                initialValue: submitData?.role,
+                rules: [
+                  { required: true, message: 'Role is required' },
+                ]
+              })(<Checkbox.Group style={{ width: '100%'}}>
+                <Row>
+                  {
+                    rolesList.map(r => (
+                      <Col span={8}>
+                        <Checkbox style={{marginTop: '4px', marginBottom: '4px'}} value={r.id}>{r.name}</Checkbox>
+                      </Col>
+                    ))
+                  }
+                </Row>
+              </Checkbox.Group>)
+            }
+          </FormItem>
+          
         </div>
       }
       {
