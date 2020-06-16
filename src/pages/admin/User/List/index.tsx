@@ -61,7 +61,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
     setTableLoading(false);
   }
   useEffect(() => {
-    fetchUsers({pageNo: pageNo || 1, pageSize: pageSize || 10});
+    fetchUsers({pageNo: 1, pageSize: 10});
     fetchGroups();
   }, [])
   const fetchUserGroups = async (userId: number) => {
@@ -283,7 +283,6 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       setAddRoleForUserModalVisible(false);
     }
   }
-  console.log('selectRows', selectRows, adminUsers)
   return (
     <PageHeaderWrapper>
       <div className={styles.top}>
