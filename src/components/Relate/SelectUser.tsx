@@ -26,7 +26,6 @@ const SelectUser: React.FC<ISearchUserProps & FormComponentProps & ConnectProps 
       type: 'users/fetchUsers',
       payload: {
         search: search,
-        pageSize: 100
       }
     });
   }
@@ -88,9 +87,6 @@ const SelectUser: React.FC<ISearchUserProps & FormComponentProps & ConnectProps 
             }
           </div>
         </Col>
-        {
-          userList.length >= 100 && <div style={{marginTop: '20px'}}>Will only display the first 50 if there are more than 100 users</div>
-        }
       </Row>
     </div>
   )
