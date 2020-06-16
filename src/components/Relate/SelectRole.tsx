@@ -37,7 +37,6 @@ const SelectGroup: React.FC<ISearchRoleProps & FormComponentProps & ConnectProps
     dispatch({
       type: 'roles/getRolesTotalCount'
     }).then(() => {
-      
       fetchRoles(roles.total);
     });
   }, [])
