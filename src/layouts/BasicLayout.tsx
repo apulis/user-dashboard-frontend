@@ -72,6 +72,7 @@ const footerRender: BasicLayoutProps['footerRender'] = () => {
     <>
       <div
         style={{
+          paddingTop: '100px',
           paddingBottom: 40,
           textAlign: 'center',
           position: 'absolute',
@@ -146,6 +147,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
       <Authorized authority={authorized} noMatch={noMatch}>
         {children}
       </Authorized>
+    <div style={{height: '100px'}}></div>
     </ProLayout>
   );
 };
