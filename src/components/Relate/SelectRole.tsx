@@ -34,7 +34,10 @@ const SelectGroup: React.FC<ISearchRoleProps & FormComponentProps & ConnectProps
     })
   };
   useEffect(() => {
-    fetchRoles();
+    dispatch({
+      type: 'roles/getRolesTotalCount'
+    });
+    fetchRoles(roles.total);
   }, [])
 
   useEffect(() => {
@@ -44,7 +47,6 @@ const SelectGroup: React.FC<ISearchRoleProps & FormComponentProps & ConnectProps
 
   const { total: roleTotal } = roles;
   const roleList: IRoleListItem[] = roles.list;
-  console.log('roleList',roleList)
   useEffect(() => {
     if (roleTotal > 20) {
       fetchRoles(roleTotal)
