@@ -208,7 +208,7 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
             <FormItem label="Group Name">
               {
                 getFieldDecorator('name', {
-                  rules: [{ required: true }, textPattern],
+                  rules: [{ required: true}, textPattern],
                   initialValue: groupInfo.name
                 })(
                   <Input />
@@ -219,7 +219,7 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
             <FormItem label="Description">
               {
                 getFieldDecorator('note', {
-                  rules: [{ required: true }, textPattern],
+                  rules: [{ required: true, message: 'Description is required' }, textPattern],
                   initialValue: groupInfo.note
                 })(
                   <Input />
