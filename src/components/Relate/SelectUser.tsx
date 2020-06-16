@@ -72,9 +72,7 @@ const SelectUser: React.FC<ISearchUserProps & FormComponentProps & ConnectProps 
               {
                 userList.length === 0 && <div>No availble users</div>
               }
-              {
-                userList.length >= 100 && <div>Will only display the first 50 if there are more than 100 users</div>
-              }
+              
             </Checkbox.Group>
           </div>
         </Col>
@@ -90,6 +88,9 @@ const SelectUser: React.FC<ISearchUserProps & FormComponentProps & ConnectProps 
             }
           </div>
         </Col>
+        {
+          userList.length >= 100 && <div style={{marginTop: '20px'}}>Will only display the first 50 if there are more than 100 users</div>
+        }
       </Row>
     </div>
   )
