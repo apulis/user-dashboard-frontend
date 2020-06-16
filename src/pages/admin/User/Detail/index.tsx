@@ -20,6 +20,7 @@ const FormItem = Form.Item;
 const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form, users, groups, config, user }) => {
   const { id } = useParams();
   const { currentUser } = user;
+  const { adminUsers } = config;
   const { getFieldDecorator, validateFields } = form;
   const userId = Number(id);
   const [userInfo, setUserInfo] = useState<IUsers>({userName: '', nickName: '', id: 0});
@@ -286,7 +287,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
     {
       title: 'Action',
       render(_text, item) {
-        if (item.name === 'System Admin' && !currentUser?.currentRole.includes('System Admin')) {
+        if (adminUsers.includes(userInfo.userName)) {
           return <div>-</div>;
         }
         return (

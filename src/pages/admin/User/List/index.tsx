@@ -163,9 +163,9 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
             <Dropdown
               overlay={
               <Menu>
-                {(currentRole.includes('System Admin') || adminUsers.includes(item.userName)) && <Menu.Item onClick={() => addRolesForUser(item.id)} key="0">Edit Role</Menu.Item>}
+                {!adminUsers.includes(item.userName) && <Menu.Item onClick={() => addRolesForUser(item.id)} key="0">Edit Role</Menu.Item>}
                 <Menu.Item onClick={async () => {await addToGroup(item.id);setCurrentHandleUserId(item.id)}} key="1">Add To User Group</Menu.Item>
-                <Menu.Item disabled={!currentRole.includes('System Admin') || adminUsers.includes(item.userName) } onClick={() => {setCurrentHandleUserId(item.id);removeUser(item.id)}} key="2">Delete</Menu.Item>
+                {!adminUsers.includes(item.userName) && <Menu.Item onClick={() => {setCurrentHandleUserId(item.id);removeUser(item.id)}} key="2">Delete</Menu.Item>}
               </Menu>}
             >
             <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
@@ -253,7 +253,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
         <UsergroupAddOutlined />
         Add To Group
       </Menu.Item>
-      <Menu.Item key="2" disabled={!!selectRows.find(val => !currentRole.includes('System Admin') || adminUsers.includes(val.userName))} onClick={() => removeUser()}>
+      <Menu.Item key="2" disabled={!!selectRows.find(val => adminUsers.includes(val.userName))} onClick={() => removeUser()}>
         <UserDeleteOutlined />
         Delete Current User
       </Menu.Item>
@@ -283,6 +283,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       setAddRoleForUserModalVisible(false);
     }
   }
+  console.log('selectRows', selectRows, adminUsers)
   return (
     <PageHeaderWrapper>
       <div className={styles.top}>
@@ -291,7 +292,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
             <Button type="primary">Create User</Button>
           </Link>
           <Button type="primary" disabled={selectRows.length === 0} onClick={() => addToGroup()} style={{ margin: '0 20px' }}>Add To Group</Button>
-          <Button disabled={!!selectRows.find(val => !currentRole.includes('System Admin') || adminUsers.includes(val.userName)) || selectRows.length === 0} onClick={() => removeUser()}>Delete Current User</Button>
+          <Button disabled={!!selectRows.find(val => adminUsers.includes(val.userName))} onClick={() => removeUser()}>Delete Current User</Button>
           {/* <Dropdown disabled={selectRows.length === 0} overlay={menu}>
             <Button style={{marginLeft: '15px'}}>
               Actions <DownOutlined />
