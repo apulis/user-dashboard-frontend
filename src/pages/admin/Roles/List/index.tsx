@@ -151,7 +151,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
   }
   const onSearchRoles = (search: string) => {
     setSearch(search);
-    fetchRoles(search);
+    fetchRoles(search, 1);
   }
   const confirmRelateGroup = async () => {
     if (selectedGroupId.length === 0) {

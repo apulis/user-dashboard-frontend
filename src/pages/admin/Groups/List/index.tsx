@@ -35,11 +35,12 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, groups }) => {
   const [selectedUserIds, setSelectedUserIds] = useState<number[]>([]);
   const [groupUserList, setGroupUserList] = useState<number[]>([]);
   const { list } = groups;
-  const fetchUsers = (search?: string) => {
+  const fetchUsers = (search?: string, pageNo?: number) => {
     dispatch({
       type: 'groups/fetchGroups',
       payload: {
-        search: search ? search : ''
+        search: search ? search : '',
+        pageNo,
       }
     })
   }
@@ -116,7 +117,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, groups }) => {
 
   ]
   const onSearch = (s: string) => {
-    fetchUsers(s)
+    fetchUsers(s, 1);
   }
   const onRowSelection: (selectedRowKeys: string[] | number[], selectedRows: IGroup[]) => void = (selectedRowKeys, selectedRows) => {
     setSelectedRows(selectedRows);
