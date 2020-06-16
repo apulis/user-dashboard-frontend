@@ -71,7 +71,9 @@ class SecurityLayout extends React.Component<SecurityLayoutProps & SecurityLayou
       dispatch({
         type: 'user/fetchCurrent',
       });
-      
+      dispatch({
+        type: 'config/fetchAdminUsers'
+      })
     }
     
   }
