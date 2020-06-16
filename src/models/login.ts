@@ -49,6 +49,7 @@ const Model: LoginModelType = {
         const params = getPageQuery();
         const routerBase = window.routerBase;
         let { redirect } = params as { redirect: string };
+        console.log('params', params)
         if (redirect) {
           console.log('redirect', redirect, routerBase)
           if (new RegExp(routerBase).test(redirect)) {
