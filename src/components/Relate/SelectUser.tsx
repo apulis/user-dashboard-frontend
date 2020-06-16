@@ -26,6 +26,7 @@ const SelectUser: React.FC<ISearchUserProps & FormComponentProps & ConnectProps 
       type: 'users/fetchUsers',
       payload: {
         search: search,
+        pageSize: search ? 30 : undefined
       }
     });
   }
@@ -70,6 +71,9 @@ const SelectUser: React.FC<ISearchUserProps & FormComponentProps & ConnectProps 
               }
               {
                 userList.length === 0 && <div>No availble users</div>
+              }
+              {
+                userList.length >= 50 && <div>Will only display the first 50 if there are more than 50 users</div>
               }
             </Checkbox.Group>
           </div>
