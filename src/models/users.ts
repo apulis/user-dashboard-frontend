@@ -75,8 +75,8 @@ const UsersModel: UsersModelType = {
     },
     * removeUsers({ payload }, { call, put }) {
       const { selectRows } = payload;
-      const removingUserNames = selectRows.map((val: IUsers) => val.userName)
-      const res = yield call(removeUsers, removingUserNames);
+      const removingUserIds = selectRows.map((val: IUsers) => val.id)
+      const res = yield call(removeUsers, removingUserIds);
       if (res.success) {
         //
       } else {

@@ -70,22 +70,22 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       await setUserGroupId(res.list.map((val: any) => val.id));
     }
   }
-  const starRemoveUsers = (currentHandleUserId?: string) => {
-    let userNames: string[];
+  const starRemoveUsers = (currentHandleUserId?: number) => {
+    let userIds: number[];
     if (currentHandleUserId) {
-      userNames = [currentHandleUserId];
+      userIds = [currentHandleUserId];
     } else {
-      userNames = selectRows.map((val: IUsers) => val.userName);
+      userIds = selectRows.map((val: IUsers) => val.id);
     }
-    removeUsers(userNames)
+    removeUsers(userIds)
       .then(res => {
         let tag = false;
-        if (list.length === userNames.length) {
+        if (list.length === userIds.length) {
           // 最后一页的数据全部删除的情况
           tag = true;
         }
         if (res.success) {
-          message.success('Success Delete User: ' + userNames.join(', '))
+          message.success('Success Delete User: ' + userIds.join(', '))
           fetchUsers({
             pageSize,
             pageNo: tag ? pageNo - 1 : pageNo,
@@ -165,7 +165,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
               <Menu>
                 {(currentRole.includes('System Admin') || adminUsers.includes(item.userName)) && <Menu.Item onClick={() => addRolesForUser(item.id)} key="0">Edit Role</Menu.Item>}
                 <Menu.Item onClick={async () => {await addToGroup(item.id);setCurrentHandleUserId(item.id)}} key="1">Add To User Group</Menu.Item>
-                <Menu.Item disabled={!currentRole.includes('System Admin') || adminUsers.includes(item.userName) } onClick={() => {setCurrentHandleUserId(item.id);removeUser(item.userName)}} key="2">Delete</Menu.Item>
+                <Menu.Item disabled={!currentRole.includes('System Admin') || adminUsers.includes(item.userName) } onClick={() => {setCurrentHandleUserId(item.id);removeUser(item.id)}} key="2">Delete</Menu.Item>
               </Menu>}
             >
             <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
@@ -219,7 +219,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
     }
     setAddGroupModalVisible(true);
   }
-  const removeUser = (userName?: string) => {
+  const removeUser = (userId?: number) => {
     
     confirm({
       title: 'Are you sure you want to delete selected item(s)?',
@@ -228,7 +228,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       okText: 'OK',
       cancelText: 'CANCEL',
       onOk() {
-        starRemoveUsers(userName);
+        starRemoveUsers(userId);
       },
       onCancel() {
         setCurrentHandleUserId(0);

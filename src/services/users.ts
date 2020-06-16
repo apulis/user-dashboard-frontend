@@ -28,7 +28,7 @@ export async function createUsers(payload: ICreateUser) {
   })
 }
 
-export async function removeUsers(payload: string[]) {
+export async function removeUsers(payload: number[]) {
   return await request('/users', {
     method: 'DELETE',
     data: payload,
