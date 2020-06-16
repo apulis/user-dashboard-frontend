@@ -286,7 +286,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
     {
       title: 'Action',
       render(_text, item) {
-        if (userInfo.id === 0) {
+        if (item.name === 'System Admin' && !currentUser?.currentRole.includes('System Admin')) {
           return <div>-</div>;
         }
         return (
