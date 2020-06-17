@@ -35,6 +35,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
   const [selectedUserId, setSelectedUserId] = useState<number[]>([]);
   const [selectedGroupId, setSelectedGroupId] = useState<number[]>([]);
   const [selectedRoleGroup, setSelectedRoleGroup] = useState<number[]>([]);
+  const [defaultPageCurrent, setDefaultPageCurrent] = useState<number>(1);
   const addRoleToUser = async (roleId: number) => {
     setCurrentHandleRoleId(roleId);
     setAddUserModalVisible(true);
@@ -150,6 +151,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
     setSelectRows(selectedRows);
   }
   const onSearchRoles = (search: string) => {
+    setDefaultPageCurrent(1);
     setSearch(search);
     fetchRoles(search, 1);
   }
@@ -204,6 +206,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
         style={{marginTop: '20px', float: 'right'}}
         onChange={onPageNationChange}
         // pageSize={pageSize}
+        current={defaultPageCurrent}
         total={total}
       />
       {
