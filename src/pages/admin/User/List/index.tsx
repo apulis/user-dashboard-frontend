@@ -291,7 +291,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
             <Button type="primary">Create User</Button>
           </Link>
           <Button type="primary" disabled={selectRows.length === 0} onClick={() => addToGroup()} style={{ margin: '0 20px' }}>Add To Group</Button>
-          <Button disabled={!!selectRows.find(val => adminUsers.includes(val.userName))} onClick={() => removeUser()}>Delete Current User</Button>
+          <Button disabled={!!selectRows.find(val => adminUsers.includes(val.userName)) || selectRowKeys.length === 0} onClick={() => removeUser()}>Delete Current User</Button>
           {/* <Dropdown disabled={selectRows.length === 0} overlay={menu}>
             <Button style={{marginLeft: '15px'}}>
               Actions <DownOutlined />
