@@ -60,9 +60,9 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
     if (!err) {
       const { userName, password, nickName } = values;
       const submitData: SignUpParamsType = { userName, password, nickName };
-      if (this.props.currentUser?.microsoftId) {
+      if (this.props.currentUser?.microsoftId && !this.props.currentUser?.userName) {
         submitData.microsoftId = this.props.currentUser?.microsoftId;
-      } else if (this.props.currentUser?.wechatId) {
+      } else if (this.props.currentUser?.wechatId && !this.props.currentUser?.userName) {
         submitData.wechatId = this.props.currentUser.wechatId;
       }
       const res = await signUp(submitData);
