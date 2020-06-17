@@ -36,8 +36,8 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
   const { currentUser } = user;
   const { list, pageNo, pageSize, total } = users || {};
   const { list: groupList } = groups;
-  if (list.length > 10) {
-    list.splice(10, list.length);
+  if (list.length > 50) {
+    list.splice(50, list.length);
   }
   const [selectRows, setSelectRows] = useState<IUsers[]>([]);
   const [addRoleForUserModalVisible, setAddRoleForUserModalVisible] = useState<boolean>(false);
@@ -196,7 +196,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       }
     })
     fetchUsers({
-      pageNo,
+      pageNo: 1,
       pageSize,
     })
   }
