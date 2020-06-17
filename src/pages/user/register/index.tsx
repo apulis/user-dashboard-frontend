@@ -67,6 +67,11 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
       }
       const res = await signUp(submitData);
       if (res.success === true) {
+        // 防止绑定后第二次再去绑定
+        delete localStorage.token;
+        this.props.dispatch({
+          type: 'user/fetchCurrent',
+        })
         message.success('Success Create Account');
         router.push('/user/login');
       } else if (res.duplicate) {
