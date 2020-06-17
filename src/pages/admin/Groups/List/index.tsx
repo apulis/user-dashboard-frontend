@@ -135,6 +135,10 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, groups }) => {
     setCurrentGroupId(0);
   }
   const confirmAddGroup = async () => {
+    if (selectedUserIds.length === 0) {
+      setAddGroupModalVisible(false);
+      return;
+    }
     let res;
     if (currentGroupId) {
       res = await addUsersToGroups(selectedUserIds, [currentGroupId]);
