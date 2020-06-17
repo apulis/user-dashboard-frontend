@@ -4,6 +4,7 @@ import { Input, Button, Col, Row, message, Breadcrumb, Checkbox, Table } from 'a
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { FormComponentProps } from '@ant-design/compatible/es/form';
 import { connect } from 'dva';
+import throttle from 'lodash/throttle';
 import router from 'umi/router';
 import { ConnectProps, ConnectState } from '@/models/connect';
 import { validateUniqueUserName, emailReg, mobilePattern, textPattern, userNamePattern } from '@/utils/validates';
@@ -39,6 +40,8 @@ const newUser: () => IUserMessage = () => {
     createTime: new Date().getTime(),
   }
 }
+
+const warn = throttle(message.warn, 3000, { trailing: false });
 
 const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props => {
   const { form: { getFieldDecorator, validateFields, getFieldsValue, setFieldsValue }, roles, dispatch } = props;
@@ -129,7 +132,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
   const removeUser = (createTime: number) => {
     const currentFormUserMessage: IUserMessage[] = getFieldsValue().userMessage;
     if (currentFormUserMessage.length === 1) {
-      message.warn('Should keep at least one user')
+      warn('Should keep at least one user');
       return;
     }
     currentFormUserMessage.forEach((item, index) => {
@@ -143,7 +146,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
   }
   const addUser = () => {
     if (userMessage.length >= 10) {
-      message.warn('maximum user is 10');
+      warn('maximum user is 10');
       return;
     }
     setUserMessage([...userMessage].concat(newUser()))
@@ -303,7 +306,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
             </div>
           ))
         }
-        <Button onClick={addUser}>ADD USER</Button><span style={{display: 'inline-block', marginLeft: '10px', marginTop: '20px'}}>maximum is 10</span>
+        <Button onClick={addUser}>Add User</Button><span style={{display: 'inline-block', marginLeft: '10px', marginTop: '20px'}}>maximum is 10</span>
       </div> }
       { step === 2 &&
         <div className="step-2">
