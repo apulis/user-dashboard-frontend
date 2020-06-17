@@ -1,3 +1,4 @@
+import cloneDeep from 'lodash/cloneDeep'
 import request from '@/utils/request';
 import { IUserMessage } from '@/pages/admin/User/Add';
 import { encodePassword } from '@/utils/utils';
@@ -19,6 +20,7 @@ export async function fetchUsers(payload: IFetchUserPayload): Promise<any> {
 }
 
 export async function createUsers(payload: ICreateUser) {
+  payload.userMessage = cloneDeep(payload.userMessage);
   payload.userMessage.forEach(u => {
     u.password = encodePassword(u.password as string);
   })
