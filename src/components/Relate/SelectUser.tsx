@@ -53,21 +53,13 @@ const SelectUser: React.FC<ISearchUserProps & FormComponentProps & ConnectProps 
     const s = value;
     fetchUsers(s);
   }, 800);
-  const rowRenderer = () => {
+  const rowRenderer = ({ index, key, style }: {index: number, key: any, style: React.CSSProperties}) => {
+    const u = userList[index];
     return (
-      <Checkbox.Group defaultValue={defaultSelected} onChange={onCheckboxSelect} style={{marginTop: '10px'}}>
-        {
-          userList.map((u) => (
-            <Col span={24}>
-              <Checkbox disabled={defaultSelected.includes(u.id)} style={{marginTop: '5px', height: '30px'}} key={u.id} value={u.id}>{u.userName}</Checkbox>
-            </Col>
-          ))
-        }
-        {
-          userList.length === 0 && <div>No availble users</div>
-        }
+      <Col span={24} key={index}>
+        <Checkbox disabled={defaultSelected.includes(u.id)} style={style} key={u.id} value={u.id}>{u.userName}</Checkbox>
+      </Col>
         
-      </Checkbox.Group>
     )
   }
   return (
@@ -80,16 +72,20 @@ const SelectUser: React.FC<ISearchUserProps & FormComponentProps & ConnectProps 
             </div>
             <Search placeholder="search users" onChange={(e) => onSearch(e.target.value)} style={{marginTop: '10px'}} />
             {
-              userList.length > 0 ? <List
-                width={300}
-                height={300}
-                rowCount={userList.length + 5}
-                rowHeight={30}
-                style={{paddingLeft: '10px', paddingBottom: '10px', paddingTop: '10px'}}
-                rowRenderer={rowRenderer}
-              /> : <Spin className="demo-loading" style={{marginLeft: '30px', marginTop: '30px'}} />
+              userList.length !== 0 && <Checkbox.Group defaultValue={defaultSelected} onChange={onCheckboxSelect} style={{marginTop: '10px'}}>
+                <List
+                  width={300}
+                  height={300}
+                  rowCount={userList.length}
+                  rowHeight={30}
+                  style={{paddingLeft: '10px', paddingBottom: '10px', paddingTop: '10px'}}
+                  rowRenderer={rowRenderer}
+                />
+              </Checkbox.Group>
             }
-            
+            {
+              userList.length === 0 &&  <Spin className="demo-loading" style={{marginLeft: '30px', marginTop: '30px'}} />
+            }
           </div>
         </Col>
         <Col span={11} offset={2}>
