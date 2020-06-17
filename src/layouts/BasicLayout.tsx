@@ -30,11 +30,11 @@ const noMatch = (
     status="403"
     title=""
     subTitle={<><p>Sorry, you are not authorized to access this page.</p><p>Please contact the administrator to add permissions</p></>}
-    extra={
-      <Button type="primary">
-        <Link to="/user/login">Go Login</Link>
-      </Button>
-    }
+    // extra={
+    //   <Button type="primary">
+    //     <Link to="/user/login">Go Login</Link>
+    //   </Button>
+    // }
   />
 );
 
