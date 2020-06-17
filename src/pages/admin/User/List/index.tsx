@@ -89,9 +89,11 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
         }
         if (res.success) {
           message.success('Success Delete')
+          let page = tag ? pageNo - 1 : pageNo;
+          if (page <= 0) page = 1;
           fetchUsers({
             pageSize,
-            pageNo: tag ? pageNo - 1 : pageNo,
+            pageNo: page,
           })
           clearRowSelection();
           setCurrentHandleUserId(0);
