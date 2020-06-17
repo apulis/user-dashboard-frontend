@@ -72,7 +72,7 @@ const footerRender: BasicLayoutProps['footerRender'] = () => {
     <>
       <div
         style={{
-          paddingTop: '100px',
+          marginTop: '100px',
           paddingBottom: 40,
           textAlign: 'center',
           position: 'absolute',
