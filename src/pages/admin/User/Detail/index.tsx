@@ -243,6 +243,9 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
       title: 'Action',
       align: 'center',
       render() {
+        if (adminUsers.includes(userInfo.userName)) {
+          return <div>-</div>;
+        }
         if (isEditing) {
           return (
             <>
