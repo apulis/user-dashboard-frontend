@@ -99,6 +99,9 @@ const Model: LoginModelType = {
       let { redirect } = getPageQuery();
       if (redirect) {
         redirect = redirect;
+        if (/login/.test(redirect as string) || /resigter/.test(redirect as string)) {
+          redirect = window.location.host + window.routerBase;
+        }
       } else if (/login/.test(window.location.href) || /resigter/.test(window.location.href)) {
         redirect = window.location.host + window.routerBase;
       } else {
