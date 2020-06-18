@@ -27,7 +27,7 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
 
   return (
     <div className={className} style={{marginRight: '30px'}}>
-      {hasDL && <Button type="primary" href="/" style={{marginRight: '20px'}}>DLWS dashboard</Button>}
+      {hasDL && <Button type="primary" href="/" style={{marginRight: '20px'}}>Apulis AI Platform</Button>}
       {/* <HeaderSearch
         className={`${styles.action} ${styles.search}`}
         placeholder={formatMessage({

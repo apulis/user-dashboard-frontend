@@ -62,7 +62,7 @@ const UserLayout: React.FC<UserLayoutProps> = props => {
           </div> */}
           <div className={styles.right}>
             <Link to="/">
-              <div className={styles.title}>Deep Learning Workspace</div>
+              <div className={styles.title}>Apulis AI Platform</div>
             </Link>
             {children}
           </div>

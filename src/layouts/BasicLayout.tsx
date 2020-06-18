@@ -80,7 +80,7 @@ const footerRender: BasicLayoutProps['footerRender'] = () => {
           width: '100%'
         }}
       >
-        DLWS User Dashboard
+        Apulis AI Platform
       </div>
     </>
   );
