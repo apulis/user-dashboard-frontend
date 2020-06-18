@@ -35,7 +35,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
   const [selectedUserId, setSelectedUserId] = useState<number[]>([]);
   const [selectedGroupId, setSelectedGroupId] = useState<number[]>([]);
   const [selectedRoleGroup, setSelectedRoleGroup] = useState<number[]>([]);
-  const [defaultPageCurrent, setDefaultPageCurrent] = useState<number>(1);
+  const [pageCurrent, setPageCurrent] = useState<number>(1);
   const [selectedRoleUser, setSelectedRoleUser] = useState<number>();
   const addRoleToUser = async (roleId: number) => {
     const res = await fetchUsersForRole(roleId);
@@ -148,6 +148,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
   const onPageNationChange = (pageNo: number) => {
     setPageNo(pageNo);
     fetchRoles(search, pageNo);
+    setPageCurrent(pageNo);
     setSelectRows([]);
     setSelectRowKeys([]);
   }
@@ -156,7 +157,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
     setSelectRows(selectedRows);
   }
   const onSearchRoles = (search: string) => {
-    setDefaultPageCurrent(1);
+    setPageCurrent(1);
     setSearch(search);
     fetchRoles(search, 1);
   }
@@ -211,7 +212,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
         style={{marginTop: '20px', float: 'right'}}
         onChange={onPageNationChange}
         // pageSize={pageSize}
-        current={defaultPageCurrent}
+        current={pageCurrent}
         total={total}
       />
       {
