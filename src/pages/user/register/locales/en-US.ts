@@ -1,7 +1,7 @@
 export default {
   'user-register.login.userName': 'userName',
-  'user-login.login.password': 'password',
-  'user-login.login.password2': 'confirm password',
+  'user-login.login.password': 'Password',
+  'user-login.login.password2': 'Confirm Password',
   'user-login.login.message-invalid-credentials':
     'Invalid username or password（admin/ant.design）',
   'user-login.login.message-invalid-verification-code': 'Invalid verification code',
@@ -81,8 +81,8 @@ export default {
   'user-register-tab-account-register': 'Register',
   'user-register.register.register-with': 'Other Register Method',
   'user-register.register.register': 'Regsiter',
-  'user-register.register.nickName': 'nickName',
-  'user-register.nickName.required': 'Please enter your nickName!',
+  'user-register.register.nickName': 'Nickname',
+  'user-register.nickName.required': 'Please enter your nickname!',
   'user-register.register.sign-up-with': 'Sign Up with',
   'user-register.register.signin': 'Sign In'
 };

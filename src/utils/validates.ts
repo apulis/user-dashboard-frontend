@@ -9,7 +9,7 @@ export const validateUniqueUserName= async (i: number, data: any, _rule?: any, v
   if (value) {
     userMessage.forEach((user: IUserMessage, index: number) => {
       if (user.userName === value && i !== index) {
-        callback('UserName needs unique');
+        callback('Username needs unique');
       }
     })
   }
@@ -18,7 +18,7 @@ export const validateUniqueUserName= async (i: number, data: any, _rule?: any, v
 
 export const mobilePattern = {
   pattern: /^[1]([3-9])[0-9]{9}$/,
-  message: "please enter a valid phone number"
+  message: "Please enter a valid phone number"
 };
 
 const emojiPattern = emojiRegex();

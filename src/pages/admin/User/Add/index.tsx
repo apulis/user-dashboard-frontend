@@ -269,7 +269,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
                           }
                         }
                       ],
-                    })(<Input placeholder="userName" />)}
+                    })(<Input placeholder="Username" />)}
                   </FormItem>
                 </Col>
                 <Col span={4}>
@@ -277,7 +277,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
                     {getFieldDecorator(`userMessage[${index}].phone`, {
                       initialValue: userMessage[index].phone,
                       rules: [mobilePattern]
-                    })(<Input placeholder="phone" />)}
+                    })(<Input placeholder="Phone" />)}
                   </FormItem>
                 </Col>
                 <Col span={4}>
@@ -288,7 +288,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
                         { pattern: emailReg, message: 'please check email format' },
                         { max: 50, message: 'Email cannot be longer than 50 character' }
                       ]
-                    })(<Input placeholder="email" />)}
+                    })(<Input placeholder="Email" />)}
                   </FormItem>
                 </Col>
                 <Col span={4}>
@@ -299,7 +299,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
                         max: 50,
                         message: 'Description cannot be longer than 50 character'
                       }]
-                    })(<Input placeholder="description" />)}
+                    })(<Input placeholder="Description" />)}
                   </FormItem>
                 </Col>
                 <Col style={{marginTop: '8px'}} span={2}><a onClick={() => removeUser(user.createTime) }>Remove</a></Col>

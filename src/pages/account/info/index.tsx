@@ -44,7 +44,7 @@ const Info: React.FC<ConnectProps & ConnectState> = ({ user, dispatch, config })
       </Descriptions>
       <Descriptions title="Login Methods" layout="vertical" bordered style={{marginTop: '35px'}}>
         {
-          authMethods.includes('wechat') && <Descriptions.Item label="Wechat">
+          authMethods.includes('wechat') && <Descriptions.Item label="Wechat account">
           {
             currentUser.wechatId ? <div>Bound</div> : <><span>Not Bound</span><a onClick={bindWechat} style={{marginLeft: '15px'}}>To Bind</a></>
           }
