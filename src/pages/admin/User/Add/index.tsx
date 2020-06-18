@@ -41,7 +41,7 @@ const newUser: () => IUserMessage = () => {
   }
 }
 
-const warn = throttle(message.warn, 3000, { trailing: false });
+// const warn = throttle(message.warn, 3000, { trailing: false });
 
 const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props => {
   const { form: { getFieldDecorator, validateFields, getFieldsValue, setFieldsValue }, roles, dispatch } = props;
@@ -132,7 +132,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
   const removeUser = (createTime: number) => {
     const currentFormUserMessage: IUserMessage[] = getFieldsValue().userMessage;
     if (currentFormUserMessage.length === 1) {
-      warn('Should keep at least one user');
+      message.warn('Should keep at least one user');
       return;
     }
     currentFormUserMessage.forEach((item, index) => {
@@ -146,7 +146,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
   }
   const addUser = () => {
     if (userMessage.length >= 10) {
-      warn('maximum user is 10');
+      message.warn('maximum user is 10');
       return;
     }
     setUserMessage([...userMessage].concat(newUser()))
