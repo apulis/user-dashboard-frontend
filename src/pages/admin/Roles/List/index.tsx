@@ -17,7 +17,7 @@ import SelectUser from "@/components/Relate/SelectUser";
 import { addRoleToGroups, addRoleToUsers } from '@/services/roles';
 import { getRoleGroup } from '@/services/roles';
 
-import { removeRoles } from '@/services/roles';
+import { removeRoles, fetchUsersForRole } from '@/services/roles';
 import { IRoleListItem } from '@/models/roles';
 
 
@@ -36,7 +36,12 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
   const [selectedGroupId, setSelectedGroupId] = useState<number[]>([]);
   const [selectedRoleGroup, setSelectedRoleGroup] = useState<number[]>([]);
   const [defaultPageCurrent, setDefaultPageCurrent] = useState<number>(1);
+  const [selectedRoleUser, setSelectedRoleUser] = useState<number>();
   const addRoleToUser = async (roleId: number) => {
+    const res = await fetchUsersForRole(roleId);
+    if (res.success === true) {
+      setSelectedRoleUser(res.list);
+    }
     setCurrentHandleRoleId(roleId);
     setAddUserModalVisible(true);
   }
@@ -229,7 +234,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
         onOk={confirmRelateUser}
       >
         <SelectUser
-          defaultSelected={selectedRoleGroup}
+          defaultSelected={selectedRoleUser}
           onChange={(selectedUserId) => setSelectedUserId(selectedUserId)}
         />
       </Modal> 
