@@ -285,7 +285,8 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
                     {getFieldDecorator(`userMessage[${index}].email`, {
                       initialValue: userMessage[index].email,
                       rules: [
-                        { pattern: emailReg, message: 'please check email format' }
+                        { pattern: emailReg, message: 'please check email format' },
+                        { max: 50, message: 'Email cannot be longer than 50 character' }
                       ]
                     })(<Input placeholder="email" />)}
                   </FormItem>
@@ -296,7 +297,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
                       initialValue: userMessage[index].note,
                       rules: [textPattern, {
                         max: 50,
-                        message: 'Description Cannot be longer than 50 character'
+                        message: 'Description cannot be longer than 50 character'
                       }]
                     })(<Input placeholder="description" />)}
                   </FormItem>

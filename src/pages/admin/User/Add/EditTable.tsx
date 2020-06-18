@@ -112,7 +112,8 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
             rules: [{
               pattern: emailReg,
               message: 'Please input corret email'
-            }],
+            },
+            { max: 50, message: 'Email cannot be longer than 50 character' }],
           })(<Input placeholder="Email" />)}</FormItem>
         } else {
           return item.email
@@ -125,7 +126,9 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
         if (editing[index]) {
           return <FormItem>{getFieldDecorator(`userMessage[${index}].note`, {
             initialValue: item.note,
-            rules: [textPattern]
+            rules: [textPattern, 
+              { max: 50, message: 'Description cannot be longer than 50 character' }
+          ]
           })(<Input placeholder="Description" />)}</FormItem>
         } else {
           return item.note;
