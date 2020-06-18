@@ -50,6 +50,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
   const [selectedRoleIds, setSelectedRoleIds] = useState<number[]>([]);
   const [currentUserRoles, setCurrentUserRoles] = useState<number[]>([]);
   const [userGroupId, setUserGroupId] = useState<number[]>([]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const currentRole = currentUser?.currentRole;
   const fetchUsers = async (params: IFetchUserParam) => {
     setTableLoading(true);
@@ -186,6 +187,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
   const onPageNationChange: (page: number, pageSize?: number) => void = (pageNo, pageSize) => {
     fetchUsers({ pageSize, pageNo });
     setSelectRows([]);
+    setCurrentPage(pageNo);
     setSelectRowKeys([]);
   }
   const onPageSizeChange = (pageSize: number) => {
@@ -194,11 +196,12 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       payload: {
         pageSize,
       }
-    })
+    });
+    setCurrentPage(1);
     fetchUsers({
       pageNo: 1,
       pageSize,
-    })
+    });
   }
   const clearRowSelection = () => {
     setSelectRowKeys([]);
@@ -242,6 +245,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
 
   }
   const onSearch = (s: string) => {
+    setCurrentPage(1)
     setSearch(s);
     fetchUsers({
       pageNo: 1,
@@ -340,6 +344,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
           defaultCurrent={1}
           pageSize={pageSize}
           total={total}
+          current={currentPage}
         />
       </div>
       <Modal
