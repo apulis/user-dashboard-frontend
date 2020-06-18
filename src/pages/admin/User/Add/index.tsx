@@ -336,14 +336,18 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
       {
         step === 3 &&
         <div className="step-3">
+          <h2>User Info</h2>
           <EditTable 
             dataSource={userMessage}
             onChange={onEditTableDataChange}
             onStatusChange={onEditTableStatusChange}
           />
+          <h2 style={{marginTop: '50px'}}>User Role</h2>
           <Table
+            style={{marginTop: '20px'}}
             columns={userRoleColumn}
             dataSource={userRoleDataSource}
+            pagination={false}
           />
         </div>
       }
