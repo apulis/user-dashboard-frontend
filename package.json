@@ -50,6 +50,7 @@
     "@ant-design/pro-layout": "^4.10.0",
     "@ant-design/pro-table": "^1.0.34",
     "@antv/data-set": "^0.10.2",
+    "@types/react-virtualized": "^9.21.10",
     "antd": "^3.23.6",
     "classnames": "^2.2.6",
     "dva": "^2.6.0-beta.16",
