@@ -251,7 +251,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
                         { max: 20, message: 'Nickname cannot be longer than 20 characters' },
                         textPattern
                       ],
-                    })(<Input placeholder="nickName" />)}
+                    })(<Input placeholder="Nickname" />)}
                   </FormItem>
                 </Col>
                 <Col span={4}>
