@@ -22,7 +22,10 @@ interface ISearchUserProps {
 const { Search } = Input;
 
 const SelectUser: React.FC<ISearchUserProps & FormComponentProps & ConnectProps & ConnectState> = ({ users, onChange, dispatch, defaultSelected = [] }) => {
-  const { list: userList } = users;
+  const { list } = users;
+  const userList = list.filter(u => {
+    return !!u.userName;
+  });
   const fetchUsers = (search?: string) => {
     dispatch({
       type: 'users/fetchUsers',
