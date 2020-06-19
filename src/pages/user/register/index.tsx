@@ -37,8 +37,8 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
   };
 
   componentDidMount() {
-    const { dispatch, currentUser } = this.props;
-    if (!currentUser && dispatch) {
+    const { dispatch } = this.props;
+    if (dispatch) {
       dispatch({
         type: 'user/fetchCurrent',
       });
@@ -101,7 +101,7 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
     const authMethods = this.props.config.authMethods;
     const { userLogin = {}, submitting, currentUser } = this.props;
     let defaultUserName = ''
-    if (currentUser && currentUser.microsoftId) {
+    if (currentUser && currentUser.microsoftId && (!currentUser.userName)) {
       defaultUserName = currentUser.microsoftId.split('@', 1)[0]
     }
     const { status, type: loginType } = userLogin;
