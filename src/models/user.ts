@@ -47,6 +47,11 @@ const UserModel: UserModelType = {
           type: 'saveCurrentUser',
           payload: response,
         });
+      } else {
+        yield put({
+          type: 'saveCurrentUser',
+          payload: {},
+        });
       }
       if (response.permissionList) {
         setAuthority(response.permissionList);

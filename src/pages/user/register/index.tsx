@@ -68,6 +68,9 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
       const res = await signUp(submitData);
       if (res.success === true) {
         // 防止绑定后第二次再去绑定
+        this.props.dispatch({
+          type: 'user/logout',
+        })
         delete localStorage.token;
         this.props.dispatch({
           type: 'user/fetchCurrent',
