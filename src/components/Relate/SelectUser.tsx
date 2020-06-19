@@ -13,6 +13,7 @@ import { ConnectProps, ConnectState } from '@/models/connect';
 import styles from './index.less';
 import { CheckboxValueType } from 'antd/lib/checkbox/Group';
 import { IUsers } from '@/models/users';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 interface ISearchUserProps {
   onChange?: (selectedUserId: number[]) => void;
@@ -41,6 +42,14 @@ const SelectUser: React.FC<ISearchUserProps & FormComponentProps & ConnectProps 
 
   const onCheckboxSelect = (checkedValue: CheckboxValueType[]) => {
     const selectedUsers: IUsers[] = []
+    defaultSelected.forEach(id => {
+      userList.forEach(u => {
+        if (u.id === id) {
+          selectedUsers.push(u)
+        }
+      })
+    })
+    console.log('check', checkedValue)
     checkedValue.forEach(id => {
       userList.forEach(u => {
         if (u.id === id) {
@@ -48,6 +57,7 @@ const SelectUser: React.FC<ISearchUserProps & FormComponentProps & ConnectProps 
         }
       })
     })
+
     setSelectedUsers(selectedUsers);
     onChange && onChange(checkedValue as number[]);
   }
@@ -56,14 +66,15 @@ const SelectUser: React.FC<ISearchUserProps & FormComponentProps & ConnectProps 
     const s = value;
     fetchUsers(s);
   }, 800);
+  const onSingleCheckBoxSelect = (value: boolean, index: number) => {
+    console.log(value)
+  }
   const rowRenderer = ({ index, key, style }: {index: number, key: any, style: React.CSSProperties}) => {
     const u = userList[index];
-    console.log('style', style)
     return (
       <Col span={24} key={index}>
         <Checkbox disabled={defaultSelected.includes(u.id)} style={style} key={u.id} value={u.id}>{u.userName}</Checkbox>
       </Col>
-        
     )
   }
   return (
@@ -94,15 +105,18 @@ const SelectUser: React.FC<ISearchUserProps & FormComponentProps & ConnectProps 
           </div>
         {/* </Col> */}
         {/* <Col  offset={2}> */}
-          <div className={styles.container}>
-            <div className="ant-modal-title">
+          <div className={styles.container} style={{'flexGrow': 1}}>
+            <div className="ant-modal-title" style={{marginBottom: '10px'}}>
               Selected: {}
             </div>
-            {
-              selectedUsers.map(u => (
-                <div>{u.userName}</div>
-              ))
-            }
+            <div style={{width: '100%', height: '320px', overflow: 'auto'}}>
+              {
+                selectedUsers.map(u => (
+                  <div style={{paddingTop: '5px'}}>{u.userName}</div>
+                ))
+              }
+            </div>
+            
           </div>
         {/* </Col> */}
       </Row>
