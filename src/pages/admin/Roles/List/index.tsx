@@ -233,6 +233,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
         visible={addUserModalVisible}
         onCancel={cancelRelate}
         onOk={confirmRelateUser}
+        width="65%"
       >
         <SelectUser
           defaultSelected={selectedRoleUser}

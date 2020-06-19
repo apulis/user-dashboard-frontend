@@ -158,7 +158,11 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
     setIsEditingTableEditing(isEditing);
   }
   const removeSelectRole = (id: number) => {
-    const s = selectedUserRole.filter(s => s !== id)
+    if (selectedUserRole.length <= 1) {
+      message.warn('Need at least one role');
+      return;
+    }
+    const s = selectedUserRole.filter(s => s !== id);
     setSelectedUserRole(s); 
   }
   const userRoleColumn: ColumnProps<IRoleListItem>[] = [

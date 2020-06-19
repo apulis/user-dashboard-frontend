@@ -22,7 +22,7 @@ export default {
   'user-login.register-result.view-mailbox': 'View mailbox',
   'user-login.email.required': 'Please enter your email!',
   'user-login.email.wrong-format': 'The email address is in the wrong format!',
-  'user-login.userName.required': 'Please enter your userName!',
+  'user-login.userName.required': 'Please enter your username!',
   'user-login.password.required': 'Please enter your password!',
   'user-login.password2.required': 'Please confirm your password!',
   'user-login.password.twice': 'The passwords entered twice do not match!',
