@@ -55,6 +55,7 @@ const SelectUser: React.FC<ISearchUserProps & FormComponentProps & ConnectProps 
   }, 800);
   const rowRenderer = ({ index, key, style }: {index: number, key: any, style: React.CSSProperties}) => {
     const u = userList[index];
+    console.log('style', style)
     return (
       <Col span={24} key={index}>
         <Checkbox disabled={defaultSelected.includes(u.id)} style={style} key={u.id} value={u.id}>{u.userName}</Checkbox>
@@ -64,21 +65,22 @@ const SelectUser: React.FC<ISearchUserProps & FormComponentProps & ConnectProps 
   }
   return (
     <div>
-      <Row>
-        <Col span={11}>
-          <div className={styles.container}>
+      <Row type="flex">
+        {/* <Col span={11}> */}
+          <div className={styles.container} style={{width: '320px'}}>
             <div className="ant-modal-title">
               Choose Users ( total: {userList.length} )
             </div>
-            <Search placeholder="search users" onChange={(e) => onSearch(e.target.value)} style={{marginTop: '10px'}} />
+            <Search placeholder="search users" onChange={(e) => onSearch(e.target.value)} style={{marginTop: '10px', width: '260px'}} />
             {
-              userList.length !== 0 && <Checkbox.Group defaultValue={defaultSelected} onChange={onCheckboxSelect} style={{marginTop: '10px'}}>
+              userList.length !== 0 && <Checkbox.Group defaultValue={defaultSelected} onChange={onCheckboxSelect} style={{marginTop: '10px', width: '100%'}}>
                 <List
-                  width={300}
-                  height={300}
+                  width={260}
+                  height={260}
                   rowCount={userList.length}
                   rowHeight={30}
-                  style={{paddingLeft: '10px', paddingBottom: '10px', paddingTop: '10px'}}
+
+                  style={{ paddingLeft: '10px', paddingBottom: '10px', paddingTop: '10px', marginTop: '10px'}}
                   rowRenderer={rowRenderer}
                 />
               </Checkbox.Group>
@@ -87,8 +89,8 @@ const SelectUser: React.FC<ISearchUserProps & FormComponentProps & ConnectProps 
               userList.length === 0 &&  <Spin className="demo-loading" style={{marginLeft: '30px', marginTop: '30px'}} />
             }
           </div>
-        </Col>
-        <Col span={11} offset={2}>
+        {/* </Col> */}
+        {/* <Col  offset={2}> */}
           <div className={styles.container}>
             <div className="ant-modal-title">
               Selected: {}
@@ -99,7 +101,7 @@ const SelectUser: React.FC<ISearchUserProps & FormComponentProps & ConnectProps 
               ))
             }
           </div>
-        </Col>
+        {/* </Col> */}
       </Row>
     </div>
   )
