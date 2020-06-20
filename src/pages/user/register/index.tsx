@@ -48,6 +48,21 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
         type: 'config/fetchAuthMethods',
       })
     }
+    window.addEventListener('unload', this.clearAuthInfo)
+  }
+  componentWillUnmount() {
+    window.removeEventListener('unload', this.clearAuthInfo);
+  }
+
+  clearAuthInfo() {
+    const currentUser = this.props.currentUser;
+    if (currentUser && !currentUser.userName) {
+      delete localStorage.token;
+      this.props.dispatch({
+        type: 'user/logout',
+      })
+    }
+    
   }
 
   changeAutoLogin = (e: CheckboxChangeEvent) => {
