@@ -55,7 +55,7 @@ export default {
   menu: {
     locale: true,
   },
-  title: 'User Dashboard',
+  title: 'Apuli User Dashboard',
   pwa: false,
   iconfontUrl: '',
 } as DefaultSettings;

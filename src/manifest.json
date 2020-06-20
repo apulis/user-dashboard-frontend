@@ -1,6 +1,6 @@
 {
-  "name": "User Dashboard",
-  "short_name": "User Dashboard",
+  "name": "Apulis User Dashboard",
+  "short_name": "Apulis User Dashboard",
   "display": "standalone",
   "start_url": "./?utm_source=homescreen",
   "theme_color": "#002140",
