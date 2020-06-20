@@ -13,7 +13,6 @@ import { ConnectProps, ConnectState } from '@/models/connect';
 import styles from './index.less';
 import { CheckboxValueType } from 'antd/lib/checkbox/Group';
 import { IUsers } from '@/models/users';
-import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 interface ISearchUserProps {
   onChange?: (selectedUserId: number[]) => void;
@@ -49,7 +48,6 @@ const SelectUser: React.FC<ISearchUserProps & FormComponentProps & ConnectProps 
         }
       })
     })
-    console.log('check', checkedValue)
     checkedValue.forEach(id => {
       userList.forEach(u => {
         if (u.id === id) {
@@ -66,9 +64,6 @@ const SelectUser: React.FC<ISearchUserProps & FormComponentProps & ConnectProps 
     const s = value;
     fetchUsers(s);
   }, 800);
-  const onSingleCheckBoxSelect = (value: boolean, index: number) => {
-    console.log(value)
-  }
   const rowRenderer = ({ index, key, style }: {index: number, key: any, style: React.CSSProperties}) => {
     const u = userList[index];
     return (
