@@ -47,7 +47,7 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
             rules: [
               { min: 4, message: 'Nickname need at least 4 characters' },
               { max: 20, message: 'Nickname cannot be longer than 20 characters' },
-              { required: true },
+              { required: true, message: 'Nickname is required' },
               textPattern
             ]
           })(<Input placeholder="Nickname" />)}</FormItem>
