@@ -33,18 +33,19 @@ const errorHandler = (error: { response: Response }): Response => {
     const errorText = codeMessage[response.status] || response.statusText;
     const { status, url } = response;
     if (status === 401) {
+      router.push('/user/login');
       setTimeout(() => {
         const href = window.location.href;
         if (!/\/login/.test(href) && !/\/register/.test(href)) {
           console.log('href', href)
-          router.push('/user/login');
+          console.log('href', href)
           notification.error({
             message: `Request error`,
             description: errorText,
           });
-          return response;
         }
-      }, 80);
+      }, 20);
+      return response;
       
     } else {
       notification.error({
