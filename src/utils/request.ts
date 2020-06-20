@@ -44,7 +44,7 @@ const errorHandler = (error: { response: Response }): Response => {
           });
           return response;
         }
-      }, 20);
+      }, 80);
       
     } else {
       notification.error({
