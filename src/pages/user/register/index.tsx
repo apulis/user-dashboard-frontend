@@ -57,12 +57,10 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
   clearAuthInfo() {
     const currentUser = this.props.currentUser;
     if (currentUser && !currentUser.userName) {
-      delete localStorage.token;
       this.props.dispatch({
         type: 'user/logout',
       })
     }
-    
   }
 
   changeAutoLogin = (e: CheckboxChangeEvent) => {
