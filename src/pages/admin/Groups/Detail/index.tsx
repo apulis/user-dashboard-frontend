@@ -168,7 +168,7 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
     },
   ];
   const confirmEditing = async () => {
-    if (getFieldValue('name') === groupInfo.name) {
+    if (getFieldValue('name') === groupInfo.name && getFieldValue('note') === groupInfo.note) {
       setIsGroupInfoEditing(false);
       return;
     }
