@@ -55,7 +55,6 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
   }
 
   clearAuthInfo() {
-    console.log(123)
     const currentUser = this.props.currentUser;
     if (currentUser && !currentUser.userName) {
       this.props.dispatch({
