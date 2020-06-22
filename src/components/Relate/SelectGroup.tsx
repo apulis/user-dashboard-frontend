@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { connect } from 'dva';
 import { Form } from '@ant-design/compatible';
 import { Checkbox, Input, Row, Col } from 'antd';
@@ -38,6 +38,18 @@ const SelectGroup: React.FC<ISearchGroupProps & FormComponentProps & ConnectProp
     setSelectedGroup(selectGroup);
     onChange && onChange(checkedValue as number[]);
   }
+
+  useEffect(() => {
+    const selected: IGroup[] = [];
+    defaultSelected.forEach(d => {
+      currentGroupList.forEach(c => {
+        if (c.id === d) {
+          selected.push(c);
+        }
+      })
+    })
+    setSelectedGroup(selected)
+  }, [defaultSelected])
 
   const onSearch = debounce((value: string) => {
     const s = value;
