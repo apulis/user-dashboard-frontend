@@ -37,6 +37,17 @@ const SelectUser: React.FC<ISearchUserProps & FormComponentProps & ConnectProps 
   useEffect(() => {
     fetchUsers();
   }, [])
+  useEffect(() => {
+    const defaultSelectedUser: IUsers[] = [];
+    defaultSelected.forEach(d => {
+      userList.forEach(u => {
+        if (u.id === d) {
+          defaultSelectedUser.push(u);
+        }
+      })
+    })
+    setSelectedUsers(defaultSelectedUser);
+  }, [list])
   const [selectedUsers, setSelectedUsers] = useState<IUsers[]>([]);
 
   const onCheckboxSelect = (checkedValue: CheckboxValueType[]) => {
