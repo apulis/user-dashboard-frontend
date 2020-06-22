@@ -192,7 +192,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
       <div className={styles.top}>
         <div className={styles.left}>
           <Link to="/admin/role/add">
-            <Button style={{marginRight: '20px'}} type="primary">Add Role</Button>
+            <Button style={{marginRight: '20px'}} type="primary">Create Role</Button>
           </Link>
           <Button onClick={() => removeCurrentSelectedRole()} disabled={buttonDisabled}>Delete Current Role</Button>
         </div>

@@ -159,7 +159,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, groups }) => {
       <div className={styles.top}>
         <div className={styles.left}>
           <Link to="/admin/group/add">
-            <Button type="primary">Add Group</Button>
+            <Button type="primary">Create Group</Button>
           </Link>
           <Button onClick={() => addUserToCurrentGroups()} disabled={selectedRows.length === 0} style={{marginLeft: '20px'}}>Add Users</Button>
         </div>
