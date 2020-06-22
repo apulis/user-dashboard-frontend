@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'dva';
-import { Descriptions } from 'antd';
+import { Descriptions, message } from 'antd';
 import { ConnectState, ConnectProps } from '@/models/connect';
 
 const Info: React.FC<ConnectProps & ConnectState> = ({ user, dispatch, config }) => {
@@ -14,7 +14,14 @@ const Info: React.FC<ConnectProps & ConnectState> = ({ user, dispatch, config })
       })
     }
   }, [])
+  useEffect(() => {
+    if (localStorage.bindType) {
+      message.success(`Success bind ${localStorage.bindType} to your account!`);
+      delete localStorage.bindType;
+    }
+  }, [currentUser])
   const bindMicrosoft = () => {
+    localStorage.bindType = 'wechat';
     dispatch({
       type: 'login/oauthLogin',
       payload: {
@@ -24,6 +31,7 @@ const Info: React.FC<ConnectProps & ConnectState> = ({ user, dispatch, config })
     })
   }
   const bindWechat = () => {
+    localStorage.bindType = 'wechat';
     dispatch({
       type: 'login/oauthLogin',
       payload: {
