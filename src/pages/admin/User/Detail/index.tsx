@@ -114,6 +114,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
 
   const confirmEditPassword = () => {
     validateFields(['newPassword'], async (err, result) => {
+      if (err) return;
       const { newPassword } = result;
       const res = await apiResetPassword(id, newPassword);
       if (res.success) {
