@@ -205,10 +205,14 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
         {
           isGroupInfoEditing ?
           <>
-            <FormItem label="Group Name">
+            <FormItem label="Group name">
               {
                 getFieldDecorator('name', {
-                  rules: [{ required: true}, textPattern],
+                  rules: [
+                    { required: true},
+                    textPattern,
+                    { max: 20, message: 'Group Name Cannot be longer than 20 characters' },
+                  ],
                   initialValue: groupInfo.name
                 })(
                   <Input />
@@ -219,7 +223,7 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
             <FormItem label="Description">
               {
                 getFieldDecorator('note', {
-                  rules: [{ required: true, message: 'Description is required' }, textPattern],
+                  rules: [{ required: true, message: 'Description is required' }, textPattern, { max: 50, message: 'Description Cannot be longer than 50 characters'}],
                   initialValue: groupInfo.note
                 })(
                   <Input />
