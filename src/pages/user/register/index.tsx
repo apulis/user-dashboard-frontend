@@ -171,10 +171,6 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
                   message: formatMessage({ id: 'user-register.nickName.required' }),
                 },
                 {
-                  min: 6,
-                  message: 'Need at least 6 characters'
-                },
-                {
                   max: 20,
                   message: 'Cannot be longer than 20 characters'
                 },

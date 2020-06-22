@@ -251,7 +251,6 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
                       initialValue: userMessage[index].nickName,
                       rules: [
                         { required: true, message: 'Nickname is required'},
-                        { min: 4, message: 'Nickname need at least 4 characters' },
                         { max: 20, message: 'Nickname cannot be longer than 20 characters' },
                         textPattern
                       ],

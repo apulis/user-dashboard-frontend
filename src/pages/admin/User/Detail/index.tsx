@@ -136,7 +136,6 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
                   initialValue: item.nickName,
                   rules: [
                     { required: true, message: 'nickName is required' },
-                    { min: 4, message: 'Nickname need at least 4 characters' },
                     { max: 20, message: 'Nickname cannot be longer than 20 characters' },
                     textPattern
                   ]

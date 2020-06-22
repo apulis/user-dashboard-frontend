@@ -45,7 +45,6 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
           return <FormItem>{getFieldDecorator(`userMessage[${index}].nickName`, {
             initialValue: item.nickName,
             rules: [
-              { min: 4, message: 'Nickname need at least 4 characters' },
               { max: 20, message: 'Nickname cannot be longer than 20 characters' },
               { required: true, message: 'Nickname is required' },
               textPattern
