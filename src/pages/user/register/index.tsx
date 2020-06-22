@@ -122,6 +122,7 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
     }
     const { status, type: loginType } = userLogin;
     const { type } = this.state;
+    console.log(currentUser)
     return (
       <div className={styles.main}>
         <LoginComponents
@@ -233,7 +234,7 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
             />
           </Tab>
           {
-            (currentUser && !currentUser.userName) ? <Alert message="You have joined, Now need to register for Apulis Deep Learning Platform" type="success" /> : <></>
+            (currentUser && Object.keys(currentUser).length > 0 && !currentUser.userName) ? <Alert message="You have joined, Now need to register for Apulis Deep Learning Platform" type="success" /> : <></>
           }
           <Submit loading={submitting}>
             <FormattedMessage id="user-register.register.register" />
