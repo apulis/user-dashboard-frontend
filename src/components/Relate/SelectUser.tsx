@@ -51,7 +51,9 @@ const SelectUser: React.FC<ISearchUserProps & FormComponentProps & ConnectProps 
     checkedValue.forEach(id => {
       userList.forEach(u => {
         if (u.id === id) {
-          selectedUsers.push(u)
+          if (!selectedUsers.find(u => u.id === id)) {
+            selectedUsers.push(u);
+          }
         }
       })
     })
