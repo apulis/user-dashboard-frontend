@@ -84,6 +84,7 @@ const Model: LoginModelType = {
     * logout({payload}, {call, put}) {
       const { redirect } = getPageQuery();
       if (localStorage.token) delete localStorage.token;
+      if (localStorage.authority) delete localStorage.authority;
       yield call(userLogout);
       if (window.location.pathname !== '/user/login' && !redirect) {
         router.replace({

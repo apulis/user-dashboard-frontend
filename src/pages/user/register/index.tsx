@@ -48,13 +48,14 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
         type: 'config/fetchAuthMethods',
       })
     }
-    window.addEventListener('unload', this.clearAuthInfo)
+    window.addEventListener('beforeunload', this.clearAuthInfo)
   }
   componentWillUnmount() {
-    window.removeEventListener('unload', this.clearAuthInfo);
+    window.removeEventListener('beforeunload', this.clearAuthInfo);
   }
 
   clearAuthInfo() {
+    console.log(123)
     const currentUser = this.props.currentUser;
     if (currentUser && !currentUser.userName) {
       this.props.dispatch({
