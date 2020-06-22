@@ -34,7 +34,7 @@ const errorHandler = (error: { response: Response }): Response => {
     const { status, url } = response;
     if (status === 401) {
       let href = window.location.href;
-      if (!/\/login/.test(href) && !/\/register/.test(href) {
+      if (!/\/login/.test(href) && !/\/register/.test(href)) {
         router.push('/user/login');
       }
       setTimeout(() => {
