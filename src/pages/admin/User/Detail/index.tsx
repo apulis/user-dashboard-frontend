@@ -135,7 +135,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
                 getFieldDecorator('nickName', {
                   initialValue: item.nickName,
                   rules: [
-                    { required: true, message: 'nickName is required' },
+                    { required: true, message: 'Nickname is required' },
                     { max: 20, message: 'Nickname cannot be longer than 20 characters' },
                     textPattern
                   ]
