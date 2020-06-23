@@ -16,7 +16,11 @@ const Info: React.FC<ConnectProps & ConnectState> = ({ user, dispatch, config })
   }, [])
   useEffect(() => {
     if (localStorage.bindType) {
-      message.success(`Success bind ${localStorage.bindType} to your account!`);
+      if (currentUser.wechatId) {
+        message.success(`Success bind wechat account!`);
+      } else if (currentUser.microsoftId) {
+        message.success(`Success bind microsoft account!`);
+      }
       delete localStorage.bindType;
     }
   }, [currentUser])
