@@ -53,7 +53,7 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
         }}
       /> */}
       <Avatar />
-      {/* <SelectLang className={styles.action} /> */}
+      <SelectLang className={styles.action} />
     </div>
   );
 };
