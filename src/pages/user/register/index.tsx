@@ -154,7 +154,7 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
                   message: 'Need at lease 4 letters'
                 },
                 {
-                  max: 22,
+                  max: 20,
                   message: 'Cannot be longer than 22 characters'
                 },
                 userNamePattern
