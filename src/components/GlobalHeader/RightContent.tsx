@@ -18,7 +18,7 @@ export interface GlobalHeaderRightProps extends ConnectProps {
 const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
   const { theme, layout } = props;
   let className = styles.right;
-  const permissionList = JSON.parse(localStorage.authority);
+  const permissionList = JSON.parse(localStorage.authority || '[]');
   const hasDL = !(permissionList && permissionList.length === 1 && permissionList.includes('MANAGE_USER'));
 
   if (theme === 'dark' && layout === 'topmenu') {

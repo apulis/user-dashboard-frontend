@@ -87,9 +87,7 @@ const UserLayout: React.FC<UserLayoutProps & PageProps> = props => {
             <SelectLang />
           </div> */}
           <div className={styles.right}>
-            <Link to="/">
               <div className={styles.title}>Apulis Deep Learning Platform</div>
-            </Link>
             {children}
           </div>
           
