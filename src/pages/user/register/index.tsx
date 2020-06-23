@@ -92,7 +92,7 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
         message.success('Success Create Account');
         router.push('/user/login');
       } else if (res.duplicate) {
-        message.error(`userName ${userName} is in use, please try another`);
+        message.error(`Username ${userName} is in use, please try another`);
       }
     }
   };
