@@ -104,7 +104,7 @@ const Model: LoginModelType = {
           redirect = window.location.host + window.routerBase;
         }
       } else if (/login/.test(window.location.href) || /resigter/.test(window.location.href)) {
-        redirect = window.location.host + window.routerBase;
+        redirect = window.location.protocol + '//' + window.location.host + window.routerBase;
       } else {
         redirect = window.location.href;
       }
