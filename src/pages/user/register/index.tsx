@@ -54,11 +54,12 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
     window.removeEventListener('beforeunload', this.clearAuthInfo);
   }
 
-  clearAuthInfo() {
+  clearAuthInfo = () => {
+    console.log(1234234, this.props.currentUser)
     const currentUser = this.props.currentUser;
     if (currentUser && !currentUser.userName) {
       this.props.dispatch({
-        type: 'user/logout',
+        type: 'login/logout',
       })
     }
   }
@@ -82,7 +83,7 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
       if (res.success === true) {
         // 防止绑定后第二次再去绑定
         this.props.dispatch({
-          type: 'user/logout',
+          type: 'login/logout',
         })
         delete localStorage.token;
         this.props.dispatch({
@@ -122,7 +123,6 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
     }
     const { status, type: loginType } = userLogin;
     const { type } = this.state;
-    console.log(currentUser)
     return (
       <div className={styles.main}>
         <LoginComponents
