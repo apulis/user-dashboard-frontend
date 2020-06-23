@@ -203,7 +203,10 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
         rowSelection={{
           type: "checkbox",
           onChange: onRowSelection,
-          selectedRowKeys: selectRowKeys
+          selectedRowKeys: selectRowKeys,
+          getCheckboxProps: (record) => ({
+            disabled: record.isPreset === 1
+          })
         }}
         columns={columns}
         dataSource={list}
