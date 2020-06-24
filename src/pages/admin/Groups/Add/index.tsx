@@ -9,7 +9,6 @@ import { ConnectProps, ConnectState } from '@/models/connect';
 import { addGroup } from '@/services/groups';
 import { ColumnProps } from 'antd/lib/table';
 import { IRoleListItem } from '@/models/roles';
-import { textPattern } from '@/utils/validates';
 
 export interface IAddUserGroup {
   name: string;
@@ -42,10 +41,10 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
   const { total: roleTotal } = roles;
   const rolesList: IRoleListItem[] = roles.list;
   useEffect(() => {
-    if (roleTotal > 20) {
+    if (roleTotal > 20 && step === 2) {
       fetchRoles(roleTotal)
     }
-  }, [roleTotal])
+  }, [step])
   const layout = {
     labelCol: { span: 24 },
     wrapperCol: { span: 12 },
@@ -61,9 +60,6 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
     } else if (step === 2) {
       validateFields((err, values) => {
         if (!err) {
-          if (!values.role) {
-            values.role = [];
-          }
           setSubmitData({
             ...submitData,
             ...values,
@@ -77,19 +73,12 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
           if (res.success) {
             message.success('Success');
             router.push('/admin/group/list');
-          } else if (res.success === false) {
-            message.error(`Group name ${submitData?.name} has exist, please try another`);
           }
         })
     }
   }
   const removeRole = (index: number) => {
-    if ([...submitData!.role].length === 1) {
-      message.warn('Need at least one role');
-      return;
-    }
-    const newRoleList = [...submitData!.role]
-    newRoleList.splice(index, 1);
+    const newRoleList = [...submitData!.role].splice(index, 1);
     setSubmitData({
       ...submitData,
       role: newRoleList,
@@ -100,6 +89,7 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
       title: 'Role',
       dataIndex: 'role',
       render(_text, item) {
+        console.log(_text, item)
         return (
           <div>{rolesList.find(r => r.id === item.role)?.name}</div>
         )
@@ -139,19 +129,9 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
       note: item ? item.note : '',
     };
   });
+  console.log(tableDataSource)
   return (
     <PageHeaderWrapper>
-      <Breadcrumb style={{marginBottom: '16px'}}>
-        { step >= 1 && <Breadcrumb.Item>
-          1. Group Info
-        </Breadcrumb.Item> }
-        { step >= 2 && <Breadcrumb.Item>
-          2. Role
-        </Breadcrumb.Item> }
-        { step >= 3 && <Breadcrumb.Item>
-          3. Preview
-        </Breadcrumb.Item> }
-      </Breadcrumb>
       {
         step === 1 && <div className="step-1">
           <FormItem label="Group Name" {...layout}>
@@ -160,21 +140,18 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
                 initialValue: submitData?.name || '',
                 rules: [
                   { required: true, message: 'group name is required' },
-                  { max: 20, message: 'Group Name Cannot be longer than 20 characters' },
-                  { whitespace: true, message: 'group name cannot be empty' },
-                  textPattern
+                  { max: 10, message: 'max length is 10' }
                 ],
               })(<Input />)
             }
           </FormItem>
-          <FormItem label="Description" {...layout}>
+          <FormItem label="Note" {...layout}>
             {
               getFieldDecorator('note', {
                 initialValue: submitData?.note || '',
                 rules: [
-                  { required: true, message: 'Description is required'},
-                  { max: 50, message: 'Description Cannot be longer than 50 characters'},
-                  textPattern
+                  { required: true, message: 'note is required'},
+                  { max: 40, message: 'max length is 40'}
                 ],
               })(<TextArea />)
             }
@@ -183,35 +160,32 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
       }
       {
         step === 2 && <div className="step-2">
-          <FormItem label="">
-            {
-              getFieldDecorator('role', {
-                initialValue: submitData?.role,
-                rules: [
-                  { required: true, message: 'Role is required' },
-                ]
-              })(<Checkbox.Group style={{ width: '100%'}}>
-                <Row>
-                  {
-                    rolesList.map(r => (
-                      <Col span={8}>
-                        <Checkbox style={{marginTop: '4px', marginBottom: '4px'}} value={r.id}>{r.name}</Checkbox>
-                      </Col>
-                    ))
-                  }
-                </Row>
-              </Checkbox.Group>)
-            }
-          </FormItem>
-          
+          {
+            getFieldDecorator('role', {
+              initialValue: submitData?.role,
+              rules: [
+                { required: true }
+              ]
+            })(<Checkbox.Group style={{ width: '100%'}}>
+              <Row>
+                {
+                  rolesList.map(r => (
+                    <Col span={8}>
+                      <Checkbox style={{marginTop: '4px', marginBottom: '4px'}} value={r.id}>{r.name}</Checkbox>
+                    </Col>
+                  ))
+                }
+              </Row>
+            </Checkbox.Group>)
+          }
         </div>
       }
       {
         step === 3 && <div className="step-3">
           <h1>Group Info</h1>
-          <div style={{ marginBottom: 16 }}>
-            <p>Group Name：{submitData?.name}</p>
-            <p>Description: {submitData?.note}</p>
+          <div>
+            <div>Group Name：{submitData?.name}</div>
+            <div>Description: {submitData?.note}</div>
           </div>
           <h1>Role  ({submitData?.role.length})</h1> 
           <Table dataSource={tableDataSource} columns={columns} />
@@ -221,7 +195,7 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
         step >=  2 &&
         <Button style={{marginRight: '15px'}} onClick={pre}>PREVIOUS</Button>
       }
-      <Button style={{marginTop: '20px'}} type="primary" onClick={next}>{ step === 3 ? 'SUBMIT' : 'Next'}</Button>
+      <Button style={{marginTop: '20px'}} type="primary" onClick={next}>{ step === 3 ? 'FINISH' : 'SUBMIT'}</Button>
     </PageHeaderWrapper>
   );
 }
