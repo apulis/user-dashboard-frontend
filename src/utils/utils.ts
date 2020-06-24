@@ -70,11 +70,22 @@ export function encodePassword(password: string) {
 
 export function initI18n() {
   // 依次获取当前语言
-  const language = localStorage.language || localStorage.umi_locale || navigator.language || 'en-US';
+  const language = getI18n();
+  console.log('la', language)
   if (language !== language.umi_locale) {
     // 设置项目语言
     setLocale(language, false);
     // 设置 cookie 以便后台使用
     request('/language/' + language)
   }
+}
+
+export function setI18n(lang: string) {
+  localStorage.language = lang;
+  request('/language/' + lang);
+  setLocale(lang, false)
+}
+
+export function getI18n() {
+  return localStorage.language || localStorage.umi_locale || navigator.language || 'en-US';
 }
