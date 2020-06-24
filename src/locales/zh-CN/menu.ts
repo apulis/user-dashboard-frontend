@@ -13,5 +13,4 @@ export default {
   'menu.admin.roles': '用户组',
   'menu.admin.roles.add': '新增用户组',
   'menu.admin.roles.list': '用户组列表',
-
 };

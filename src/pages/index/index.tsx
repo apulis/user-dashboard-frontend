@@ -3,6 +3,7 @@ import { Card, Col, Row } from 'antd';
 import { Link } from 'umi';
 import { connect } from 'dva';
 import { ConnectState, ConnectProps } from '@/models/connect';
+import { formatMessage } from 'umi-plugin-react/locale';
 
 
 const Index: React.FC<ConnectState & ConnectProps> = ({ users, groups, roles, dispatch }) => {
@@ -32,8 +33,10 @@ const Index: React.FC<ConnectState & ConnectProps> = ({ users, groups, roles, di
       <Row gutter={[32, 16]}>
         <Col lg={8} md={10} sm={12}>
           <Card size="small"
-            title="Users" 
-            extra={<Link to="/admin/user/add">Create User</Link>} style={{ width: 270 }}
+            title={formatMessage({
+              id: 'index.users'
+            })} 
+          extra={<Link to="/admin/user/add">{formatMessage({id: 'index.users.create'})}</Link>} style={{ width: 270 }}
           >
             <h2>{userTotal || 0}</h2>
           </Card>
