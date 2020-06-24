@@ -124,7 +124,7 @@ class Login extends Component<LoginProps & LoginState & ConnectState> {
                 },
                 {
                   max: 20,
-                  message: 'Cannot be longer than 22 characters'
+                  message: 'Cannot be longer than 20 characters'
                 },
                 userNamePattern
               ]}
