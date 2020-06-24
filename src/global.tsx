@@ -3,6 +3,7 @@ import { Button, message, notification } from 'antd';
 import React from 'react';
 import { formatMessage } from 'umi-plugin-react/locale';
 import defaultSettings from '../config/defaultSettings';
+import { initI18n } from './utils/utils';
 
 const { pwa } = defaultSettings;
 // if pwa is true
@@ -81,3 +82,5 @@ if (pwa) {
     });
   }
 }
+
+initI18n();

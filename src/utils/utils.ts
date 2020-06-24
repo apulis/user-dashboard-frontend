@@ -2,6 +2,8 @@ import { parse } from 'querystring';
 import pathRegexp from 'path-to-regexp';
 import { Route } from '@/models/connect';
 import { Md5 } from "md5-typescript";
+import { setLocale } from 'umi-plugin-react/locale';
+import request from './request';
 
 /* eslint no-useless-escape:0 import/prefer-default-export:0 */
 const reg = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
@@ -64,4 +66,15 @@ export const getRouteAuthority = (path: string, routeData: Route[]) => {
 
 export function encodePassword(password: string) {
   return Md5.init(password);
+}
+
+export function initI18n() {
+  // 依次获取当前语言
+  const language = localStorage.language || localStorage.umi_locale || navigator.language || 'en-US';
+  if (language !== language.umi_locale) {
+    // 设置项目语言
+    setLocale(language, false);
+    // 设置 cookie 以便后台使用
+    request('/language/' + language)
+  }
 }
