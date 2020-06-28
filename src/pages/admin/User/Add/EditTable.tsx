@@ -5,10 +5,12 @@ import { Table, Input, Button } from 'antd';
 // import { saveAs } from 'file-saver'
 import { ColumnProps } from 'antd/lib/table';
 import { FormComponentProps } from '@ant-design/compatible/es/form';
+import { formatMessage } from 'umi-plugin-react/locale';
 // import Excel from 'exceljs/dist/exceljs.bare';
 import { emailReg, validateUniqueUserName, mobilePattern, textPattern, userNamePattern } from '@/utils/validates';
 import { IUserMessage } from './index';
 import styles from '../Detail/index.less';
+import { FormattedDate } from 'umi-types/locale';
 
 interface User extends IUserMessage {
 
@@ -38,72 +40,76 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
   }, [dataSource])
   const columns = [
     {
-      title: 'Nickname',
+      title: formatMessage({id: 'users.nickName'}),
       dataIndex: 'nickName',
       render(_text: any, item: User, index: number) {
         if (editing[index]) {
           return <FormItem>{getFieldDecorator(`userMessage[${index}].nickName`, {
             initialValue: item.nickName,
             rules: [
-              { max: 20, message: 'Nickname cannot be longer than 20 characters' },
-              { required: true, message: 'Nickname is required' },
+              { max: 20, message: formatMessage({id: 'users.add.form.nickName.max'}) },
+              { required: true, message: formatMessage({id: 'users.add.form.nickName.required'}) },
               textPattern
             ]
-          })(<Input placeholder="Nickname" />)}</FormItem>
+          })(<Input placeholder={formatMessage({id: 'users.nickName'})} />)}</FormItem>
         } else {
           return item.nickName;
         }
       }
     }, {
-      title: 'Username',
+      title: formatMessage({id: 'users.userName'}),
       dataIndex: 'userName',
       render(_text: any, item: User, index: number) {
         if (editing[index]) {
           return <FormItem>{getFieldDecorator(`userMessage[${index}].userName`, {
             initialValue: item.userName,
             rules: [
-              { required: true, message: 'Username is required'},
-              { min: 4, message: 'Username need at least 4 characters' },
-              { max: 20, message: 'Username cannot be longer than 20 characters' },
+              { required: true, message: formatMessage({id: 'users.add.form.userName.required'})},
+              { min: 4, message: formatMessage({id: 'users.add.form.userName.min'}) },
+              { max: 20, message: formatMessage({id: 'users.add.form.userName.max'}) },
               { validator: (...args) => {
                 const newArgs = args.slice(0, 4);
                 validateUniqueUserName(index, dataSource, ...newArgs);
               }},
               userNamePattern
             ],
-          })(<Input placeholder="Username" />)}</FormItem>
+          })(<Input placeholder={formatMessage({id: 'users.userName'})} />)}</FormItem>
         } else {
           return item.userName;
         }
       }
     }, {
-      title: 'Password',
+      title: formatMessage({id: 'users.password'}),
       dataIndex: 'password',
       render(_text: any, item: User, index: number) {
         if (editing[index]) {
           return <FormItem>{getFieldDecorator(`userMessage[${index}].password`, {
             initialValue: item.password,
-            rules: [{ required: true, message: 'Password is required'}, { min: 6, message: 'Need at least 6 characters' }, { max: 20, message: 'Cannot be longer than 20 characters' }],
-          })(<Input placeholder="Password" />)}</FormItem>
+            rules: [
+              { required: true, message: 'Password is required'},
+              { min: 6, message: 'Need at least 6 characters' },
+              { max: 20, message: 'Cannot be longer than 20 characters' }
+            ],
+          })(<Input placeholder={formatMessage({id: 'users.password'})} />)}</FormItem>
         } else {
           return item.password
         }
       }
     }, {
-      title: 'Phone',
+      title: formatMessage({id: 'users.phone'}),
       dataIndex: 'phone',
       render(_text: any, item: User, index: number) {
         if (editing[index]) {
           return <FormItem>{getFieldDecorator(`userMessage[${index}].phone`, {
             initialValue: item.phone,
             rules: [mobilePattern]
-          })(<Input placeholder="Phone" />)}</FormItem>
+          })(<Input placeholder={formatMessage({id: 'user.phone'})} />)}</FormItem>
         } else {
           return item.phone
         }
       }
     }, {
-      title: 'Email',
+      title: formatMessage({id: 'users.email'}),
       dataIndex: 'email',
       render(_text: any, item: User, index: number) {
         if (editing[index]) {
@@ -111,44 +117,44 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
             initialValue: item.email,
             rules: [{
               pattern: emailReg,
-              message: 'Please input corret email'
+              message: formatMessage({id: 'users.add.form.email.pattern'})
             },
-            { max: 50, message: 'Email cannot be longer than 50 character' }],
-          })(<Input placeholder="Email" />)}</FormItem>
+            { max: 50, message: formatMessage({id: 'users.add.form.email.max'}) }],
+          })(<Input placeholder={formatMessage({id: 'users.email'})} />)}</FormItem>
         } else {
           return item.email
         }
       }
     }, {
-      title: 'Description',
+      title: formatMessage({id: 'users.description'}),
       dataIndex: 'note',
       render(_text: any, item: User, index: number) {
         if (editing[index]) {
           return <FormItem>{getFieldDecorator(`userMessage[${index}].note`, {
             initialValue: item.note,
             rules: [textPattern, 
-              { max: 50, message: 'Description cannot be longer than 50 character' }
+              { max: 50, message: formatMessage({id: 'users.add.form.note.max'}) }
           ]
-          })(<Input placeholder="Description" />)}</FormItem>
+          })(<Input placeholder={formatMessage({id: 'users.description'})} />)}</FormItem>
         } else {
           return item.note;
         }
       }
     }, {
-      title: 'Action',
+      title: formatMessage({id: 'users.add.userRole.action'}),
       dataIndex: 'action',
       width: '13%',
       render(_text: any, item: User, index: number) {
         if (editing[index]) {
           return (
             <>
-              <a style={{ marginRight: 10 }} onClick={() => saveEditingTable(index)}>Save</a>
-              <a onClick={() => toggleEditing(index)}>Cancel</a>
+              <a style={{ marginRight: 10 }} onClick={() => saveEditingTable(index)}>{formatMessage({id: 'users.add.editTable.save'})}</a>
+              <a onClick={() => toggleEditing(index)}>{formatMessage({id: 'users.add.editTable.cancel'})}</a>
             </>
           )
         } else {
           return (
-            <a onClick={() => toggleEditing(index)}>Edit</a>
+          <a onClick={() => toggleEditing(index)}>{formatMessage({id: 'users.add.editTable.edit'})}</a>
           )
         }
         
