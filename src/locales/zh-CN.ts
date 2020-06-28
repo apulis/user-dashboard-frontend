@@ -5,6 +5,7 @@ import pwa from './zh-CN/pwa';
 import settingDrawer from './zh-CN/settingDrawer';
 import settings from './zh-CN/settings';
 import index from './zh-CN/index';
+import users from './zh-CN/users';
 
 export default {
   'navBar.lang': '语言',
@@ -18,7 +19,8 @@ export default {
   ...menu,
   ...settingDrawer,
   ...settings,
-  ...index,
   ...pwa,
   ...component,
+  ...index,
+  ...users,
 };
