@@ -40,19 +40,19 @@ const Index: React.FC<ConnectState & ConnectProps> = ({ users, groups, roles, di
           >
             <h2>{userTotal || 0}</h2>
           </Card>
-        </Col>
+        </Col>    
         <Col lg={8} md={10} sm={12}>
           <Card size="small"
-            title="Groups" 
-            extra={<Link to="/admin/group/add">Create Group</Link>} style={{ width: 270 }}
+            title={formatMessage({id: 'index.groups'})} 
+            extra={<Link to="/admin/group/add">{formatMessage({id: 'index.groups.create'})}</Link>} style={{ width: 270 }}
           >
             <h2>{groupTotal || 0}</h2>
           </Card>
         </Col>
         <Col lg={8} md={10} sm={12}>
           <Card size="small"
-            title="Custom Role" 
-            extra={<Link to="/admin/role/add">Create Custom Role</Link>} style={{ width: 270 }}
+            title={formatMessage({id: 'index.roles'})} 
+            extra={<Link to="/admin/role/add">{formatMessage({id: 'index.roles.create'})}</Link>} style={{ width: 270 }}
           >
             <h2>{roleTotal || 0}</h2>
           </Card>
