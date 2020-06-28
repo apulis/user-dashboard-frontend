@@ -24,5 +24,16 @@ export default {
   'groups.add.submit': 'Submit',
   
   // List
+  'groups.list.modal.wiil.delete.group': 'Will delete group: ',
+  'groups.list.modal.success.delete.group': 'Success delete group: ',
+  'groups.list.group.name': 'Group Name',
+  'groups.list.note': 'Description',
+  'groups.list.createTime': 'Create Time',
+  'groups.list.actions': 'actions',
+  'groups.list.add.users': 'Add Users',
+  'groups.list.delete': 'Delete',
+  'groups.list.add': 'Create Group',
+  'groups.list.search.groups': 'Search groups',
+  
 
 }

@@ -23,4 +23,15 @@ export default {
   'groups.add.previous': '上一步',
   'groups.add.finish': '下一步',
   'groups.add.submit': '提交',
+  // List
+  'groups.list.modal.wiil.delete.group': '将会删除用户组: ',
+  'groups.list.modal.success.delete.group': '成功删除用户组: ',
+  'groups.list.group.name': '用户组名称',
+  'groups.list.note': '描述',
+  'groups.list.createTime': '创建时间',
+  'groups.list.actions': '操作',
+  'groups.list.add.users': '添加用户',
+  'groups.list.delete': '删除',
+  'groups.list.add': '创建用户组',
+  'groups.list.search.groups': '搜索用户组',
 }
