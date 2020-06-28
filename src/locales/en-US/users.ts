@@ -64,6 +64,7 @@ export default {
   'users.add.editTable.edit': 'Edit',
   'users.add.button.submit': 'Submit',
   'users.add.button.next': 'Next',
-  //
+  // Detail
+  
   
 }
