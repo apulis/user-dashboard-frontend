@@ -6,6 +6,7 @@ import settingDrawer from './zh-CN/settingDrawer';
 import settings from './zh-CN/settings';
 import index from './zh-CN/index';
 import users from './zh-CN/users';
+import groups from './zh-CN/groups';
 
 export default {
   'navBar.lang': '语言',
@@ -23,4 +24,5 @@ export default {
   ...component,
   ...index,
   ...users,
+  ...groups,
 };

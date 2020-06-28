@@ -3,6 +3,7 @@ import { Form } from '@ant-design/compatible';
 import { Input, Button, Breadcrumb, Checkbox, Row, Col, Table, message } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { FormComponentProps } from '@ant-design/compatible/es/form';
+import { formatMessage } from 'umi-plugin-react/locale';
 import { connect } from 'dva';
 import router from 'umi/router';
 import { ConnectProps, ConnectState } from '@/models/connect';
@@ -71,7 +72,7 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
       addGroup(submitData as IAddUserGroup)
         .then(res => {
           if (res.success) {
-            message.success('Success');
+            message.success(formatMessage({id: 'groups.add.message.success'}));
             router.push('/admin/group/list');
           }
         })
@@ -86,17 +87,16 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
   }
   const columns: ColumnProps<{role: number; note: string; isPreset: number}>[] = [
     {
-      title: 'Role',
+      title: formatMessage({id: 'groups.add.role'}),
       dataIndex: 'role',
       render(_text, item) {
-        console.log(_text, item)
         return (
           <div>{rolesList.find(r => r.id === item.role)?.name}</div>
         )
       }
     },
     {
-      title: 'RoleDescription',
+      title: formatMessage({id: 'groups.add.RoleDescription'}),
       key: 'note',
       render(_text, item) {
         return (
@@ -105,16 +105,18 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
       }
     },
     {
-      title: 'RoleType',
+      title: formatMessage({id: 'groups.add.role.type'}),
       render(_text, item) {
-        return <span>{item.isPreset ? 'Preset Role' : 'Custom Role'}</span>
+        return <span>{item.isPreset ? formatMessage({id: 'groups.add.role.type.preset'}) : formatMessage({id: 'groups.add.role.type.custom'})}</span>
       }
     },
     {
-      title: 'Action',
+      title: formatMessage({id: 'groups.add.role.type.action'}),
       dataIndex: 'action',
       render(_text: any, _item: any, index: number) {
-        return <a onClick={() => {removeRole(index)}}>Remove</a>
+        return (<a onClick={() => {removeRole(index)}}>
+          {formatMessage({id: 'groups.add.role.action.remove'})}
+        </a>)
       }
     }
   ];
@@ -134,24 +136,24 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
     <PageHeaderWrapper>
       {
         step === 1 && <div className="step-1">
-          <FormItem label="Group Name" {...layout}>
+          <FormItem label={formatMessage({id: 'groups.add.groupName'})} {...layout}>
             {
               getFieldDecorator('name', {
                 initialValue: submitData?.name || '',
                 rules: [
-                  { required: true, message: 'group name is required' },
-                  { max: 10, message: 'max length is 10' }
+                  { required: true, message: formatMessage({id: 'groups.add.form.group.name.required'}) },
+                  { max: 10, message: formatMessage({id: 'groups.add.form.group.name.max'}) }
                 ],
               })(<Input />)
             }
           </FormItem>
-          <FormItem label="Note" {...layout}>
+          <FormItem label={formatMessage({id: 'groups.add.note'})} {...layout}>
             {
               getFieldDecorator('note', {
                 initialValue: submitData?.note || '',
                 rules: [
-                  { required: true, message: 'note is required'},
-                  { max: 40, message: 'max length is 40'}
+                  { required: true, message: formatMessage({id: 'groups.add.form.group.note.required'})},
+                  { max: 40, message: formatMessage({id: 'groups.add.form.group.note.max'})}
                 ],
               })(<TextArea />)
             }
@@ -182,20 +184,24 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
       }
       {
         step === 3 && <div className="step-3">
-          <h1>Group Info</h1>
+          <h1>{formatMessage({id: 'groups.add.step3.title'})}</h1>
           <div>
-            <div>Group Name：{submitData?.name}</div>
-            <div>Description: {submitData?.note}</div>
+            <div>{formatMessage({id: 'groups.add.step3.groupName'})}{submitData?.name}</div>
+            <div>{formatMessage({id: 'groups.add.step3.note'})}{submitData?.note}</div>
           </div>
-          <h1>Role  ({submitData?.role.length})</h1> 
+          <h1>{formatMessage({id: 'groups.add.step3.role'})}  ({submitData?.role.length})</h1> 
           <Table dataSource={tableDataSource} columns={columns} />
         </div>
       }
       {
         step >=  2 &&
-        <Button style={{marginRight: '15px'}} onClick={pre}>PREVIOUS</Button>
+      <Button style={{marginRight: '15px'}} onClick={pre}>
+        {formatMessage({id: 'groups.add.previous'})}
+      </Button>
       }
-      <Button style={{marginTop: '20px'}} type="primary" onClick={next}>{ step === 3 ? 'FINISH' : 'SUBMIT'}</Button>
+      <Button style={{marginTop: '20px'}} type="primary" onClick={next}>
+        { step === 3 ? formatMessage({id: 'groups.add.finish'}) : formatMessage({id: 'groups.add.submit'}) }
+      </Button>
     </PageHeaderWrapper>
   );
 }

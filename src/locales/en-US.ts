@@ -6,6 +6,7 @@ import settingDrawer from './en-US/settingDrawer';
 import settings from './en-US/settings';
 import index from './en-US/index';
 import users from './en-US/users';
+import groups from './en-US/groups';
 
 export default {
   'navBar.lang': 'Languages',
@@ -22,5 +23,6 @@ export default {
   ...pwa,
   ...component,
   ...index,
-  ...users
+  ...users,
+  ...groups,
 };
