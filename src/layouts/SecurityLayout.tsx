@@ -81,12 +81,11 @@ class SecurityLayout extends React.Component<SecurityLayoutProps & SecurityLayou
   render() {
     const { isReady } = this.state;
     const { children, loading, currentUser } = this.props;
-    const notLogin = !currentUser;
+    const notLogin = !currentUser || Object.keys(currentUser).length === 0;
     const notRegister = currentUser && (!currentUser.userName && currentUser.openId);
     const queryString = stringify({
       redirect: window.location.href.replace(/\/user\/login$/, ''),
     });
-
     if ((notLogin && loading) || !isReady) {
       return <PageLoading />;
     }
