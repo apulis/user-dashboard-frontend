@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Input, Table, Col, Button, message } from 'antd';
-import { PageHeaderWrapper } from '@ant-design/pro-layout';
+import { Input, Table, Button, message } from 'antd';
 import { connect } from 'dva';
 import { Form } from '@ant-design/compatible';
 import { useParams } from 'react-router-dom';
 import { PageHeader } from 'antd';
 import router from 'umi/router';
 import { ColumnProps } from 'antd/es/table';
-import { ConnectProps, ConnectState } from '@/models/connect';
+import { ConnectState } from '@/models/connect';
 import { FormComponentProps } from 'antd/lib/form';
 import { getGroupDetail, getGroupRoles, getGroupUsers, editGroupDetail, removeGroupRole, removeGroupUser } from '@/services/groups';
 import { textPattern } from '@/utils/validates';
+import { formatMessage } from 'umi-plugin-react/locale';
+import { formatNumber } from 'umi-types/locale';
 
 const FormItem = Form.Item;
 
@@ -74,7 +75,7 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
   const removeRole = async (roleId: number) => {
     const res = await removeGroupRole(Number(id), roleId);
     if (res.success) {
-      message.success('Success delete role');
+      message.success(formatMessage({id: 'groups.detail.message.success.delete.role'}));
       fetchGroupRoles(Number(id));
     }
   }
@@ -82,7 +83,7 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
   const removeUser = async (userId: number) => {
     const res = await removeGroupUser(Number(id), userId);
     if (res.success) {
-      message.success('Success delete user');
+      message.success(formatMessage({id: 'groups.detail.message.success.delete.user'}));
       fetchGroupUsers(Number(id));
     }
   }
@@ -98,30 +99,32 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
 
   const roleColumns: ColumnProps<any>[] = [
     {
-      title: 'Role',
+      title: formatMessage({id: 'groups.detail.role.role'}),
       dataIndex: 'name',
       key: 'name',
     },
     {
-      title: 'Description',
+      title: formatMessage({id: 'groups.detail.role.description'}),
       dataIndex: 'note',
       key: 'note',
     },
     {
-      title: 'Role Type',
+      title: formatMessage({id: 'groups.detail.role.description'}),
       render(_text, item) {
         return (
-          <div>{item.isPreset ? 'Preset Role' : 'Custom Role'}</div>
+          <div>{item.isPreset ? formatMessage({id: 'groups.detail.role.type.preset'}) : formatMessage({id: 'groups.detail.role.type.custom'})}</div>
         )
       }
     },
     {
-      title: 'Action',
+      title: formatMessage({id: 'groups.detail.role.action'}),
       dataIndex: '',
       render(_text, item) {
         return (
           <div>
-            <a onClick={() => removeRole(item.id)}>Remove</a>
+            <a onClick={() => removeRole(item.id)}>
+              {formatMessage({id: 'groups.detail.role.remove'})}
+            </a>
           </div>
         )
       }
@@ -132,36 +135,38 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
 
   const usersColumns: ColumnProps<any>[] = [
     {
-      title: 'Nickname',
+      title: formatMessage({id: 'users.nickName'}),
       dataIndex: 'nickName',
       key: 'nickName'
     },
     {
-      title: 'Username',
+      title: formatMessage({id: 'users.userName'}),
       dataIndex: 'userName',
       key: 'userName'
     },
     {
-      title: 'Phone',
+      title: formatMessage({id: 'users.phone'}),
       dataIndex: 'phone',
       key: 'phone'
     },
     {
-      title: 'Email',
+      title: formatMessage({id: 'users.email'}),
       dataIndex: 'email',
       key: 'email'
     },
     {
-      title: 'Description',
+      title: formatMessage({id: 'users.description'}),
       dataIndex: 'note',
       key: 'note'
     },
     {
-      title: 'Action',
+      title: formatMessage({id: 'groups.detail.role.action'}),
       render(_text, item) {
         return (
           <div>
-            <a onClick={() => removeUser(item.id)}>Remove</a>
+            <a onClick={() => removeUser(item.id)}>
+              {formatMessage({id: 'groups.detail.role.remove'})}
+            </a>
           </div>
         )
       }
@@ -179,7 +184,7 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
         note: values.note,
       })
       if (res.success) {
-        message.success('Edit success');
+        message.success(formatMessage({id: 'groups.detail.role.message.edit.success'}));
         setIsGroupInfoEditing(false);
         fetchGroupDetail(Number(id));
       } else if (res.success === false) {
@@ -205,13 +210,13 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
         {
           isGroupInfoEditing ?
           <>
-            <FormItem label="Group name">
+            <FormItem label={formatMessage({id: 'groups.add.groupName'})}>
               {
                 getFieldDecorator('name', {
                   rules: [
                     { required: true},
                     textPattern,
-                    { max: 20, message: 'Group Name Cannot be longer than 20 characters' },
+                    { max: 20, message: formatMessage({id: 'groups.add.form.group.name.max'}) },
                   ],
                   initialValue: groupInfo.name
                 })(
@@ -220,10 +225,10 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
               }
             </FormItem>
             
-            <FormItem label="Description">
+            <FormItem label={formatMessage({id: 'groups.add.note'})}>
               {
-                getFieldDecorator('note', {
-                  rules: [{ required: true, message: 'Description is required' }, textPattern, { max: 50, message: 'Description Cannot be longer than 50 characters'}],
+                getFieldDecorator('note', { 
+                  rules: [{ required: true, message: formatMessage({id: 'groups.add.form.group.note.required'}) }, textPattern, { max: 50, message: 'Description Cannot be longer than 40 characters'}],
                   initialValue: groupInfo.note
                 })(
                   <Input />
@@ -233,8 +238,8 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
           </>
           :
           <>
-            <div><span>Group Name: </span>{groupInfo.name}</div>
-            <div><span>Description: </span>{groupInfo.note}</div>
+            <div><span>{formatMessage({id: 'groups.detail.groupName'})} </span>{groupInfo.name}</div>
+            <div><span>{formatMessage({id: 'groups.detail.Description'})} </span>{groupInfo.note}</div>
           </>
           
         }
@@ -242,19 +247,28 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
           {
             isGroupInfoEditing ? 
             <>
-              <Button style={{marginRight: '20px'}} onClick={confirmEditing} type="primary">Save</Button>
-              <Button onClick={toggleEditing}>Cancel</Button>
+              <Button style={{marginRight: '20px'}} onClick={confirmEditing} type="primary">
+                {
+                  formatMessage({id: 'groups.detail.save'})
+                }
+              </Button>
+              <Button onClick={toggleEditing}>
+                {
+                  formatMessage({id: 'groups.detail.cancel'})
+                }
+              </Button>
             </>
             :
-            <a onClick={toggleEditing}>Edit</a>
+            <a onClick={toggleEditing}>
+              {formatMessage({id: 'groups.detail.edit'})}
+            </a>
           }
         </div>
       </div>
 
-      <Table columns={roleColumns} dataSource={groupRoleDataSource} title={() => <h2>Role:</h2>} />
+        <Table columns={roleColumns} dataSource={groupRoleDataSource} title={() => <h2>{formatMessage({id: 'groups.detail.table.role'})}</h2>} />
 
-      <Table columns={usersColumns} dataSource={groupUserDataSource} title={() => <h2>User:</h2>}/>
-
+        <Table columns={usersColumns} dataSource={groupUserDataSource} title={() => <h2>{formatMessage({id: 'groups.detail.table.user'})}</h2>}/>
     </>
   )
 }

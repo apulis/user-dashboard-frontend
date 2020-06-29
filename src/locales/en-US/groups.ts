@@ -12,9 +12,9 @@ export default {
   'groups.add.groupName': 'Group Name',
   'groups.add.note': 'Description',
   'groups.add.form.group.name.required': 'Group name is required',
-  'groups.add.form.group.name.max': 'Max length is 10',
+  'groups.add.form.group.name.max': 'Max length is 20',
   'groups.add.form.group.note.required': 'Description required',
-  'groups.add.form.group.note.max': 'Max length is 40',
+  'groups.add.form.group.note.max': 'Max length is 50',
   'groups.add.step3.title': 'Group Info',
   'groups.add.step3.groupName': 'Group Name：',
   'groups.add.step3.note': 'Description:',
@@ -34,6 +34,25 @@ export default {
   'groups.list.delete': 'Delete',
   'groups.list.add': 'Create Group',
   'groups.list.search.groups': 'Search groups',
-  
 
+  // Detail
+  'groups.detail.message.success.delete.role': 'Success delete role',
+  'groups.detail.message.success.delete.user': 'Success delete user',
+  'groups.detail.role.role': 'Role',
+  'groups.detail.role.description': 'Description',
+  'groups.detail.role.type': 'Role Type',
+  'groups.detail.role.type.preset': 'Preset Role',
+  'groups.detail.role.type.custom': 'Custom Role',
+  'groups.detail.role.action': 'Action',
+  'groups.detail.role.remove': 'Remove',
+  'groups.detail.role.message.edit.success': 'Edit success',
+  'groups.detail.role.title.user.group': 'User Groups',
+  'groups.detail.role.title.group.info': 'Group Info',
+  'groups.detail.groupName': 'Group Name: ',
+  'groups.detail.Description': 'Description:',
+  'groups.detail.save': 'Save',
+  'groups.detail.cancel': 'Cancel',
+  'groups.detail.edit': 'Edit',
+  'groups.detail.table.role': 'Role:',
+  'groups.detail.table.user': 'User:'
 }

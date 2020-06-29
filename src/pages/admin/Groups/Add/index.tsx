@@ -142,7 +142,7 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
                 initialValue: submitData?.name || '',
                 rules: [
                   { required: true, message: formatMessage({id: 'groups.add.form.group.name.required'}) },
-                  { max: 10, message: formatMessage({id: 'groups.add.form.group.name.max'}) }
+                  { max: 20, message: formatMessage({id: 'groups.add.form.group.name.max'}) }
                 ],
               })(<Input />)
             }
@@ -153,7 +153,7 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
                 initialValue: submitData?.note || '',
                 rules: [
                   { required: true, message: formatMessage({id: 'groups.add.form.group.note.required'})},
-                  { max: 40, message: formatMessage({id: 'groups.add.form.group.note.max'})}
+                  { max: 50, message: formatMessage({id: 'groups.add.form.group.note.max'})}
                 ],
               })(<TextArea />)
             }
