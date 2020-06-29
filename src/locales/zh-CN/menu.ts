@@ -10,7 +10,7 @@ export default {
   'menu.admin.groups': '用户组',
   'menu.admin.groups.add': '新增用户组',
   'menu.admin.groups.list': '用户组列表',
-  'menu.admin.roles': '用户组',
-  'menu.admin.roles.add': '新增用户组',
-  'menu.admin.roles.list': '用户组列表',
+  'menu.admin.roles': '角色',
+  'menu.admin.roles.add': '新增角色',
+  'menu.admin.roles.list': '角色列表',
 };
