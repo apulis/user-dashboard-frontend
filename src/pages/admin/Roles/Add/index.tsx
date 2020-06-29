@@ -3,6 +3,7 @@ import { Input, Checkbox, Tree, Button, message } from 'antd';
 import { Form } from '@ant-design/compatible'
 import { connect } from 'dva';
 import router from 'umi/router';
+import { formatMessage } from 'umi-plugin-react/locale';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { FormComponentProps } from '@ant-design/compatible/es/form';
 import { AntTreeNodeSelectedEvent } from 'antd/lib/tree';
@@ -10,6 +11,7 @@ import { ConnectState, ConnectProps } from '@/models/connect';
 import { createRole } from '@/services/roles';
 import { TreeNodeNormal, AntTreeNodeCheckedEvent } from 'antd/lib/tree/Tree';
 import { textPattern } from '@/utils/validates';
+import { format } from 'prettier';
 
 const FormItem = Form.Item;
 const { TreeNode } = Tree;
@@ -83,39 +85,39 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form,
       });
       setButtonLoading(false)
       if (result.success) {
-        message.success('Success Create Role ' + name);
+        message.success(formatMessage({id: 'roles.add.message.success.create.role'}) + name);
         router.push('/admin/role/list');
       } else if (result.success === false) {
-        message.error(`Rolename ${name} have existed, please try another`);
+        message.error(`${formatMessage({id: 'roles.add.message.existed.1'})} ${name} ${formatMessage({id: 'roles.add.message.existed.2'})}`);
       }
     });
   }
   return (
     <PageHeaderWrapper>
-      <FormItem label="Rolename" {...layout} style={{width: '80%'}}>
+      <FormItem label={formatMessage({id: 'roles.add.form.roleName'})} {...layout} style={{width: '80%'}}>
         {
           getFieldDecorator('RoleName', {
             rules: [
-              { required: true, message: 'Role name is required' },
-              { max: 20, message: 'Role name cannot be longer than 20 characters' },
-              { whitespace: true, message: 'Role name cannot be empty' },
+              { required: true, message: formatMessage({id: 'roles.add.form.roleName.required'}) },
+              { max: 20, message: formatMessage({id: 'roles.add.form.roleName.max'}) },
+              { whitespace: true, message: formatMessage({id: 'roles.add.form.roleName.whitespace'}) },
               textPattern
             ]
           })(<Input />)
         }
       </FormItem>
-      <FormItem label="Description" {...layout} style={{width: '80%'}}>
+      <FormItem label={formatMessage({id: 'roles.add.form.description'})} {...layout} style={{width: '80%'}}>
         {
           getFieldDecorator('note', {
             rules: [
-              { required: true, message: 'Description is required' },
-              { max: 50, message: 'Description cannot be longer than 50 characters' },
+              { required: true, message: formatMessage({id: 'roles.add.form.description.required'}) },
+              { max: 50, message: formatMessage({id: 'roles.add.form.description.max'}) },
               textPattern
             ]
           })(<Input.TextArea />)
         }
       </FormItem>
-      <h1>Choose permissions:</h1>
+      <h1>{formatMessage({id: 'roles.add.choose.permissions'})}</h1>
       <Tree
         checkable
         onExpand={onExpand}
@@ -128,7 +130,9 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form,
         treeData={treeData}
         defaultExpandAll
       />
-      <Button style={{marginTop: '20px'}} loading={buttonLoading} onClick={next}>Submit</Button>
+      <Button style={{marginTop: '20px'}} loading={buttonLoading} onClick={next}>
+        {formatMessage({id: 'roles.add.submit'})}
+      </Button>
     </PageHeaderWrapper>
   )
 }

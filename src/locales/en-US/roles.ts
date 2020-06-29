@@ -1,5 +1,3 @@
-import { forwardRef } from "react";
-import { defaultCellDataGetter } from "react-virtualized/dist/es/Table";
 
 export default {
   // List
@@ -18,4 +16,17 @@ export default {
   'roles.list.delete.current.role': 'Delete Current Role',
   'roles.list.search.role': 'Search roles',
   
+  // Add
+  'roles.add.message.success.create.role': 'Success Create Role ',
+  'roles.add.message.existed.1': 'Rolename',
+  'roles.add.message.existed.2': 'have existed, please try another',
+  'roles.add.form.roleName': 'Rolename',
+  'roles.add.form.roleName.required': 'Role name is required',
+  'roles.add.form.roleName.max': 'Role name cannot be longer than 20 characters',
+  'roles.add.form.roleName.whitespace': 'Role name cannot be empty',
+  'roles.add.form.description': 'Description',
+  'roles.add.form.description.required': 'Description is required',
+  'roles.add.form.description.max': 'Description cannot be longer than 50 characters',
+  'roles.add.choose.permissions': 'Choose permissions:',
+  'roles.add.submit': 'Submit',
 }
