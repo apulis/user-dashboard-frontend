@@ -10,6 +10,7 @@ import { FormComponentProps } from '@ant-design/compatible/es/form';
 import styles from './index.less';
 import { Link } from 'umi';
 import { ColumnProps } from 'antd/es/table';
+import { formatMessage } from 'umi-plugin-react/locale';
 
 import SelectGroup from '@/components/Relate/SelectGroup';
 import SelectUser from "@/components/Relate/SelectUser";
@@ -19,6 +20,7 @@ import { getRoleGroup } from '@/services/roles';
 
 import { removeRoles, fetchUsersForRole } from '@/services/roles';
 import { IRoleListItem } from '@/models/roles';
+import { format } from 'prettier';
 
 
 
@@ -58,35 +60,41 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
   const { list: groupList } = groups;
   const columns: ColumnProps<IRoleListItem>[] = [
     {
-      title: 'Role Name',
+      title: formatMessage({id: 'roles.list.name'}),
       dataIndex: 'name',
       key: 'name',   
     },
     {
-      title: 'Description',
+      title: formatMessage({id: 'roles.list.description'}),
       dataIndex: 'note',
       key: 'note',   
     },
     {
-      title: 'Type',
+      title: formatMessage({id: 'roles.list.type'}),
       dataIndex: 'type',
       align: 'center',
       render(_text, item) {
         return (
-          <div>{item.isPreset ? 'Preset Role' : 'Custom Role'}</div>
+          <div>{item.isPreset ? formatMessage({id: 'roles.list.type.preset'}) : formatMessage({id: 'roles.list.type.custom'})}</div>
         )
       } 
     },
     {
-      title: 'Action',
+      title: formatMessage({id: 'roles.list.action'}),
       align: 'center',
       width: '320px',
       render(_text, item) {
         return (
           <div style={{display: 'flex', justifyContent: 'space-around'}}>
-            <a onClick={() => addRoleToUser(item.id)}>Related To User</a>
-            <a onClick={() => addRoleToGroup(item.id)}>Related To Group</a>
-            {item.isPreset === 0 && <a style={{ color: 'red' }} onClick={() => removeCurrentSelectedRole(item.id)}>Delete</a>}
+            <a onClick={() => addRoleToUser(item.id)}>
+              {formatMessage({id: 'roles.list.relate.to.user'})}
+            </a>
+            <a onClick={() => addRoleToGroup(item.id)}>
+              {formatMessage({id: 'roles.list.relate.to.group'})}
+            </a>
+            {item.isPreset === 0 && <a style={{ color: 'red' }} onClick={() => removeCurrentSelectedRole(item.id)}>
+                {formatMessage({id: 'roles.list.delete'})}
+              </a>}
           </div>
         )
       }
@@ -110,7 +118,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
   const removeCurrentSelectedRole = async (currentRole?: number) => {
     let tempRoleList;
     Modal.confirm({
-      title: 'Will delete current selected role?',
+      title: formatMessage({id: 'roles.list.modal.confim.delete.role'}),
       async onOk() {
         let res;
         if (typeof currentRole === 'number') {
@@ -122,7 +130,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
           res = await removeRoles(currentRemoveUserRoleNames)
         }
         if (res.success === true) {
-          message.success(`Success`);
+          message.success(formatMessage({id: 'roles.list.message.success'}));
           clearSelect();
           if (tempRoleList.length === list.length) {
             // 删掉最后一页的全部内容
@@ -169,14 +177,14 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
     }
     const res = await addRoleToGroups([currentHandleRoleId], selectedGroupId);
     if (res.success === true) {
-      message.success('Success');
+      message.success(formatMessage({id: 'roles.list.message.success'}));
       setAddGroupModalVisible(false);
     }
   }
   const confirmRelateUser = async () => {
     const res = await addRoleToUsers(selectedUserId, [currentHandleRoleId]);
     if (res.success === true) {
-      message.success('Success');
+      message.success(formatMessage({id: 'roles.list.message.success'}));
       setAddUserModalVisible(false);
     }
   }
@@ -192,11 +200,15 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
       <div className={styles.top}>
         <div className={styles.left}>
           <Link to="/admin/role/add">
-            <Button style={{marginRight: '20px'}} type="primary">Create Role</Button>
+            <Button style={{marginRight: '20px'}} type="primary">
+              {formatMessage({id: 'roles.list.create.role'})}
+            </Button>
           </Link>
-          <Button onClick={() => removeCurrentSelectedRole()} disabled={buttonDisabled}>Delete Current Role</Button>
+          <Button onClick={() => removeCurrentSelectedRole()} disabled={buttonDisabled}>
+            { formatMessage({id: 'roles.list.delete.current.role'}) }
+          </Button>
         </div>
-        <Search onSearch={onSearchRoles} placeholder="search roles" style={{width: '200px' }}/>
+        <Search onSearch={onSearchRoles} placeholder={formatMessage({id: 'roles.list.search.role'})} style={{width: '200px' }}/>
       </div>
       <Table
         style={{marginTop: '20px'}}

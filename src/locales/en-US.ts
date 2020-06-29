@@ -7,6 +7,7 @@ import settings from './en-US/settings';
 import index from './en-US/index';
 import users from './en-US/users';
 import groups from './en-US/groups';
+import roles from './en-US/roles';
 
 export default {
   'navBar.lang': 'Languages',
@@ -25,4 +26,5 @@ export default {
   ...index,
   ...users,
   ...groups,
+  ...roles,
 };

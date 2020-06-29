@@ -41,7 +41,7 @@ export default {
   'groups.detail.role.role': '角色',
   'groups.detail.role.description': '描述',
   'groups.detail.role.type': '角色类型',
-  'groups.detail.role.type.preset': '预置角色',
+  'groups.detail.role.type.preset': '预设角色',
   'groups.detail.role.type.custom': '自定义角色',
   'groups.detail.role.action': '操作',
   'groups.detail.role.remove': '删除',
