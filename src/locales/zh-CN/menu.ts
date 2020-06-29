@@ -1,4 +1,5 @@
 export default {
+  'menu.home': '主页',
   'menu.index': '控制台',
   'menu.admin': '管理页',
   'menu.admin.user': '用户',
