@@ -16,7 +16,7 @@ const SelectLang: React.FC<SelectLangProps> = props => {
   const { className } = props;
   const selectedLang = getI18n();
   const changeLang = ({ key }: ClickParam): void => setI18n(key);
-  const locales = ['zh-CN', 'zh-TW', 'en-US', 'pt-BR'];
+  const locales = ['zh-CN', 'en-US'];
   const languageLabels = {
     'zh-CN': '简体中文',
     'en-US': 'English',
