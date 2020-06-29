@@ -7,7 +7,8 @@ import settings from './zh-CN/settings';
 import index from './zh-CN/index';
 import users from './zh-CN/users';
 import groups from './zh-CN/groups';
-import roles from './zh-CN/roles'
+import roles from './zh-CN/roles';
+import account from './zh-CN/account';
 
 export default {
   'navBar.lang': '语言',
@@ -27,4 +28,5 @@ export default {
   ...users,
   ...groups,
   ...roles,
+  ...account,
 };
