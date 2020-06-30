@@ -8,21 +8,18 @@ import ProLayout, {
   MenuDataItem,
   BasicLayoutProps as ProLayoutProps,
   Settings,
-  DefaultFooter,
 } from '@ant-design/pro-layout';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link, Route } from 'umi';
 import { Dispatch } from 'redux';
 import { connect } from 'dva';
-import { GithubOutlined } from '@ant-design/icons';
-import { Result, Button } from 'antd';
+import { Result } from 'antd';
 import { formatMessage } from 'umi-plugin-react/locale';
 import { getRouteAuthority } from '@/utils/utils';
 
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import { ConnectState } from '@/models/connect';
-import { isAntDesignPro, getAuthorityFromRouter } from '@/utils/utils';
 import logo from '../assets/logo.svg';
 
 const noMatch = (
@@ -80,7 +77,7 @@ const footerRender: BasicLayoutProps['footerRender'] = () => {
           width: '100%'
         }}
       >
-        Apulis Deep Learning Platform
+        {formatMessage({id: 'common.platform.name'})}
       </div>
     </>
   );

@@ -8,7 +8,8 @@ import index from './en-US/index';
 import users from './en-US/users';
 import groups from './en-US/groups';
 import roles from './en-US/roles';
-import account from './en-US/account'
+import account from './en-US/account';
+import common from './en-US/common';
 
 export default {
   'navBar.lang': 'Languages',
@@ -28,5 +29,6 @@ export default {
   ...users,
   ...groups,
   ...roles,
-  ...account
+  ...account,
+  ...common
 };
