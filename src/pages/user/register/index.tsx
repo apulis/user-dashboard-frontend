@@ -230,7 +230,7 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
             />
           </Tab>
           {
-            (currentUser && Object.keys(currentUser).length > 0 && !currentUser.userName) ? <Alert message="You have joined, Now need to register for Apulis Deep Learning Platform" type="success" /> : <></>
+            (currentUser && Object.keys(currentUser).length > 0 && !currentUser.userName) ? <Alert message="You have joined, Now need to register for Apulis Platform" type="success" /> : <></>
           }
           <Submit loading={submitting}>
             <FormattedMessage id="user-register.register.register" />

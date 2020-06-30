@@ -80,7 +80,7 @@ const footerRender: BasicLayoutProps['footerRender'] = () => {
           width: '100%'
         }}
       >
-        Apulis Deep Learning Platform
+        Apulis Platform
       </div>
     </>
   );
