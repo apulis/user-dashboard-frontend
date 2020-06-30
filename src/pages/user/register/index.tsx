@@ -138,24 +138,24 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
               loginType === 'account' &&
               !submitting &&
               this.renderMessage(
-                formatMessage({ id: 'user-login.login.message-invalid-credentials' }),
+                formatMessage({ id: 'user-register.login.message-invalid-credentials' }),
               )}
             <UserName
               name="userName"
-              placeholder={`${formatMessage({ id: 'user-login.login.userName' })}`}
+              placeholder={`${formatMessage({ id: 'user-register.login.userName' })}`}
               defaultValue={defaultUserName}
               rules={[
                 {
                   required: true,
-                  message: formatMessage({ id: 'user-login.userName.required' }),
+                  message: formatMessage({ id: 'users.add.form.userName.required' }),
                 },
                 {
                   min: 4,
-                  message: 'Need at lease 4 letters'
+                  message: formatMessage({ id: 'users.add.form.userName.min' })
                 },
                 {
                   max: 20,
-                  message: 'Cannot be longer than 20 characters'
+                  message: formatMessage({ id: 'users.add.form.userName.max' })
                 },
                 userNamePattern
               ]}
@@ -172,26 +172,26 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
                 },
                 {
                   max: 20,
-                  message: 'Cannot be longer than 20 characters'
+                  message: formatMessage({ id: 'users.add.form.nickName.max' })
                 },
                 textPattern
               ]}
             />
             <Password
               name="password"
-              placeholder={`${formatMessage({ id: 'user-login.login.password' })}`}
+              placeholder={`${formatMessage({ id: 'user-register.login.password' })}`}
               rules={[
                 {
                   required: true,
-                  message: formatMessage({ id: 'user-login.password.required' }),
+                  message: formatMessage({ id: 'user-register.password.required' }),
                 },
                 {
                   min: 6,
-                  message: 'Need at lease 6 letters'
+                  message: formatMessage({ id: 'users.add.form.password.min' })
                 },
                 {
                   max: 20,
-                  message: 'Cannot be longer than 20 characters'
+                  message: formatMessage({ id: 'users.add.form.password.max' })
                 }
               ]}
               onPressEnter={e => {
@@ -203,7 +203,7 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
             />
             <Password
               name="password2"
-              placeholder={`${formatMessage({ id: 'user-login.login.password2' })}`}
+              placeholder={`${formatMessage({ id: 'user-register.register.password2' })}`}
               rules={[
                 {
                   validator: async (rule, value, callback) => {
@@ -215,7 +215,7 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
                     const values = await this.loginForm?.getFieldsValue();
                     if (!values) return;
                     if (values.password !== values.password2) {
-                      callback('Password inconsistent');
+                      callback(formatMessage({id: 'user-register.register.password2.identical'}));
                     }
                     
                   }
@@ -230,7 +230,7 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
             />
           </Tab>
           {
-            (currentUser && Object.keys(currentUser).length > 0 && !currentUser.userName) ? <Alert message="You have joined, Now need to register for Apulis Deep Learning Platform" type="success" /> : <></>
+            (currentUser && Object.keys(currentUser).length > 0 && !currentUser.userName) ? <Alert message={`${formatMessage({id: 'user-register.register.password.need.register'})}${formatMessage({id: 'common.platform.name'})}`} type="success" /> : <></>
           }
           <Submit loading={submitting}>
             <FormattedMessage id="user-register.register.register" />
