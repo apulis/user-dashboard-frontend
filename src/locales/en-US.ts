@@ -10,6 +10,7 @@ import groups from './en-US/groups';
 import roles from './en-US/roles';
 import account from './en-US/account';
 import common from './en-US/common';
+import request from './en-US/request';
 
 export default {
   'navBar.lang': 'Languages',
@@ -30,5 +31,6 @@ export default {
   ...groups,
   ...roles,
   ...account,
-  ...common
+  ...common,
+  ...request,
 };

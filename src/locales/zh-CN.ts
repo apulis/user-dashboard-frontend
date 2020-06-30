@@ -10,6 +10,7 @@ import groups from './zh-CN/groups';
 import roles from './zh-CN/roles';
 import account from './zh-CN/account';
 import common from './zh-CN/common';
+import request from './zh-CN/request';
 
 export default {
   'navBar.lang': '语言',
@@ -31,4 +32,5 @@ export default {
   ...roles,
   ...account,
   ...common,
+  ...request,
 };
