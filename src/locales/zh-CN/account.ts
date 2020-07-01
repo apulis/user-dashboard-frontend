@@ -10,5 +10,6 @@ export default {
   'account.info.method.microsoft.account': '微软账户',
   'account.info.bound': '绑定',
   'account.info.not.bound': '未绑定',
-  'account.info.to.bind': '去绑定'
+  'account.info.to.bind': '去绑定',
+  'account.info.signout': '注销',
 }

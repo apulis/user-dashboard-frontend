@@ -9,5 +9,6 @@ export default {
   'account.info.method.microsoft.account': 'Microsoft account',
   'account.info.bound': 'Bound',
   'account.info.not.bound': 'Not Bound',
-  'account.info.to.bind': 'To Bind'
+  'account.info.to.bind': 'To Bind',
+  'account.info.signout': 'Sign out',
 }

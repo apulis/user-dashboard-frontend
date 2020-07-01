@@ -101,7 +101,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
     } else if (res.success === false) {
       if (res.conflictedUserName && res.conflictedUserName.length > 0) {
         res.conflictedUserName.forEach((dpc: any) => {
-          message.error(`${formatMessage({id: 'users.add.message.user'})} ${dpc.userName} ${formatMessage({id: 'is already existed!'})}`);
+          message.error(`${formatMessage({id: 'users.add.message.user'})} ${dpc.userName} ${formatMessage({id: 'users.add.message.already.existed'})}`);
         })
       }
     }
@@ -132,7 +132,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
   const removeUser = (createTime: number) => {
     const currentFormUserMessage: IUserMessage[] = getFieldsValue().userMessage;
     if (currentFormUserMessage.length === 1) {
-      message.warn(formatMessage({id: 'users.add.message.already.existed'}));
+      message.warn(formatMessage({id: 'users.add.message.keep.one.user'}));
       return;
     }
     currentFormUserMessage.forEach((item, index) => {
