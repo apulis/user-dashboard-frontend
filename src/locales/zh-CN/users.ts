@@ -32,7 +32,7 @@ export default {
   'users.add.message.already.existed': '已存在',
   'users.add.message.keep.one.user': '最少需要保留一个用户',
   'users.add.message.need.one.role': '最少需要一个角色',
-  'users.add.userRole.role': '觉得',
+  'users.add.userRole.role': '角色',
   'users.add.userRole.description': '描述',
   'users.add.userRole.type': '类型',
   'users.add.userRole.type.preset': '预设',
