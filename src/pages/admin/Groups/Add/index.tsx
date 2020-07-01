@@ -74,12 +74,20 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
           if (res.success) {
             message.success(formatMessage({id: 'groups.add.message.success'}));
             router.push('/admin/group/list');
+          } else if (res.success === false) {
+            message.error(`Group name ${submitData?.name} duplicated`);
           }
         })
     }
   }
   const removeRole = (index: number) => {
-    const newRoleList = [...submitData!.role].splice(index, 1);
+    if ([...submitData!.role].length === 1) {
+      message.warn('Need at least one role');
+      return;
+    }
+    const newRoleList = [...submitData!.role].filter((val, i) => {
+      return index !== i;
+    });
     setSubmitData({
       ...submitData,
       role: newRoleList,
@@ -162,24 +170,27 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
       }
       {
         step === 2 && <div className="step-2">
-          {
-            getFieldDecorator('role', {
-              initialValue: submitData?.role,
-              rules: [
-                { required: true }
-              ]
-            })(<Checkbox.Group style={{ width: '100%'}}>
-              <Row>
-                {
-                  rolesList.map(r => (
-                    <Col span={8}>
-                      <Checkbox style={{marginTop: '4px', marginBottom: '4px'}} value={r.id}>{r.name}</Checkbox>
-                    </Col>
-                  ))
-                }
-              </Row>
-            </Checkbox.Group>)
-          }
+          <FormItem label="Choose role">
+            {
+              getFieldDecorator('role', {
+                initialValue: submitData?.role,
+                rules: [
+                  { required: true }
+                ]
+              })(<Checkbox.Group style={{ width: '100%'}}>
+                <Row>
+                  {
+                    rolesList.map(r => (
+                      <Col span={8}>
+                        <Checkbox style={{marginTop: '4px', marginBottom: '4px'}} value={r.id}>{r.name}</Checkbox>
+                      </Col>
+                    ))
+                  }
+                </Row>
+              </Checkbox.Group>)
+            }
+          </FormItem>
+          
         </div>
       }
       {
