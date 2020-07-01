@@ -7,6 +7,7 @@ export default {
   'users.message.loading': 'Loading...',
   'users.message.loading.error': 'Loading roles error',
   'users.userName': 'Username',
+  'user.password': 'Password',
   'users.nickName': 'Nickname',
   'users.phone': 'Phone',
   'users.email': 'Email',

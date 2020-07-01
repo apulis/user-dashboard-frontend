@@ -6,6 +6,7 @@ export default {
   'users.message.loading': '加载中...',
   'users.message.loading.error': '加载角色出错',
   'users.userName': '用户名',
+  'users.password': '密码',
   'users.nickName': '昵称',
   'users.phone': '电话',
   'users.email': '电子邮件',
