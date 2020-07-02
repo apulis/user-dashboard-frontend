@@ -83,9 +83,9 @@ const UserLayout: React.FC<UserLayoutProps & PageProps> = props => {
           </div>
         </Col>
         <Col span={9}>
-          {/* <div className={styles.lang}>
+          <div className={styles.lang}>
             <SelectLang />
-          </div> */}
+          </div>
           <div className={styles.right}>
               <div className={styles.title}>{formatMessage({id: 'common.platform.name'})}</div>
             {children}
