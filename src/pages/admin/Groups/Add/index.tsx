@@ -141,6 +141,17 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
   });
   return (
     <PageHeaderWrapper>
+      <Breadcrumb style={{marginBottom: '16px'}}>
+        { step >= 1 && <Breadcrumb.Item>
+          1. {formatMessage({id: 'groups.add.steps.groupInfo'})}
+        </Breadcrumb.Item> }
+        { step >= 2 && <Breadcrumb.Item>
+          2. {formatMessage({id: 'groups.add.steps.role'})}
+        </Breadcrumb.Item> }
+        { step >= 3 && <Breadcrumb.Item>
+          3. {formatMessage({id: 'groups.add.steps.preview'})}
+        </Breadcrumb.Item> }
+      </Breadcrumb>
       {
         step === 1 && <div className="step-1">
           <FormItem label={formatMessage({id: 'groups.add.groupName'})} {...layout}>

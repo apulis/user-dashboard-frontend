@@ -2,6 +2,9 @@ import { defaultCellDataGetter } from "react-virtualized/dist/es/Table";
 
 export default {
   // Add
+  'groups.add.steps.groupInfo': '用户组信息',
+  'groups.add.steps.role': '选择角色',
+  'groups.add.steps.preview': '预览',
   'groups.add.message.success': '成功',
   'groups.add.role': '角色',
   'groups.add.RoleDescription': '角色描述',

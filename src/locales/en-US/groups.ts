@@ -1,6 +1,9 @@
 
 export default {
   // Add
+  'groups.add.steps.groupInfo': 'Group Info',
+  'groups.add.steps.role': 'Role',
+  'groups.add.steps.preview': 'Preview',
   'groups.add.message.success': 'Success',
   'groups.add.role': 'Role',
   'groups.add.RoleDescription': 'RoleDescription',
