@@ -56,7 +56,7 @@ export default {
   'users.add.form.removeUser': '删除',
   'users.add.addUser': '添加用户',
   'users.add.maximum': '最大数量为 10',
-  'users.add.role.form.required': '需要最少选择一个橘色',
+  'users.add.role.form.required': '需要最少选择一个角色',
   'users.add.step3.title1': '用户信息',
   'users.add.step3.title2': '用户角色',
   'users.add.previous': '上一步',
