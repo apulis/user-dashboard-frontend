@@ -79,6 +79,10 @@ export function initI18n() {
   }
 }
 
+export async function setCookieLang(lang: string) {
+  return await request('/language/' + lang);
+} 
+
 export function setI18n(lang: string) {
   localStorage.language = lang;
   request('/language/' + lang);

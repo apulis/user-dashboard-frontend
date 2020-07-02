@@ -63,6 +63,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form,
   }, []);
   console.log('language', language)
   useEffect(() => {
+    if (!language) return;
     dispatch({
       type: 'roles/fetchAllPermissions'
     });

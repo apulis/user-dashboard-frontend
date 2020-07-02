@@ -2,6 +2,7 @@ import { Reducer } from 'redux';
 import { Effect } from 'dva';
 
 import { getOAuth2Methods, getAdminUsers } from '@/services/config';
+import { setCookieLang } from '@/utils/utils';
 
 export interface ConfigStateType {
   authMethods: string[];
@@ -54,7 +55,8 @@ const ConfigModel: ConfigModelType = {
       }
     },
     * setLang({ payload }, { call, put }) {
-      console.log('paytload', payload)
+      yield call(setCookieLang, payload.language);
+      console.log('2222', payload.language)
       yield put({
         type: 'saveLang',
         payload: {
