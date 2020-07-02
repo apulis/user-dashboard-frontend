@@ -75,14 +75,14 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
             message.success(formatMessage({id: 'groups.add.message.success'}));
             router.push('/admin/group/list');
           } else if (res.success === false) {
-            message.error(`Group name ${submitData?.name} duplicated`);
+            message.error(formatMessage({id: 'groups.detail.role.message.edit.dup'}));
           }
         })
     }
   }
   const removeRole = (index: number) => {
     if ([...submitData!.role].length === 1) {
-      message.warn('Need at least one role');
+      message.warn(formatMessage({id: 'users.add.message.need.one.role'}));
       return;
     }
     const newRoleList = [...submitData!.role].filter((val, i) => {

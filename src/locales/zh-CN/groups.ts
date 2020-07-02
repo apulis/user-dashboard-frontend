@@ -46,7 +46,7 @@ export default {
   'groups.detail.role.action': '操作',
   'groups.detail.role.remove': '删除',
   'groups.detail.role.message.edit.success': '编辑成功',
-  'groups.detail.role.message.edit.dup': '用户组名称重复了',
+  'groups.detail.role.message.edit.dup': '用户组名称已存在',
   'groups.detail.role.title.user.group': '用户组',
   'groups.detail.role.title.group.info': '用户组信息',
   'groups.detail.groupName': '用户组名称：',
