@@ -80,6 +80,8 @@ export default {
   'user-register.register.signin': '登录',
   'user-register.register.password2': '请确认密码',
   'user-register.register.password2.identical': '两次输入的密码不一致',
-  'user-register.register.password.need.register': '您已经加入，需要注册'
+  'user-register.register.password.need.register': '您已经加入，需要注册',
+  'user-register.register.success.create.account': '成功创建账户',
+  'user-register.register.in.use': '已经被注册，请使用其他的用户名',
   
 };

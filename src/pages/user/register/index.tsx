@@ -89,10 +89,10 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
         this.props.dispatch({
           type: 'user/fetchCurrent',
         })
-        message.success('Success Create Account');
+        message.success(formatMessage({id: 'user-register.register.success.create.account'}));
         router.push('/user/login');
       } else if (res.duplicate) {
-        message.error(`Username ${userName} is in use, please try another`);
+        message.error(`${formatMessage({id: 'users.userName'})} ${userName} ${formatMessage({id: 'user-register.register.in.use'})}`);
       }
     }
   };

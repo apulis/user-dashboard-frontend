@@ -87,4 +87,6 @@ export default {
   'user-register.register.password2': 'Please confirm password',
   'user-register.register.password2.identical': 'Password inconsistent',
   'user-register.register.password.need.register': 'You have joined, Now need to register for ',
+  'user-register.register.success.create.account': 'Success Create Account',
+  'user-register.register.in.use': 'is in use, please try another',
 };
