@@ -25,6 +25,7 @@ export default {
   'users.delete.current.user': 'Delete Current User', 
   'user.placeholder.search.users': 'Search users',
   'user.items.per.page': 'Items per page:',
+  'users.has.active.job': ' has active job, please confirm!',
   // Add
   'users.add.message.maximum': 'Maximum user is 10',
   'users.add.message.success.create.user': 'Success create users',

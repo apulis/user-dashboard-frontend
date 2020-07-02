@@ -46,6 +46,7 @@ export default {
   'groups.detail.role.action': 'Action',
   'groups.detail.role.remove': 'Remove',
   'groups.detail.role.message.edit.success': 'Edit success',
+  'groups.detail.role.message.edit.dup': 'Group name duplicated, please try another',
   'groups.detail.role.title.user.group': 'User Groups',
   'groups.detail.role.title.group.info': 'Group Info',
   'groups.detail.groupName': 'Group Name: ',

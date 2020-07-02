@@ -24,6 +24,7 @@ export default {
   'users.delete.current.user': '删除当前用户',
   'user.placeholder.search.users': '搜索用户',
   'user.items.per.page': '每页数量',
+  'users.has.active.job': '有正在运行的 job，不能被删除',
   
   // Add
   'users.add.message.maximum': '最大数量为10',

@@ -188,7 +188,7 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
         setIsGroupInfoEditing(false);
         fetchGroupDetail(Number(id));
       } else if (res.success === false) {
-        message.error(res.message)
+        message.error(formatMessage({id: 'groups.detail.role.message.edit.dup'}))
       }
     });
     
