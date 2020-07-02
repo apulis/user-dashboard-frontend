@@ -211,7 +211,7 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
       </Button>
       }
       <Button style={{marginTop: '20px'}} type="primary" onClick={next}>
-        { step === 3 ? formatMessage({id: 'groups.add.finish'}) : formatMessage({id: 'groups.add.submit'}) }
+        { step === 3 ? formatMessage({id: 'groups.add.finish'}) : formatMessage({id: 'groups.add.next'}) }
       </Button>
     </PageHeaderWrapper>
   );

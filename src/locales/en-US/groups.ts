@@ -21,7 +21,7 @@ export default {
   'groups.add.step3.role': 'Role',
   'groups.add.previous': 'Previous',
   'groups.add.finish': 'Finish',
-  'groups.add.submit': 'Submit',
+  'groups.add.next': 'Next',
   
   // List
   'groups.list.modal.wiil.delete.group': 'Will delete group: ',

@@ -21,8 +21,8 @@ export default {
   'groups.add.step3.note': '描述：',
   'groups.add.step3.role': '角色',
   'groups.add.previous': '上一步',
-  'groups.add.finish': '下一步',
-  'groups.add.submit': '提交',
+  'groups.add.finish': '完成',
+  'groups.add.next': '下一步',
   // List
   'groups.list.modal.wiil.delete.group': '将会删除用户组: ',
   'groups.list.modal.success.delete.group': '成功删除用户组: ',
