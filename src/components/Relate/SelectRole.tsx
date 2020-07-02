@@ -2,16 +2,15 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'dva';
 import { Form } from '@ant-design/compatible';
 import { Checkbox, Input, Row, Col } from 'antd';
-
 import { FormComponentProps } from '@ant-design/compatible/lib/form';
+import { formatMessage } from 'umi-plugin-react/locale';
+
 
 import { ConnectProps, ConnectState } from '@/models/connect';
 
 import styles from './index.less';
 import { CheckboxValueType } from 'antd/lib/checkbox/Group';
 import { IRoleListItem } from '@/models/roles';
-
-import { getUserRolesById } from '@/services/users';
 
 
 interface ISearchRoleProps {
@@ -20,7 +19,6 @@ interface ISearchRoleProps {
   onChange?: (selectedRoleIds: number[]) => void;
 }
 
-const { Search } = Input;
 
 const SelectGroup: React.FC<ISearchRoleProps & FormComponentProps & ConnectProps & ConnectState> = ({ roles, onChange, dispatch, currentUserId, currentUserRoles }) => {
   const { total: roleTotal } = roles;
@@ -66,17 +64,13 @@ const SelectGroup: React.FC<ISearchRoleProps & FormComponentProps & ConnectProps
     setSelectedRoles(selectedRoles);
     onChange && onChange(checkedValue as number[]);
   }
-  const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const s = e.target.value;
-    fetchRoles(undefined, s);
-  }
   return (
     <div>
       <Row>
         <Col span={11}>
           <div className={styles.container}>
             <div className="ant-modal-title">
-              Choose Roles ( total: {roleList.length} )
+              {formatMessage({id: 'component.select.role.choose.roles'})} ( {formatMessage({id: 'component.select.role.total'})}: {roleList.length} )
             </div>
             <Checkbox.Group className={styles.checkbox} defaultValue={currentUserRoles} onChange={onCheckboxSelect} style={{marginTop: '10px'}}>
               {
@@ -87,7 +81,9 @@ const SelectGroup: React.FC<ISearchRoleProps & FormComponentProps & ConnectProps
                 ))
               }
               {
-                roleList.length === 0 && <div>No availble roles</div>
+                roleList.length === 0 && <div>
+                  { formatMessage({id: 'component.select.role.no.roles'}) }
+                </div>
               }
             </Checkbox.Group>
           </div>
@@ -95,7 +91,7 @@ const SelectGroup: React.FC<ISearchRoleProps & FormComponentProps & ConnectProps
         <Col span={11} offset={2}>
           <div className={styles.container}>
             <div className="ant-modal-title">
-              Selected: {}
+              {formatMessage({id: 'component.select.role.selected'})}
             </div>
             {
               selectedRoles.map(u => (

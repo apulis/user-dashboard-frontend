@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import { Form } from '@ant-design/compatible';
 import { Checkbox, Input, Row, Col, Spin } from 'antd';
 import { debounce } from 'lodash';
-
+import { formatMessage } from 'umi-plugin-react/locale';
 import 'react-virtualized/styles.css';
 import List from 'react-virtualized/dist/es/List';
 import { FormComponentProps } from '@ant-design/compatible/lib/form';
@@ -91,7 +91,7 @@ const SelectUser: React.FC<ISearchUserProps & FormComponentProps & ConnectProps 
         {/* <Col span={11}> */}
           <div className={styles.container} style={{width: '320px'}}>
             <div className="ant-modal-title">
-              Choose Users ( total: {userList.length} )
+              {formatMessage({id: 'component.select.user.choose.users'})} ( {formatMessage({id: 'component.select.user.total'})}: {userList.length} )
             </div>
             <Search placeholder="search users" onChange={(e) => onSearch(e.target.value)} style={{marginTop: '10px', width: '260px'}} />
             {
@@ -115,7 +115,7 @@ const SelectUser: React.FC<ISearchUserProps & FormComponentProps & ConnectProps 
         {/* <Col  offset={2}> */}
           <div className={styles.container} style={{'flexGrow': 1}}>
             <div className="ant-modal-title" style={{marginBottom: '10px'}}>
-              Selected: {}
+              {formatMessage({id: 'component.select.user.selected'})}
             </div>
             <div style={{width: '100%', height: '320px', overflow: 'auto'}}>
               {
