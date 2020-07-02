@@ -103,7 +103,7 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
           return <FormItem>{getFieldDecorator(`userMessage[${index}].phone`, {
             initialValue: item.phone,
             rules: [mobilePattern]
-          })(<Input placeholder={formatMessage({id: 'user.phone'})} />)}</FormItem>
+          })(<Input placeholder={formatMessage({id: 'users.phone'})} />)}</FormItem>
         } else {
           return item.phone
         }
