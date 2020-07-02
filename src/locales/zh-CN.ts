@@ -11,6 +11,7 @@ import roles from './zh-CN/roles';
 import account from './zh-CN/account';
 import common from './zh-CN/common';
 import request from './zh-CN/request';
+import validates from './zh-CN/validates';
 
 export default {
   'navBar.lang': '语言',
@@ -33,4 +34,5 @@ export default {
   ...account,
   ...common,
   ...request,
+  ...validates,
 };

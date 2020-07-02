@@ -11,6 +11,7 @@ import roles from './en-US/roles';
 import account from './en-US/account';
 import common from './en-US/common';
 import request from './en-US/request';
+import validates from './en-US/validates';
 
 export default {
   'navBar.lang': 'Languages',
@@ -33,4 +34,5 @@ export default {
   ...account,
   ...common,
   ...request,
+  ...validates,
 };
