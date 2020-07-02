@@ -12,6 +12,7 @@ import { createRole } from '@/services/roles';
 import { TreeNodeNormal, AntTreeNodeCheckedEvent } from 'antd/lib/tree/Tree';
 import { textPattern } from '@/utils/validates';
 import { format } from 'prettier';
+import { lang } from 'moment';
 
 const FormItem = Form.Item;
 const { TreeNode } = Tree;
@@ -19,12 +20,13 @@ const { TreeNode } = Tree;
 type TypeKeys = string[];
 
 
-const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form, dispatch, roles }) => {
+const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form, dispatch, roles, config }) => {
   const [expandedKeys, setExpandedKeys] = useState<TypeKeys>([]);
   const [checkedKeys, setCheckedKeys] = useState<TypeKeys>([]);
   const [selectedKeys, setSelectedKeys] = useState<TypeKeys>([]);
   const [autoExpandParent, setAutoExpandParent] = useState<boolean>(true);
   const [buttonLoading, setButtonLoading] = useState<boolean>(false);
+  const { language } = config;
   const { validateFields, getFieldDecorator } = form;
   const { permissions } = roles;
   const projectTypes = [...new Set(permissions.map(val => val.project))];
@@ -59,6 +61,12 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form,
       type: 'roles/fetchAllPermissions'
     });
   }, []);
+  console.log('language', language)
+  useEffect(() => {
+    dispatch({
+      type: 'roles/fetchAllPermissions'
+    });
+  }, [language]);
   const onExpand = (expandedKeys:TypeKeys) => {
     // if not set autoExpandParent to false, if children expanded, parent can not collapse.
     // or, you can remove all expanded children keys.
@@ -138,4 +146,4 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form,
 }
 
 
-export default connect(({user, roles}: ConnectState) => ({user, roles}))(Form.create<FormComponentProps>()(Add));
+export default connect(({user, roles, config}: ConnectState) => ({user, roles, config}))(Form.create<FormComponentProps>()(Add));

@@ -6,6 +6,7 @@ import { getOAuth2Methods, getAdminUsers } from '@/services/config';
 export interface ConfigStateType {
   authMethods: string[];
   adminUsers: string[];
+  language: string;
 }
 
 export interface ConfigModelType {
@@ -14,9 +15,11 @@ export interface ConfigModelType {
   effects: {
     fetchAuthMethods: Effect;
     fetchAdminUsers: Effect;
+    setLang: Effect;
   };
   reducers: {
     save: Reducer;
+    saveLang: Reducer;
   };
 }
 
@@ -25,6 +28,7 @@ const ConfigModel: ConfigModelType = {
   state: {
     authMethods: [],
     adminUsers: [],
+    language: '',
   },
   effects: {
     * fetchAuthMethods({ payload }, { call, put }) {
@@ -48,6 +52,15 @@ const ConfigModel: ConfigModelType = {
           }
         })
       }
+    },
+    * setLang({ payload }, { call, put }) {
+      console.log('paytload', payload)
+      yield put({
+        type: 'saveLang',
+        payload: {
+          language: payload.language,
+        }
+      })
     }
   },
   
@@ -58,6 +71,12 @@ const ConfigModel: ConfigModelType = {
         ...payload,
       }
     },
+    saveLang(state, { payload }) {
+      return {
+        ...state,
+        language: payload.language
+      }
+    }
   },
 };
 export default ConfigModel;

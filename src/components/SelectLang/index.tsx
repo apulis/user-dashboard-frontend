@@ -8,14 +8,24 @@ import classNames from 'classnames';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
 import { setI18n, getI18n } from '@/utils/utils';
+import { ConnectProps } from '@/models/connect';
+import { connect } from 'dva';
 
 interface SelectLangProps {
   className?: string;
 }
-const SelectLang: React.FC<SelectLangProps> = props => {
+const SelectLang: React.FC<SelectLangProps & ConnectProps> = props => {
   const { className } = props;
   const selectedLang = getI18n();
-  const changeLang = ({ key }: ClickParam): void => setI18n(key);
+  const changeLang = ({ key }: ClickParam): void => {
+    setI18n(key);
+    props.dispatch && props.dispatch({
+      type: 'config/setLang',
+      payload: {
+        language: key
+      }
+    })
+  };
   const locales = ['zh-CN', 'en-US'];
   const languageLabels = {
     'zh-CN': '简体中文',
@@ -46,4 +56,4 @@ const SelectLang: React.FC<SelectLangProps> = props => {
   );
 };
 
-export default SelectLang;
+export default connect()(SelectLang);

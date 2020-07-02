@@ -71,7 +71,6 @@ export function encodePassword(password: string) {
 export function initI18n() {
   // 依次获取当前语言
   const language = getI18n();
-  console.log('la', language)
   if (language !== language.umi_locale) {
     // 设置项目语言
     setLocale(language, false);

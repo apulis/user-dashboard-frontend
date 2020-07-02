@@ -139,7 +139,6 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
       note: item ? item.note : '',
     };
   });
-  console.log(tableDataSource)
   return (
     <PageHeaderWrapper>
       {
