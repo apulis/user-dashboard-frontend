@@ -15,7 +15,7 @@ export default {
   'groups.add.form.group.name.required': '用户组名称是必填的',
   'groups.add.form.group.name.max': '最多 10 个字符',
   'groups.add.form.group.note.required': '描述是必填的',
-  'groups.add.form.group.note.max': '最大字符长度是 40',
+  'groups.add.form.group.note.max': '最大字符长度是 50',
   'groups.add.step3.title': '用户组信息',
   'groups.add.step3.groupName': '用户组名称：',
   'groups.add.step3.note': '描述：',

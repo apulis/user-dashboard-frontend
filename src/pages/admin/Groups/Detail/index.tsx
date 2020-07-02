@@ -216,7 +216,7 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
                   rules: [
                     { required: true},
                     textPattern,
-                    { max: 20, message: formatMessage({id: 'groups.add.form.group.name.max'}) },
+                    { max: 20 },
                   ],
                   initialValue: groupInfo.name
                 })(
@@ -228,7 +228,7 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
             <FormItem label={formatMessage({id: 'groups.add.note'})}>
               {
                 getFieldDecorator('note', { 
-                  rules: [{ required: true, message: formatMessage({id: 'groups.add.form.group.note.required'}) }, textPattern, { max: 50, message: 'Description Cannot be longer than 40 characters'}],
+                  rules: [{ required: true, message: formatMessage({id: 'groups.add.form.group.note.required'}) }, textPattern, { max: 50, message: formatMessage({id: 'groups.add.form.group.note.max'})}],
                   initialValue: groupInfo.note
                 })(
                   <Input />
