@@ -134,8 +134,10 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
           clearSelect();
           if (tempRoleList.length === list.length) {
             // 删掉最后一页的全部内容
-            fetchRoles(undefined, pageNo - 1);
-            setPageCurrent(pageNo - 1);
+            const currentPage = pageNo - 1;
+            fetchRoles(undefined, currentPage);
+            setPageCurrent(currentPage)
+            setPageNo(currentPage);
           } else {
             fetchRoles()
           }
