@@ -16,5 +16,6 @@ export default {
   //
   'component.select.user.choose.users': '选择用户',
   'component.select.user.total': '总数',
-  'component.select.user.selected': '已选择：'
+  'component.select.user.selected': '已选择：',
+  'component.select.user.search.users': '搜索用户',
 };

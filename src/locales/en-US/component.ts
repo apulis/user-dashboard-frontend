@@ -16,5 +16,6 @@ export default {
   //
   'component.select.user.choose.users': 'Choose Users',
   'component.select.user.total': 'total',
-  'component.select.user.selected': 'Selected:'
+  'component.select.user.selected': 'Selected:',
+  'component.select.user.search.users': 'Search users',
 };

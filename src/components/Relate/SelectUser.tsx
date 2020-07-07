@@ -93,7 +93,7 @@ const SelectUser: React.FC<ISearchUserProps & FormComponentProps & ConnectProps 
             <div className="ant-modal-title">
               {formatMessage({id: 'component.select.user.choose.users'})} ( {formatMessage({id: 'component.select.user.total'})}: {userList.length} )
             </div>
-            <Search placeholder="search users" onChange={(e) => onSearch(e.target.value)} style={{marginTop: '10px', width: '260px'}} />
+            <Search placeholder={formatMessage({id: 'component.select.user.search.users'})} onChange={(e) => onSearch(e.target.value)} style={{marginTop: '10px', width: '260px'}} />
             {
               userList.length !== 0 && <Checkbox.Group defaultValue={defaultSelected} onChange={onCheckboxSelect} style={{marginTop: '10px', width: '100%'}}>
                 <List
