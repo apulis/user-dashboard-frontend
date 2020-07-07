@@ -25,11 +25,11 @@ const emojiPattern = emojiRegex();
 
 export const textPattern = {
   validator(rule: any, value: any, callback: any, source?: any, options?: any) {
-    const data = source[Object.keys(source)[0]];
-    if (emojiPattern.test(data)) {
+    if (emojiPattern.test(value)) {
       callback('Could not contains emoji');
       return;
     }
+    
     callback();
   },
 }
