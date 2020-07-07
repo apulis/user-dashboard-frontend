@@ -11,6 +11,7 @@ import { emailReg, validateUniqueUserName, mobilePattern, textPattern, userNameP
 import { IUserMessage } from './index';
 import styles from '../Detail/index.less';
 import { FormattedDate } from 'umi-types/locale';
+import { format } from 'prettier';
 
 interface User extends IUserMessage {
 
@@ -86,9 +87,9 @@ const EditTable: React.FC<EditTableProps & FormComponentProps> = ({dataSource, s
           return <FormItem>{getFieldDecorator(`userMessage[${index}].password`, {
             initialValue: item.password,
             rules: [
-              { required: true, message: 'Password is required'},
-              { min: 6, message: 'Need at least 6 characters' },
-              { max: 20, message: 'Cannot be longer than 20 characters' }
+              { required: true, message: formatMessage({id: 'users.add.form.password.required'})},
+              { min: 6, message: formatMessage({id: 'users.add.form.password.min'}) },
+              { max: 20, message: formatMessage({id: 'users.add.form.password.max'}) }
             ],
           })(<Input placeholder={formatMessage({id: 'users.password'})} />)}</FormItem>
         } else {
