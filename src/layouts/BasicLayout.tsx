@@ -26,7 +26,7 @@ const noMatch = (
   <Result
     status="403"
     title=""
-    subTitle={<><p>Sorry, you are not authorized to access this page.</p><p>Please contact the administrator to add permissions</p></>}
+    subTitle={<><p>{formatMessage({id: 'common.page.403.title1'})}</p><p>{formatMessage({id: 'common.page.403.title2'})}</p></>}
     // extra={
     //   <Button type="primary">
     //     <Link to="/user/login">Go Login</Link>
