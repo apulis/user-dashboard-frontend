@@ -214,9 +214,9 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
               {
                 getFieldDecorator('name', {
                   rules: [
-                    { required: true},
+                    { required: true, message: formatMessage({id: 'groups.add.form.group.name.required'})},
                     textPattern,
-                    { max: 20 },
+                    { max: 20, message: formatMessage({id: 'groups.add.form.group.name.max'}) },
                   ],
                   initialValue: groupInfo.name
                 })(
