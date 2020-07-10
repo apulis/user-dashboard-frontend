@@ -21,8 +21,9 @@ interface ISearchUserProps {
 
 const { Search } = Input;
 
-const SelectUser: React.FC<ISearchUserProps & FormComponentProps & ConnectProps & ConnectState> = ({ users, onChange, dispatch, defaultSelected = [] }) => {
+const SelectUser: React.FC<ISearchUserProps & FormComponentProps & ConnectProps & ConnectState> = ({ users, onChange, dispatch, defaultSelected = [], config }) => {
   const { list } = users;
+  const { adminUsers } = config;
   const userList = list.filter(u => {
     return !!u.userName;
   });
@@ -81,7 +82,7 @@ const SelectUser: React.FC<ISearchUserProps & FormComponentProps & ConnectProps 
     const u = userList[index];
     return (
       <Col span={24} key={index}>
-        <Checkbox disabled={defaultSelected.includes(u.id)} style={style} key={u.id} value={u.id}>{u.userName}</Checkbox>
+        <Checkbox disabled={defaultSelected.includes(u.id) || adminUsers.includes(u.userName)} style={style} key={u.id} value={u.id}>{u.userName}</Checkbox>
       </Col>
     )
   }
@@ -133,4 +134,4 @@ const SelectUser: React.FC<ISearchUserProps & FormComponentProps & ConnectProps 
 }
 
 
-export default connect(({ users }: ConnectState) => ({ users }))(Form.create<FormComponentProps & ConnectProps & ISearchUserProps>()(SelectUser));
+export default connect(({ users, config }: ConnectState) => ({ users, config }))(Form.create<FormComponentProps & ConnectProps & ISearchUserProps>()(SelectUser));
