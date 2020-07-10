@@ -320,8 +320,14 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
         rowSelection={{
           type: "checkbox",
           onChange: onRowSelection,
-          selectedRowKeys: selectRowKeys
+          selectedRowKeys: selectRowKeys,
+          getCheckboxProps: (record) => {
+            return {
+              disabled: adminUsers.includes(record.userName),
+            }
+          }
         }}
+        rowKey="id"
         dataSource={list}
         columns={columns}
         pagination={false}
