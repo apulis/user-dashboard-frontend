@@ -86,13 +86,13 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form,
         message.success('Success Create Role ' + name);
         router.push('/admin/role/list');
       } else if (result.success === false) {
-        message.error(`Rolename ${name} have existed, please try another`);
+        message.error(`Role name ${name} have existed, please try another`);
       }
     });
   }
   return (
     <PageHeaderWrapper>
-      <FormItem label="Rolename" {...layout} style={{width: '80%'}}>
+      <FormItem label="Role name" {...layout} style={{width: '80%'}}>
         {
           getFieldDecorator('RoleName', {
             rules: [
