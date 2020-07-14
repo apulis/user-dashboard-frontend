@@ -18,9 +18,9 @@ export default {
   
   // Add
   'roles.add.message.success.create.role': 'Success Create Role ',
-  'roles.add.message.existed.1': 'Rolename',
+  'roles.add.message.existed.1': 'Role name',
   'roles.add.message.existed.2': 'have existed, please try another',
-  'roles.add.form.roleName': 'Rolename',
+  'roles.add.form.roleName': 'Role name',
   'roles.add.form.roleName.required': 'Role name is required',
   'roles.add.form.roleName.max': 'Role name cannot be longer than 20 characters',
   'roles.add.form.roleName.whitespace': 'Role name cannot be empty',
