@@ -20,8 +20,8 @@ const plugins: IPlugin[] = [
       },
       locale: {
         enable: true,
-        default: 'en-US',
-        baseNavigator: false,
+        default: 'zh-CN',
+        baseNavigator: true,
       },
       dynamicImport: {
         loadingComponent: './components/PageLoading/index',
