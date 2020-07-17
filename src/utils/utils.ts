@@ -71,7 +71,7 @@ export function encodePassword(password: string) {
 export function initI18n() {
   // 依次获取当前语言
   const language = getI18n();
-  if (language !== language.umi_locale) {
+  if (language !== language.umi_locale || language !== localStorage.language) {
     // 设置项目语言
     setLocale(language, false);
     // 设置 cookie 以便后台使用
@@ -90,5 +90,5 @@ export function setI18n(lang: string) {
 }
 
 export function getI18n() {
-  return localStorage.language || localStorage.umi_locale || navigator.language || 'en-US';
+  return localStorage.language || localStorage.umi_locale || navigator.language || 'zh-CN';
 }
