@@ -63,6 +63,14 @@ const SelectGroup: React.FC<ISearchRoleProps & FormComponentProps & ConnectProps
         }
       })
     })
+    currentUserRoles?.forEach(id => {
+      roleList.forEach(r => {
+        if (r.id === id && !selectedRoles.find(s => s.id === id)) {
+          selectedRoles.push(r);
+        }
+      })
+    })
+    console.log('selectedRoles', selectedRoles)
     setSelectedRoles(selectedRoles);
     onChange && onChange(checkedValue as number[]);
   }
