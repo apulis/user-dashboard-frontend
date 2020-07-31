@@ -90,7 +90,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form,
       const result = await createRole({
         name: name,
         note: values.note,
-        permissions: checkedKeys
+        permissions: checkedKeys.filter(key => !projectTypes.includes(key))
       });
       setButtonLoading(false)
       if (result.success) {
