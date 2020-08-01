@@ -55,7 +55,7 @@ export default {
   menu: {
     locale: true,
   },
-  title: 'Apuli User Dashboard',
+  title: 'Huawei User Dashboard',
   pwa: false,
   iconfontUrl: '',
 } as DefaultSettings;
