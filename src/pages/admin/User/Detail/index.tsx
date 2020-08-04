@@ -268,12 +268,9 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
             <a style={{marginRight: '15px'}} onClick={editCurrentUser}>
               {formatMessage({id: 'users.detail.edit'})}
             </a>
-            {
-              currentRole.includes('System Admin') && 
-              <a onClick={resetPassword}>
-                {formatMessage({id: 'users.detail.reset.password'})}
-              </a>
-            }
+            <a onClick={resetPassword}>
+              {formatMessage({id: 'users.detail.reset.password'})}
+            </a>
           </div>
         )
       }
