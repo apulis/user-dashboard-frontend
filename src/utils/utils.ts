@@ -90,5 +90,6 @@ export function setI18n(lang: string) {
 }
 
 export function getI18n() {
-  return localStorage.language || localStorage.umi_locale || navigator.language || 'zh-CN';
+  // return localStorage.language || localStorage.umi_locale || navigator.language || 'zh-CN';
+  return 'zh-CN';
 }
