@@ -47,6 +47,7 @@ const SelectLang: React.FC<SelectLangProps & ConnectProps> = props => {
       ))}
     </Menu>
   );
+  return null;
   return (
     <HeaderDropdown overlay={langMenu} placement="bottomRight">
       <span className={classNames(styles.dropDown, className)}>
