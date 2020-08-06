@@ -120,6 +120,23 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
         message.error('loading roles error');
       })
   }
+  const addVCForUser = (userId: number) => {
+    setCurrentHandleUserId(userId);
+    const cancel = message.loading('loading...');
+    getUserRolesById(userId)
+      .then(res => {
+        if (res.success) {
+          cancel();
+          const currentUserRoles = res.list.map(r => r.roleId);
+          setCurrentUserRoles(currentUserRoles);
+          setAddRoleForUserModalVisible(true);
+        }
+      })
+      .catch(error => {
+        cancel();
+        message.error('loading roles error');
+      })
+  }
   const columns: ColumnProps<IUsers>[] = [
     {
       title: 'Username',
@@ -171,6 +188,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
               <Menu>
                 {!adminUsers.includes(item.userName) && <Menu.Item onClick={() => addRolesForUser(item.id)} key="0">Edit Role</Menu.Item>}
                 <Menu.Item onClick={async () => {await addToGroup(item.id);setCurrentHandleUserId(item.id)}} key="1">Add To User Group</Menu.Item>
+                {!adminUsers.includes(item.userName) && <Menu.Item onClick={() => addVCForUser(item.id)} key="0">Related to VC</Menu.Item>}
                 {!adminUsers.includes(item.userName) && <Menu.Item onClick={() => {setCurrentHandleUserId(item.id);removeUser(item.id)}} key="2">Delete</Menu.Item>}
               </Menu>}
             >

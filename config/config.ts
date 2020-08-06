@@ -247,12 +247,19 @@ export default {
   // chainWebpack: webpackPlugin,
   proxy: {
     '/custom-user-dashboard-backend': {
-      target: 'http://localhost:5001/',
-      // target: 'http://sandbox2-master.sigsus.cn:52080/custom-user-dashboard-backend',
+      // target: 'http://localhost:5001/',
+      target: 'http://219.133.167.42:30000/custom-user-dashboard-backend',
       changeOrigin: true,
       pathRewrite: {
         '^/custom-user-dashboard-backend': '',
       }, // /server/api/login => /api/login
+    },
+    '/apis/': {
+      target: 'http://huawei-infra01.sigsus.cn/',
+      changeOrigin: true,
+      pathRewrite: {
+        '^': '',
+      },
     },
   },
 } as IConfig;

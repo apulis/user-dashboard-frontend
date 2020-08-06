@@ -6,7 +6,8 @@ import { router } from 'umi';
 import { useParams } from 'react-router-dom';
 import { FormComponentProps } from 'antd/lib/form';
 import { ColumnProps } from 'antd/es/table';
-import { getUserById, resetPassword as apiResetPassword, editUserInfo, removeUserRole, getUserRoleInfo, getUserGroups } from '@/services/users';
+import { getUserById, resetPassword as apiResetPassword, editUserInfo, removeUserRole, getUserRoleInfo, getUserGroups, 
+  getVcList } from '@/services/users';
 import { removeGroupUser} from '@/services/groups';
 import { ConnectState, ConnectProps } from '@/models/connect';
 import { IRoleListItem } from '@/models/roles';
@@ -28,6 +29,8 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
   const [groupInfo, setGroupInfo] = useState<IGroup[]>([]);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [pageParmas, setPageParmas] = useState({ page: 1, size: 10 });
+  const [vcList, setVcList] = useState([]);
   const fetchUserById = async () => {
     if (isNaN(userId)) return;
     const res = await getUserById(userId);
@@ -96,6 +99,14 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
       }
     })
   }
+  const fetchVcList = async () => {
+    // userId
+    const res = await getVcList({
+      ...pageParmas
+    });
+    setVcList(res.result || []);
+  }
+
   useEffect(() => {
     if (isNaN(Number(id))) {
       router.push('/admin/user/list')
@@ -107,6 +118,10 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
     fetchUserRoles();
     fetchUserGroups();
   }, [])
+
+  useEffect(() => {
+    fetchVcList();
+  }, [pageParmas])
 
   const resetPassword = () => {
     setModalVisible(true);
@@ -324,6 +339,38 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
     }
   ]
 
+  const vcListColumns = [
+    {
+      title: 'VCName',
+      dataIndex: 'vcName',
+    },
+    {
+      title: 'DeviceType',
+      dataIndex: 'quota',
+      render: (i: string) => getDeviceTypeContent(i)
+    },
+    {
+      title: 'DeviceNumber',
+      dataIndex: 'quota',
+      render: (i: string) => getDeviceTypeContent(i, true)
+    },
+    {
+      title: 'MaxAvailable',
+      dataIndex: 'metadata',
+      render: (i: string) => getDeviceTypeContent(i, true, true)
+    }
+  ]
+
+  const getDeviceTypeContent = (v: string, isNum?: boolean, isMetadata?: boolean) => {
+    const val = JSON.parse(v);
+    const keys = Object.keys(val);
+    let content = null;
+    if (keys.length) {
+      isNum ? content = keys.map(i => <p>{isMetadata ? val[i].user_quota : val[i]}</p>)  : content = keys.map(i => <p>{i}</p>)
+    }
+    return content;
+  }
+
   return (
     <div className={styles.detailWrap}>
       <PageHeader
@@ -337,6 +384,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
         columns={userInfoColumns}
         title={() => (<h1>User Info</h1>)}
         dataSource={[userInfo]}
+        pagination={false}
       />
 
       <Table
@@ -349,6 +397,12 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
         columns={userGroupColumns}
         title={() => <h1>User Groups</h1>}
         dataSource={groupInfo}
+      />
+
+      <Table
+        columns={vcListColumns}
+        title={() => <h1>User VC Resources</h1>}
+        dataSource={vcList}
       />
       {
         modalVisible && <Modal
