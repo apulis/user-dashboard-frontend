@@ -388,6 +388,12 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
       />
 
       <Table
+        columns={vcListColumns}
+        title={() => <h1>User VC Resources</h1>}
+        dataSource={vcList}
+      />
+
+      <Table
         columns={userRoleColumns}
         title={() => <h1>User Roles</h1>}
         dataSource={roleInfo}
@@ -399,11 +405,6 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
         dataSource={groupInfo}
       />
 
-      <Table
-        columns={vcListColumns}
-        title={() => <h1>User VC Resources</h1>}
-        dataSource={vcList}
-      />
       {
         modalVisible && <Modal
           visible={modalVisible}

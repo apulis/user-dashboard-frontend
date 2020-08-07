@@ -8,17 +8,14 @@ import { FormComponentProps } from '@ant-design/compatible/lib/form';
 import { DownOutlined, UsergroupAddOutlined, UserDeleteOutlined, ExclamationCircleOutlined  } from '@ant-design/icons';
 import { ColumnProps } from 'antd/es/table';
 import { ClickParam } from 'antd/lib/menu';
-
 import { ConnectProps, ConnectState } from '@/models/connect';
 import { IUsers } from '@/models/users';
-
 import SelectRole from '@/components/Relate/SelectRole'
-
 import { removeUsers, addUsersToGroups, getUserRolesById, getUserGroups } from '@/services/users';
 import { addRoleToUsers, editRoleToUsers } from '@/services/roles';
 import SelectGroup from '../../../../components/Relate/SelectGroup';
-
-import styles from './index.less'
+import styles from './index.less';
+import VCTable from '../components/VCTable';
 
 interface IFetchUserParam {
   pageNo: number;
@@ -51,6 +48,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
   const [currentUserRoles, setCurrentUserRoles] = useState<number[]>([]);
   const [userGroupId, setUserGroupId] = useState<number[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [vcModal, setVcModal] = useState(false);
   const currentRole = currentUser?.currentRole;
   const fetchUsers = async (params: IFetchUserParam) => {
     setTableLoading(true);
@@ -120,23 +118,12 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
         message.error('loading roles error');
       })
   }
+
   const addVCForUser = (userId: number) => {
     setCurrentHandleUserId(userId);
-    const cancel = message.loading('loading...');
-    getUserRolesById(userId)
-      .then(res => {
-        if (res.success) {
-          cancel();
-          const currentUserRoles = res.list.map(r => r.roleId);
-          setCurrentUserRoles(currentUserRoles);
-          setAddRoleForUserModalVisible(true);
-        }
-      })
-      .catch(error => {
-        cancel();
-        message.error('loading roles error');
-      })
+    setVcModal(true);
   }
+
   const columns: ColumnProps<IUsers>[] = [
     {
       title: 'Username',
@@ -310,6 +297,17 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       setAddRoleForUserModalVisible(false);
     }
   }
+
+  const confirmAddVCToUser = async () => {
+    const res = await editRoleToUsers(currentHandleUserId, selectedRoleIds);
+    if (res.success) {
+      message.success('Success edit role');
+      setCurrentHandleUserId(0);
+      setCurrentUserRoles([]);
+      setAddRoleForUserModalVisible(false);
+    }
+  }
+
   return (
     <PageHeaderWrapper>
       <div className={styles.top}>
@@ -402,6 +400,17 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
         }
 
       </Modal>
+
+      {vcModal && <Modal
+        title="Related to VC"
+        visible={vcModal}
+        onOk={confirmAddVCToUser}
+        onCancel={() => setVcModal(false)}
+        destroyOnClose
+        width="50%"
+      >
+        <VCTable currentHandleUserId={currentHandleUserId} />
+      </Modal>}
       
     </PageHeaderWrapper>
   )
