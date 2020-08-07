@@ -180,7 +180,7 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
       }
       {
         step === 2 && <div className="step-2">
-          <FormItem label="Choose role">
+          <FormItem label={formatMessage({id: 'component.select.role.choose.roles'})}>
             {
               getFieldDecorator('role', {
                 initialValue: submitData?.role,
