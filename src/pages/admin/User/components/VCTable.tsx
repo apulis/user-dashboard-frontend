@@ -1,19 +1,18 @@
-import React, { useEffect, useState, FC } from 'react';
+import React, { useEffect, useState, FC, useImperativeHandle, forwardRef } from 'react';
 import { Table, message, Input } from 'antd';
 import { getVcList } from '@/services/users';
 
 const { Search } = Input;
 
-interface VCTableProps {
-  currentHandleUserId: number
-}
-
-const VCTable: FC<VCTableProps> = ({ currentHandleUserId }) => {
+const VCTable = (props: any, ref: any) => {
   const [pageParams, setPageParams] = useState({ page: 1, size: 10 });
   const [loading, setLoading] = useState(false);
   const [vcList, setVcList] = useState([]);
   const [total, setTotal] = useState(0);
   const [selectedRowKeys, setSelectRowKeys] = useState<string[] | number[]>([]);
+  useImperativeHandle(ref, () => ({ 
+    selectedRowKeys: selectedRowKeys
+  }));
 
   useEffect(() => {
     getData();
@@ -86,7 +85,7 @@ const VCTable: FC<VCTableProps> = ({ currentHandleUserId }) => {
   return (
     <div>
       <Search
-        placeholder="search VC"
+        placeholder="search VCName"
         onSearch={onSearch}
         style={{ width: 200 }}
       />
@@ -113,4 +112,4 @@ const VCTable: FC<VCTableProps> = ({ currentHandleUserId }) => {
   )
 }
 
-export default VCTable;
+export default forwardRef(VCTable);

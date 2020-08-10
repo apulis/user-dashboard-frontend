@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
 import { Link } from 'umi';
@@ -12,7 +12,7 @@ import { ConnectProps, ConnectState } from '@/models/connect';
 import { IUsers } from '@/models/users';
 import SelectRole from '@/components/Relate/SelectRole'
 import { removeUsers, addUsersToGroups, getUserRolesById, getUserGroups } from '@/services/users';
-import { addRoleToUsers, editRoleToUsers } from '@/services/roles';
+import { editRoleToUsers } from '@/services/roles';
 import SelectGroup from '../../../../components/Relate/SelectGroup';
 import styles from './index.less';
 import VCTable from '../components/VCTable';
@@ -28,9 +28,8 @@ const { confirm } = Modal;
 const { Search } = Input;
 
 const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props) => {
-  const { dispatch, users, form, groups, config, user } = props;
+  const { dispatch, users, groups, config } = props;
   const { adminUsers } = config;
-  const { currentUser } = user;
   const { list, pageNo, pageSize, total } = users || {};
   const { list: groupList } = groups;
   if (list.length > 50) {
@@ -49,7 +48,8 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
   const [userGroupId, setUserGroupId] = useState<number[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [vcModal, setVcModal] = useState(false);
-  const currentRole = currentUser?.currentRole;
+  const vcTableRef = useRef();
+
   const fetchUsers = async (params: IFetchUserParam) => {
     setTableLoading(true);
     await dispatch({
@@ -409,7 +409,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
         destroyOnClose
         width="50%"
       >
-        <VCTable currentHandleUserId={currentHandleUserId} />
+        <VCTable currentHandleUserId={currentHandleUserId} ref={vcTableRef}  />
       </Modal>}
       
     </PageHeaderWrapper>
