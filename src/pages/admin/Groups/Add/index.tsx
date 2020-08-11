@@ -185,7 +185,7 @@ const Group: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ for
               getFieldDecorator('role', {
                 initialValue: submitData?.role,
                 rules: [
-                  { required: true }
+                  { required: true, message: formatMessage({id: 'roles.add.form.roleName.required'}) }
                 ]
               })(<Checkbox.Group style={{ width: '100%'}}>
                 <Row>

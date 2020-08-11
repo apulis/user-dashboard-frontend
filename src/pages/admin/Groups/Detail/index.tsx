@@ -203,10 +203,10 @@ const Detail: React.FC<FormComponentProps> = ({ form }) => {
       <PageHeader
         className="site-page-header"
         onBack={() => router.push('/admin/group/list')}
-        title="User Groups"
+        title={formatMessage({id: 'groups.detail.role.title.user.group'})}
         subTitle=""
       />
-        <h2>Group Info</h2>
+        <h2>{formatMessage({id: 'groups.add.steps.groupInfo'})}</h2>
         {
           isGroupInfoEditing ?
           <>
