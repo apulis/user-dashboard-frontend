@@ -118,3 +118,7 @@ export async function getVcList(params: any) {
     params: params,
   });
 }
+
+export async function getUserVc(userId: number) {
+  return request(`/vc/user/${userId}`);
+}

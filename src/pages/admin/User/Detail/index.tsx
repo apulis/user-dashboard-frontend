@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 import { FormComponentProps } from 'antd/lib/form';
 import { ColumnProps } from 'antd/es/table';
 import { getUserById, resetPassword as apiResetPassword, editUserInfo, removeUserRole, getUserRoleInfo, getUserGroups, 
-  getVcList } from '@/services/users';
+  getUserVc } from '@/services/users';
 import { removeGroupUser} from '@/services/groups';
 import { ConnectState, ConnectProps } from '@/models/connect';
 import { IRoleListItem } from '@/models/roles';
@@ -30,7 +30,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [pageParmas, setPageParmas] = useState({ page: 1, size: 10 });
-  const [vcList, setVcList] = useState([]);
+  const [userVcList, setUserVcList] = useState([]);
   const fetchUserById = async () => {
     if (isNaN(userId)) return;
     const res = await getUserById(userId);
@@ -99,12 +99,9 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
       }
     })
   }
-  const fetchVcList = async () => {
-    // userId
-    const res = await getVcList({
-      ...pageParmas
-    });
-    setVcList(res.result || []);
+  const fetchUserVcList = async () => {
+    const res = await getUserVc(userId);
+    setUserVcList(res.result || []);
   }
 
   useEffect(() => {
@@ -120,7 +117,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
   }, [])
 
   useEffect(() => {
-    fetchVcList();
+    fetchUserVcList();
   }, [pageParmas])
 
   const resetPassword = () => {
@@ -390,7 +387,13 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
       <Table
         columns={vcListColumns}
         title={() => <h1>User VC Resources</h1>}
-        dataSource={vcList}
+        dataSource={userVcList}
+        // pagination={{
+        //   total: dataSets.total,
+        //   onChange: pageParamsChange,
+        //   current: pageParams.pageNum,
+        //   pageSize: pageParams.pageSize
+        // }}
       />
 
       <Table
