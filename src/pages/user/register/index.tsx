@@ -14,6 +14,7 @@ import { ConnectState } from '@/models/connect';
 import IconMicrosoft from '@/components/Icon/IconMicrosoft';
 import { CurrentUser } from '@/models/user';
 import { textPattern, userNamePattern } from '@/utils/validates';
+import { userLogout } from '@/services/login';
 
 const { Tab, UserName, Password, NickName, Submit } = LoginComponents;
 
@@ -82,13 +83,11 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
       const res = await signUp(submitData);
       if (res.success === true) {
         // 防止绑定后第二次再去绑定
-        this.props.dispatch({
-          type: 'login/logout',
-        })
+        await userLogout()
         delete localStorage.token;
-        this.props.dispatch({
-          type: 'user/fetchCurrent',
-        })
+        // this.props.dispatch({
+        //   type: 'user/fetchCurrent',
+        // })
         message.success(formatMessage({id: 'user-register.register.success.create.account'}));
         router.push('/user/login');
       } else if (res.duplicate) {
