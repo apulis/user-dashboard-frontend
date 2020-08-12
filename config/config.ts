@@ -248,14 +248,14 @@ export default {
   proxy: {
     '/custom-user-dashboard-backend': {
       // target: 'http://localhost:5001/',
-      target: 'http://219.133.167.42:30000/custom-user-dashboard-backend',
+      target: 'https://atlas02.sigsus.cn/custom-user-dashboard-backend',
       changeOrigin: true,
       pathRewrite: {
         '^/custom-user-dashboard-backend': '',
       }, // /server/api/login => /api/login
     },
     '/apis/': {
-      target: 'http://huawei-infra01.sigsus.cn/',
+      target: 'https://atlas02.sigsus.cn/',
       changeOrigin: true,
       pathRewrite: {
         '^': '',

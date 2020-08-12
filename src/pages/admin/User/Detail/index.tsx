@@ -29,8 +29,9 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
   const [groupInfo, setGroupInfo] = useState<IGroup[]>([]);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [pageParmas, setPageParmas] = useState({ page: 1, size: 10 });
+  const [pageParmas, setPageParmas] = useState({ pageNum: 1, pageSize: 10 });
   const [userVcList, setUserVcList] = useState([]);
+  const [vcTotal, setVcTotal] = useState(0);
   const fetchUserById = async () => {
     if (isNaN(userId)) return;
     const res = await getUserById(userId);
@@ -100,8 +101,12 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
     })
   }
   const fetchUserVcList = async () => {
-    const res = await getUserVc(userId);
-    setUserVcList(res.result || []);
+    const res = await getUserVc(userId, pageParmas);
+    const { success, vcList, total } = res;
+    if (success) {
+      setUserVcList(vcList);
+      setVcTotal(total);
+    }
   }
 
   useEffect(() => {
@@ -368,6 +373,10 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
     return content;
   }
 
+  const pageParmasChange = (page: any, count: any) => {
+    setPageParmas({ pageNum: page, pageSize: count });
+  };
+
   return (
     <div className={styles.detailWrap}>
       <PageHeader
@@ -388,12 +397,12 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
         columns={vcListColumns}
         title={() => <h1>User VC Resources</h1>}
         dataSource={userVcList}
-        // pagination={{
-        //   total: dataSets.total,
-        //   onChange: pageParamsChange,
-        //   current: pageParams.pageNum,
-        //   pageSize: pageParams.pageSize
-        // }}
+        pagination={{
+          total: vcTotal,
+          onChange: pageParmasChange,
+          current: pageParmas.pageNum,
+          pageSize: pageParmas.pageSize
+        }}
       />
 
       <Table

@@ -11,7 +11,7 @@ import { ClickParam } from 'antd/lib/menu';
 import { ConnectProps, ConnectState } from '@/models/connect';
 import { IUsers } from '@/models/users';
 import SelectRole from '@/components/Relate/SelectRole'
-import { removeUsers, addUsersToGroups, getUserRolesById, getUserGroups } from '@/services/users';
+import { removeUsers, addUsersToGroups, getUserRolesById, getUserGroups, editVC } from '@/services/users';
 import { editRoleToUsers } from '@/services/roles';
 import SelectGroup from '../../../../components/Relate/SelectGroup';
 import styles from './index.less';
@@ -299,12 +299,12 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
   }
 
   const confirmAddVCToUser = async () => {
-    const res = await editRoleToUsers(currentHandleUserId, selectedRoleIds);
+    const { selectVcList } = vcTableRef.current!;
+    const res = await editVC({ userId: currentHandleUserId, vcList: selectVcList });
     if (res.success) {
-      message.success('Success edit role');
+      message.success('Success edit VC');
       setCurrentHandleUserId(0);
-      setCurrentUserRoles([]);
-      setAddRoleForUserModalVisible(false);
+      setVcModal(false);
     }
   }
 
@@ -407,7 +407,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
         onOk={confirmAddVCToUser}
         onCancel={() => setVcModal(false)}
         destroyOnClose
-        width="50%"
+        width="60%"
       >
         <VCTable currentHandleUserId={currentHandleUserId} ref={vcTableRef}  />
       </Modal>}

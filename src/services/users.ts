@@ -1,6 +1,5 @@
 import cloneDeep from 'lodash/cloneDeep'
 import request from '@/utils/request';
-import requestDL from '@/utils/request-dl';
 import { IUserMessage } from '@/pages/admin/User/Add';
 import { encodePassword } from '@/utils/utils';
 
@@ -114,11 +113,20 @@ export async function resetPassword(userId: number, newPassword: string) {
 }
 
 export async function getVcList(params: any) {
-  return requestDL(`/ListVCs`, {
+  return request(`/vc/all`, {
     params: params,
   });
 }
 
-export async function getUserVc(userId: number) {
-  return request(`/vc/user/${userId}`);
+export async function getUserVc(userId: number, params: any) {
+  return request(`/vc/user/${userId}`, {
+    params: params,
+  });
+}
+
+export async function editVC(data: any) {
+  return await request(`/vc`, {
+    method: 'PATCH',
+    data: data
+  })
 }
