@@ -18,8 +18,8 @@ export const validateUniqueUserName= async (i: number, data: any, _rule?: any, v
 };
 
 export const mobilePattern = {
-  // pattern: /^[1]([3-9])[0-9]{9}$/,
-  // message: formatMessage({id: 'validates.message.mobile'})
+  pattern: /^[1]([3-9])[0-9]{9}$/,
+  message: formatMessage({id: 'validates.message.mobile'})
 };
 
 const emojiPattern = emojiRegex();
