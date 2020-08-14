@@ -55,7 +55,7 @@ export default {
   menu: {
     locale: true,
   },
-  title: 'Huawei User Dashboard',
+  title: ' User Dashboard',
   pwa: false,
   iconfontUrl: '',
 } as DefaultSettings;
