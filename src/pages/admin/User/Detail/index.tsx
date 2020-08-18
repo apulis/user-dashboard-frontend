@@ -102,9 +102,9 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
   }
   const fetchUserVcList = async () => {
     const res = await getUserVc(userId, pageParmas);
-    const { success, vcList, total } = res;
+    const { success, list, total } = res;
     if (success) {
-      setUserVcList(vcList);
+      setUserVcList(list);
       setVcTotal(total);
     }
   }
