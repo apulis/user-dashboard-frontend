@@ -47,7 +47,6 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form,
       }
     })
   })
-  console.log('----', treeData)
   const layout = {
     labelCol: { span: 24 },
     wrapperCol: { span: 8 },
@@ -128,7 +127,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form,
         treeData={treeData}
         defaultExpandAll
       />
-      <Button style={{marginTop: '20px'}} loading={buttonLoading} onClick={next}>Submit</Button>
+      <Button style={{marginTop: '20px'}} type="primary" loading={buttonLoading} onClick={next}>Submit</Button>
     </PageHeaderWrapper>
   )
 }

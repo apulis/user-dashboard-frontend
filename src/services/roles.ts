@@ -91,7 +91,7 @@ export async function getRolePermissions(roleId: number) {
   return await request('/role/' + roleId + '/permission');
 }
 
-export async function editRolePermissions(roleId: number, data: string[]) {
+export async function editRolePermissions(roleId: number, data: any) {
   return await request('/role/' + roleId + '/permission', {
     method: 'PATCH',
     data: data
