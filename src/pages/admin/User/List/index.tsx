@@ -170,11 +170,11 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       render(_text, item): React.ReactNode {
         return (
           <div style={{display: 'flex', justifyContent: 'space-around'}}>
-            <Dropdown
+            {!adminUsers.includes(item.userName) ? <Dropdown
               overlay={
               <Menu>
                 {!adminUsers.includes(item.userName) && <Menu.Item onClick={() => addRolesForUser(item.id)} key="0">Edit Role</Menu.Item>}
-                <Menu.Item onClick={async () => {await addToGroup(item.id);setCurrentHandleUserId(item.id)}} key="1">Add To User Group</Menu.Item>
+                {!adminUsers.includes(item.userName) && <Menu.Item onClick={async () => {await addToGroup(item.id);setCurrentHandleUserId(item.id)}} key="1">Add To User Group</Menu.Item>}
                 {!adminUsers.includes(item.userName) && <Menu.Item onClick={() => addVCForUser(item.id)} key="0">Related to VC</Menu.Item>}
                 {!adminUsers.includes(item.userName) && <Menu.Item onClick={() => {setCurrentHandleUserId(item.id);removeUser(item.id)}} key="2">Delete</Menu.Item>}
               </Menu>}
@@ -182,7 +182,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
             <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
                 More <DownOutlined />
               </a>
-            </Dropdown>
+            </Dropdown> :<div>-</div>}
           </div>
         )
       }
