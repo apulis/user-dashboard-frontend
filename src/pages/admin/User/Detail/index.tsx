@@ -6,9 +6,11 @@ import { router } from 'umi';
 import { useParams } from 'react-router-dom';
 import { FormComponentProps } from 'antd/lib/form';
 import { ColumnProps } from 'antd/es/table';
-import { getUserById, resetPassword as apiResetPassword, editUserInfo, removeUserRole, getUserRoleInfo, getUserGroups, 
-  getUserVc } from '@/services/users';
-import { removeGroupUser} from '@/services/groups';
+import {
+  getUserById, resetPassword as apiResetPassword, editUserInfo, removeUserRole, getUserRoleInfo, getUserGroups,
+  getUserVc
+} from '@/services/users';
+import { removeGroupUser } from '@/services/groups';
 import { ConnectState, ConnectProps } from '@/models/connect';
 import { IRoleListItem } from '@/models/roles';
 import { IUsers } from '@/models/users';
@@ -22,9 +24,10 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
   const { id } = useParams();
   const { currentUser } = user;
   const { adminUsers } = config;
+  debugger
   const { getFieldDecorator, validateFields } = form;
   const userId = Number(id);
-  const [userInfo, setUserInfo] = useState<IUsers>({userName: '', nickName: '', id: 0});
+  const [userInfo, setUserInfo] = useState<IUsers>({ userName: '', nickName: '', id: 0 });
   const [roleInfo, setRoleInfo] = useState<IRoleListItem[]>([]);
   const [groupInfo, setGroupInfo] = useState<IGroup[]>([]);
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -33,8 +36,10 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
   const [userVcList, setUserVcList] = useState([]);
   const [vcTotal, setVcTotal] = useState(0);
   const fetchUserById = async () => {
+    debugger
     if (isNaN(userId)) return;
     const res = await getUserById(userId);
+    debugger
     if (res.success) {
       setUserInfo(res.user);
     }
@@ -130,7 +135,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
   }
 
   const confirmEditPassword = () => {
-    validateFields(['newPassword'], async (err, result) => {
+    validateFields(['newPassword', 'confirmNewPassword'], async (err, result) => {
       if (err) return;
       const { newPassword } = result;
       const res = await apiResetPassword(id, newPassword);
@@ -157,11 +162,11 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
                     textPattern
                   ]
                 })(
-                    <Input />
-                  )
+                  <Input />
+                )
               }
             </FormItem>
-            
+
           )
         }
         return (
@@ -179,11 +184,11 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
                 getFieldDecorator('userName', {
                   initialValue: item.userName,
                   rules: [userNamePattern, { min: 4, message: 'Nickname need at least 4 characters' },
-                  { max: 20, message: 'Nickname cannot be longer than 20 characters' }]
+                    { max: 20, message: 'Nickname cannot be longer than 20 characters' }]
                 })(
-                    <Input disabled />
-                  )
-                }
+                  <Input disabled />
+                )
+              }
             </FormItem>
           )
         }
@@ -203,11 +208,11 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
                   initialValue: item.phone || '',
                   rules: [mobilePattern]
                 })(
-                    <Input />
-                  )
+                  <Input />
+                )
               }
             </FormItem>
-            
+
           )
         }
         return (
@@ -228,11 +233,11 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
                     { pattern: emailReg, message: 'please check email format' }
                   ]
                 })(
-                    <Input />
-                  )
-              } 
+                  <Input />
+                )
+              }
             </FormItem>
-            
+
           )
         }
         return (
@@ -247,11 +252,11 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
           return (
             <FormItem>
               {getFieldDecorator('note', {
-                  initialValue: item.note || '',
-                  rules: [textPattern]
-                })(<Input />)}
+                initialValue: item.note || '',
+                rules: [textPattern]
+              })(<Input />)}
             </FormItem>
-            
+
           )
         }
         return (
@@ -277,9 +282,9 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
         const currentRole = currentUser?.currentRole;
         return (
           <div>
-            <a style={{marginRight: '15px'}} onClick={editCurrentUser}>Edit</a>
+            <a style={{ marginRight: '15px' }} onClick={editCurrentUser}>Edit</a>
             {
-              currentRole.includes('System Admin') && 
+              currentRole.includes('System Admin') &&
               <a onClick={resetPassword}>Reset password</a>
             }
           </div>
@@ -287,7 +292,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
       }
     }
   ]
-  
+
   const userRoleColumns: ColumnProps<IRoleListItem>[] = [
     {
       title: 'Role Name',
@@ -303,7 +308,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
       title: 'Role Type',
       render(_text, item) {
         return (
-        <div>{item.isPreset ? 'Preset Role' : 'Custom Role'}</div>
+          <div>{item.isPreset ? 'Preset Role' : 'Custom Role'}</div>
         )
       }
     },
@@ -319,7 +324,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
       }
     },
   ]
-  
+
   const userGroupColumns: ColumnProps<IGroup>[] = [
     {
       title: 'Group Name',
@@ -368,7 +373,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
     const keys = Object.keys(val);
     let content = null;
     if (keys.length) {
-      isNum ? content = keys.map(i => <p>{isMetadata ? val[i].user_quota : val[i]}</p>)  : content = keys.map(i => <p>{i}</p>)
+      isNum ? content = keys.map(i => <p>{isMetadata ? val[i].user_quota : val[i]}</p>) : content = keys.map(i => <p>{i}</p>)
     }
     return content;
   }
@@ -420,9 +425,9 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
       {
         modalVisible && <Modal
           visible={modalVisible}
-          onCancel={() => {setModalVisible(false)}}
+          onCancel={() => { setModalVisible(false) }}
           onOk={confirmEditPassword}
-        
+
         >
           <FormItem label="New password">
             {
@@ -439,6 +444,29 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
                   {
                     max: 20,
                     message: 'New password cannot be longer than 20 characters',
+                  }
+                ]
+              })(
+                <Input />
+              )
+            }
+          </FormItem>
+          <FormItem label="Confirm password" hasFeedback>
+            {
+              getFieldDecorator('confirmNewPassword', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please confirm your password!',
+                  },
+                  {
+                    validator: async (rule, value, callback) => {
+                      if (value && value !== form.getFieldValue('newPassword')) {
+                        callback('Two passwords that you enter is inconsistent!');
+                      } else {
+                        callback();
+                      }
+                    }
                   }
                 ]
               })(
