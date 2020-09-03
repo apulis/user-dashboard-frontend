@@ -447,7 +447,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
                   }
                 ]
               })(
-                <Input />
+                <Input type = 'password'/>
               )
             }
           </FormItem>
@@ -470,7 +470,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
                   }
                 ]
               })(
-                <Input />
+                <Input  type = 'password'/>
               )
             }
           </FormItem>
