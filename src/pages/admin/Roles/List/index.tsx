@@ -53,11 +53,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
   const columns: ColumnProps<IRoleListItem>[] = [
     {
       title: 'Role Name',
-      render(item) {
-        return (
-          <Link to={"/admin/role/detail/" + item.id}>{item.name}</Link>
-        )
-      }
+      render: item => <Link to={"/admin/role/detail/" + item.id}>{item.name}</Link>
     },
     {
       title: 'Description',
