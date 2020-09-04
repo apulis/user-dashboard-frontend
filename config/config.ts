@@ -177,6 +177,10 @@ export default {
                       name: 'add',
                       path: '/admin/role/add',
                       component: './admin/Roles/Add',
+                    },
+                    {
+                      path: '/admin/role/detail/:id',
+                      component: './admin/Roles/Detail',
                     }
                   ]
                 },
@@ -247,12 +251,19 @@ export default {
   // chainWebpack: webpackPlugin,
   proxy: {
     '/custom-user-dashboard-backend': {
-      // target: 'http://localhost:5001/',
-      target: 'http://sandbox2-master.sigsus.cn:52080/custom-user-dashboard-backend',
+      target: 'http://localhost:5001/',
+      // target: 'https://atlas02.sigsus.cn/custom-user-dashboard-backend',
       changeOrigin: true,
       pathRewrite: {
         '^/custom-user-dashboard-backend': '',
       }, // /server/api/login => /api/login
+    },
+    '/apis/': {
+      target: 'https://atlas02.sigsus.cn/',
+      changeOrigin: true,
+      pathRewrite: {
+        '^': '',
+      },
     },
   },
 } as IConfig;

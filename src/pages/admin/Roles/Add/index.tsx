@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { Input, Checkbox, Tree, Button, message } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Input, Tree, Button, message } from 'antd';
 import { Form } from '@ant-design/compatible'
 import { connect } from 'dva';
 import router from 'umi/router';
@@ -12,7 +12,6 @@ import { TreeNodeNormal, AntTreeNodeCheckedEvent } from 'antd/lib/tree/Tree';
 import { textPattern } from '@/utils/validates';
 
 const FormItem = Form.Item;
-const { TreeNode } = Tree;
 
 type TypeKeys = string[];
 
@@ -79,20 +78,20 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form,
       const result = await createRole({
         name: name,
         note: values.note,
-        permissions: checkedKeys
+        permissions: checkedKeys.filter(key => !projectTypes.includes(key))
       });
       setButtonLoading(false)
       if (result.success) {
         message.success('Success Create Role ' + name);
         router.push('/admin/role/list');
       } else if (result.success === false) {
-        message.error(`Rolename ${name} have existed, please try another`);
+        message.error(`Role name ${name} have existed, please try another`);
       }
     });
   }
   return (
     <PageHeaderWrapper>
-      <FormItem label="Rolename" {...layout} style={{width: '80%'}}>
+      <FormItem label="Role name" {...layout} style={{width: '80%'}}>
         {
           getFieldDecorator('RoleName', {
             rules: [
@@ -128,7 +127,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form,
         treeData={treeData}
         defaultExpandAll
       />
-      <Button style={{marginTop: '20px'}} loading={buttonLoading} onClick={next}>Submit</Button>
+      <Button style={{marginTop: '20px'}} type="primary" loading={buttonLoading} onClick={next}>Submit</Button>
     </PageHeaderWrapper>
   )
 }

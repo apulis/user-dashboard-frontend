@@ -111,3 +111,22 @@ export async function resetPassword(userId: number, newPassword: string) {
     }
   })
 }
+
+export async function getVcList(params: any) {
+  return request(`/vc/all`, {
+    params: params,
+  });
+}
+
+export async function getUserVc(userId: number, params: any) {
+  return request(`/vc/user/${userId}`, {
+    params: params,
+  });
+}
+
+export async function editVC(data: any) {
+  return await request(`/vc`, {
+    method: 'PATCH',
+    data: data
+  })
+}

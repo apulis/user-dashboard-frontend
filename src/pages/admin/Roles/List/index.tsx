@@ -1,26 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Table, Input, Pagination, message, Modal } from 'antd';
+import { Button, Table, Input, Pagination, message, Modal, Dropdown, Menu } from 'antd';
 import { Form } from '@ant-design/compatible';
 import { connect } from 'dva';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-
 import { ConnectState, ConnectProps } from '@/models/connect';
 import { FormComponentProps } from '@ant-design/compatible/es/form';
-
 import styles from './index.less';
 import { Link } from 'umi';
 import { ColumnProps } from 'antd/es/table';
-
 import SelectGroup from '@/components/Relate/SelectGroup';
 import SelectUser from "@/components/Relate/SelectUser";
-
 import { addRoleToGroups, addRoleToUsers } from '@/services/roles';
 import { getRoleGroup } from '@/services/roles';
-
 import { removeRoles, fetchUsersForRole } from '@/services/roles';
 import { IRoleListItem } from '@/models/roles';
-
-
+import { DownOutlined } from '@ant-design/icons';
 
 const { Search } = Input;
 
@@ -36,7 +30,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
   const [selectedGroupId, setSelectedGroupId] = useState<number[]>([]);
   const [selectedRoleGroup, setSelectedRoleGroup] = useState<number[]>([]);
   const [pageCurrent, setPageCurrent] = useState<number>(1);
-  const [selectedRoleUser, setSelectedRoleUser] = useState<number>();
+  const [selectedRoleUser, setSelectedRoleUser] = useState<number[]>([]);
   const addRoleToUser = async (roleId: number) => {
     const res = await fetchUsersForRole(roleId);
     if (res.success === true) {
@@ -59,8 +53,11 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
   const columns: ColumnProps<IRoleListItem>[] = [
     {
       title: 'Role Name',
-      dataIndex: 'name',
-      key: 'name',   
+      render(item) {
+        return (
+          <Link to={"/admin/role/detail/" + item.id}>{item.name}</Link>
+        )
+      }
     },
     {
       title: 'Description',
@@ -84,9 +81,16 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
       render(_text, item) {
         return (
           <div style={{display: 'flex', justifyContent: 'space-around'}}>
-            <a onClick={() => addRoleToUser(item.id)}>Related To User</a>
-            <a onClick={() => addRoleToGroup(item.id)}>Related To Group</a>
-            {item.isPreset === 0 && <a style={{ color: 'red' }} onClick={() => removeCurrentSelectedRole(item.id)}>Delete</a>}
+            <Dropdown
+              overlay={
+              <Menu>
+                <Menu.Item onClick={() => addRoleToUser(item.id)} key="1">Related To User</Menu.Item>
+                <Menu.Item onClick={() => addRoleToGroup(item.id)} key="2">Related To Group</Menu.Item>
+                {item.isPreset === 0 && <Menu.Item onClick={() => removeCurrentSelectedRole(item.id)} key="3">Delete</Menu.Item>}
+              </Menu>}
+            >
+              <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>More <DownOutlined /></a>
+            </Dropdown>
           </div>
         )
       }
@@ -126,8 +130,10 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
           clearSelect();
           if (tempRoleList.length === list.length) {
             // 删掉最后一页的全部内容
-            fetchRoles(undefined, pageNo - 1);
-            setPageCurrent(pageNo - 1);
+            const currentPage = pageNo - 1;
+            fetchRoles(undefined, currentPage);
+            setPageCurrent(currentPage)
+            setPageNo(currentPage);
           } else {
             fetchRoles()
           }
