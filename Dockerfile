@@ -7,7 +7,7 @@ ADD package.json .
 ADD package-lock.json .
 ADD yarn.lock .
 RUN yarn config set registry 'https://registry.npm.taobao.org'
-RUN yarn install
+RUN yarn install --frozen-lockfile
 
 COPY . /home/custom-user-dashboard
 
@@ -20,7 +20,7 @@ WORKDIR /home/app/server
 COPY --from=0 /home/custom-user-dashboard/dist ../dist
 COPY --from=0 /home/custom-user-dashboard/server .
 RUN yarn config set registry 'https://registry.npm.taobao.org'
-RUN yarn
+RUN yarn 
 
 EXPOSE 3083
 
