@@ -9,12 +9,6 @@ const Info: React.FC<ConnectProps & ConnectState> = ({ user, dispatch, config })
   const authMethods = config.authMethods;
   const { id } = currentUser;
   // TODO 解绑之后，unbind之后fetchCurrent，并不有马上更新currentUser，而是必须得两次unbind之后currentUser的对应id才会置空。
-  console.log('xxxxxx')
-  console.log('render')
-  console.log(currentUser)
-  console.log('xxxxxx')
-  const [flag, setFlag] = useState(false)
-  useEffect(() => {},[flag])
   useEffect(() => {
     if (authMethods.length === 0) {
       dispatch({
@@ -62,7 +56,6 @@ const Info: React.FC<ConnectProps & ConnectState> = ({ user, dispatch, config })
       dispatch({
         type: 'user/fetchCurrent',
       })
-      setFlag(!flag)
     } else {
       message.error(`Error unBind microsoft account!`);
     }
@@ -75,7 +68,6 @@ const Info: React.FC<ConnectProps & ConnectState> = ({ user, dispatch, config })
       dispatch({
         type: 'user/fetchCurrent',
       })
-      setFlag(!flag)
     } else {
       message.error(`Error unBind wechat account!`);
     }
