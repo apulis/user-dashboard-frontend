@@ -16,6 +16,7 @@ import { CurrentUser } from '@/models/user';
 import { textPattern, userNamePattern } from '@/utils/validates';
 import { userLogout } from '@/services/login';
 import { Checkbox } from 'antd';
+import { ConfigStateType } from '@/models/config';
 
 const { Tab, UserName, Password, NickName, Submit } = LoginComponents;
 
@@ -23,7 +24,8 @@ interface RegisterProps {
   dispatch: Dispatch<AnyAction>;
   userLogin: StateType;
   submitting?: boolean;
-  currentUser?: CurrentUser
+  currentUser?: CurrentUser;
+  config: ConfigStateType;
 }
 interface LoginState {
   type: string;
@@ -124,7 +126,7 @@ class Login extends Component<RegisterProps & LoginState & ConnectState & FormCo
 
   render() {
     const authMethods = this.props.config.authMethods;
-    const { userLogin = {}, submitting, currentUser } = this.props;
+    const { userLogin = {}, submitting, currentUser, config } = this.props;
     let defaultUserName = ''
     if (currentUser && currentUser.microsoftId && (!currentUser.userName)) {
       defaultUserName = currentUser.microsoftId.split('@', 1)[0]
@@ -258,13 +260,15 @@ class Login extends Component<RegisterProps & LoginState & ConnectState & FormCo
             </Form.Item>
           </Tab>
           {
-            (currentUser && Object.keys(currentUser).length > 0 && !currentUser.userName) ? <Alert message="You have joined, Now need to register for Apulis Platform" type="success" /> : <></>
+            (currentUser && Object.keys(currentUser).length > 0 && !currentUser.userName) ? <Alert message={`You have joined, Now need to register for ${config.platformName}`} type="success" /> : <></>
           }
           <Submit loading={submitting}>
             <FormattedMessage id="user-register.register.register" />
           </Submit>
           <div className={styles.other}>
-            <FormattedMessage id="user-register.register.sign-up-with" />
+            {
+              authMethods.length > 0 && <FormattedMessage id="user-register.register.sign-up-with" />
+            }
             {
               authMethods.includes('wechat') &&
               <Icon onClick={() => this.toLogin('wechat')} type="wechat" className={styles.icon} theme="outlined" />

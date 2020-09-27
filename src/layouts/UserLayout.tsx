@@ -1,12 +1,10 @@
 import { MenuDataItem, getMenuData, getPageTitle } from '@ant-design/pro-layout';
 import { Helmet } from 'react-helmet';
-import { Link } from 'umi';
 import React, { useEffect } from 'react';
 import { connect } from 'dva';
 import { Row, Col, message } from 'antd';
 import { formatMessage } from 'umi-plugin-react/locale';
 
-import SelectLang from '@/components/SelectLang';
 import { ConnectProps, ConnectState } from '@/models/connect';
 import styles from './UserLayout.less';
 import image1 from '@/assets/image1.jpeg';
@@ -18,7 +16,7 @@ export interface UserLayoutProps extends ConnectProps {
   breadcrumbNameMap: { [path: string]: MenuDataItem };
 }
 
-const UserLayout: React.FC<UserLayoutProps & PageProps> = props => {
+const UserLayout: React.FC<UserLayoutProps & PageProps & ConnectState> = props => {
   const {
     route = {
       routes: [],
@@ -87,7 +85,9 @@ const UserLayout: React.FC<UserLayoutProps & PageProps> = props => {
             <SelectLang />
           </div> */}
           <div className={styles.right}>
-              <div className={styles.title}>Apulis Platform</div>
+              <div className={styles.title}>
+                {props.config.platformName}
+              </div>
             {children}
           </div>
           
@@ -98,6 +98,7 @@ const UserLayout: React.FC<UserLayoutProps & PageProps> = props => {
   );
 };
 
-export default connect(({ settings }: ConnectState) => ({
+export default connect(({ settings, config }: ConnectState) => ({
   ...settings,
+  config
 }))(UserLayout);

@@ -8,22 +8,21 @@ import ProLayout, {
   MenuDataItem,
   BasicLayoutProps as ProLayoutProps,
   Settings,
-  DefaultFooter,
+  PageLoading
 } from '@ant-design/pro-layout';
 import React, { useEffect } from 'react';
 import { Link, Route } from 'umi';
 import { Dispatch } from 'redux';
 import { connect } from 'dva';
-import { GithubOutlined } from '@ant-design/icons';
-import { Result, Button } from 'antd';
+import { Result } from 'antd';
 import { formatMessage } from 'umi-plugin-react/locale';
 import { getRouteAuthority } from '@/utils/utils';
 
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import { ConnectState } from '@/models/connect';
-import { isAntDesignPro, getAuthorityFromRouter } from '@/utils/utils';
 import logo from '../assets/logo.svg';
+import { ConfigStateType } from '@/models/config';
 
 const noMatch = (
   <Result
@@ -47,6 +46,7 @@ export interface BasicLayoutProps extends ProLayoutProps {
   };
   settings: Settings;
   dispatch: Dispatch;
+  config: ConfigStateType;
 }
 export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
   breadcrumbNameMap: {
@@ -66,7 +66,7 @@ const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
     return Authorized.check(item.authority, localItem, null) as MenuDataItem;
   });
 
-const footerRender: BasicLayoutProps['footerRender'] = () => {
+const footerRender = (platformName: string) => {
 
   return (
     <>
@@ -80,7 +80,7 @@ const footerRender: BasicLayoutProps['footerRender'] = () => {
           width: '100%'
         }}
       >
-        Apulis Platform
+        {platformName}
       </div>
     </>
   );
@@ -137,7 +137,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
           <span>{route.breadcrumbName}</span>
         );
       }}
-      footerRender={footerRender}
+      footerRender={() => footerRender(props.config.platformName)}
       menuDataRender={menuDataRender}
       formatMessage={formatMessage}
       rightContentRender={() => <RightContent />}
@@ -152,7 +152,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
   );
 };
 
-export default connect(({ global, settings }: ConnectState) => ({
+export default connect(({ global, settings, config }: ConnectState) => ({
   collapsed: global.collapsed,
   settings,
+  config
 }))(BasicLayout);
