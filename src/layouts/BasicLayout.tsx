@@ -21,6 +21,7 @@ import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import { ConnectState } from '@/models/connect';
 import logo from '../assets/logo.svg';
+import { ConfigStateType } from '@/models/config';
 
 const noMatch = (
   <Result
@@ -44,6 +45,7 @@ export interface BasicLayoutProps extends ProLayoutProps {
   };
   settings: Settings;
   dispatch: Dispatch;
+  config: ConfigStateType;
 }
 export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
   breadcrumbNameMap: {
@@ -63,25 +65,22 @@ const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
     return Authorized.check(item.authority, localItem, null) as MenuDataItem;
   });
 
-const footerRender: BasicLayoutProps['footerRender'] = () => {
-
-  return (
-    <>
-      <div
-        style={{
-          marginTop: '100px',
-          paddingBottom: 40,
-          textAlign: 'center',
-          position: 'absolute',
-          bottom: 0,
-          width: '100%'
-        }}
-      >
-        {formatMessage({id: 'common.platform.name'})}
-      </div>
-    </>
-  );
-};
+const footerRender = (platformName: string) => (
+  <>
+    <div
+      style={{
+        marginTop: '100px',
+        paddingBottom: 40,
+        textAlign: 'center',
+        position: 'absolute',
+        bottom: 0,
+        width: '100%'
+      }}
+    >
+      {platformName}
+    </div>
+  </>
+);
 
 const BasicLayout: React.FC<BasicLayoutProps> = props => {
   const { dispatch, children, settings, location = { pathname: '/' } } = props;
@@ -134,7 +133,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
           <span>{route.breadcrumbName}</span>
         );
       }}
-      footerRender={footerRender}
+      footerRender={() => footerRender(props.config.platformName)}
       menuDataRender={menuDataRender}
       formatMessage={formatMessage}
       rightContentRender={() => <RightContent />}
@@ -149,7 +148,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
   );
 };
 
-export default connect(({ global, settings }: ConnectState) => ({
+export default connect(({ global, settings, config }: ConnectState) => ({
   collapsed: global.collapsed,
   settings,
+  config
 }))(BasicLayout);

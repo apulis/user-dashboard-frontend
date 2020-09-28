@@ -1,4 +1,4 @@
-import { Alert, Icon, message } from 'antd';
+import { Alert, Icon, message, Form, Checkbox } from 'antd';
 import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
 import React, { Component } from 'react';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
@@ -7,14 +7,15 @@ import { FormComponentProps } from 'antd/es/form';
 import { Link, router } from 'umi';
 import { connect } from 'dva';
 import { StateType } from '@/models/login';
-import LoginComponents from './components/Login';
-import styles from './style.less';
 import { SignUpParamsType, signUp } from '@/services/register';
 import { ConnectState } from '@/models/connect';
 import IconMicrosoft from '@/components/Icon/IconMicrosoft';
 import { CurrentUser } from '@/models/user';
 import { textPattern, userNamePattern } from '@/utils/validates';
 import { userLogout } from '@/services/login';
+import { ConfigStateType } from '@/models/config';
+import LoginComponents from './components/Login';
+import styles from './style.less';
 
 const { Tab, UserName, Password, NickName, Submit } = LoginComponents;
 
@@ -22,14 +23,15 @@ interface RegisterProps {
   dispatch: Dispatch<AnyAction>;
   userLogin: StateType;
   submitting?: boolean;
-  currentUser?: CurrentUser
+  currentUser?: CurrentUser;
+  config: ConfigStateType;
 }
 interface LoginState {
   type: string;
   autoLogin: boolean;
 }
 
-class Login extends Component<RegisterProps & LoginState & ConnectState> {
+class Login extends Component<RegisterProps & LoginState & ConnectState & FormComponentProps> {
   loginForm: FormComponentProps['form'] | undefined | null = undefined;
 
   state: LoginState = {
@@ -71,29 +73,35 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
     });
   };
 
+
+
   handleSubmit = async (err: unknown, values: SignUpParamsType) => {
-    if (!err) {
-      const { userName, password, nickName } = values;
-      const submitData: SignUpParamsType = { userName, password, nickName };
-      if (this.props.currentUser?.microsoftId && !this.props.currentUser?.userName) {
-        submitData.microsoftId = this.props.currentUser?.microsoftId;
-      } else if (this.props.currentUser?.wechatId && !this.props.currentUser?.userName) {
-        submitData.wechatId = this.props.currentUser.wechatId;
+    this.props.form.validateFields(['isAgree'], async (error) => {
+      if (!error) {
+        if (!err) {
+          const { userName, password, nickName } = values;
+          const submitData: SignUpParamsType = { userName, password, nickName };
+          if (this.props.currentUser?.microsoftId && !this.props.currentUser?.userName) {
+            submitData.microsoftId = this.props.currentUser?.microsoftId;
+          } else if (this.props.currentUser?.wechatId && !this.props.currentUser?.userName) {
+            submitData.wechatId = this.props.currentUser.wechatId;
+          }
+          const res = await signUp(submitData);
+          if (res.success === true) {
+            // 防止绑定后第二次再去绑定
+            await userLogout()
+            delete localStorage.token;
+            // this.props.dispatch({
+            //   type: 'user/fetchCurrent',
+            // })
+            message.success(formatMessage({ id: 'user-register.register.success.create.account' }));
+            router.push('/user/login');
+          } else if (res.duplicate) {
+            message.error(`${formatMessage({ id: 'users.userName' })} ${userName} ${formatMessage({ id: 'user-register.register.in.use' })}`);
+          }
+        }
       }
-      const res = await signUp(submitData);
-      if (res.success === true) {
-        // 防止绑定后第二次再去绑定
-        await userLogout()
-        delete localStorage.token;
-        // this.props.dispatch({
-        //   type: 'user/fetchCurrent',
-        // })
-        message.success(formatMessage({id: 'user-register.register.success.create.account'}));
-        router.push('/user/login');
-      } else if (res.duplicate) {
-        message.error(`${formatMessage({id: 'users.userName'})} ${userName} ${formatMessage({id: 'user-register.register.in.use'})}`);
-      }
-    }
+    })
   };
 
   onTabChange = (type: string) => {
@@ -108,14 +116,14 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
     dispatch({
       type: 'login/oauthLogin',
       payload: {
-        loginType, 
+        loginType,
       }
     })
   }
 
   render() {
     const authMethods = this.props.config.authMethods;
-    const { userLogin = {}, submitting, currentUser } = this.props;
+    const { userLogin = {}, submitting, currentUser, config } = this.props;
     let defaultUserName = ''
     if (currentUser && currentUser.microsoftId && (!currentUser.userName)) {
       defaultUserName = currentUser.microsoftId.split('@', 1)[0]
@@ -127,7 +135,7 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
         <LoginComponents
           defaultActiveKey={type}
           onTabChange={this.onTabChange}
-          onSubmit={(err, values) => this.handleSubmit(err, values)}
+          onSubmit={(err, values) => { this.handleSubmit(err, values) }}
           onCreate={(form?: FormComponentProps['form']) => {
             this.loginForm = form;
           }}
@@ -214,9 +222,9 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
                     const values = await this.loginForm?.getFieldsValue();
                     if (!values) return;
                     if (values.password !== values.password2) {
-                      callback(formatMessage({id: 'user-register.register.password2.identical'}));
+                      callback(formatMessage({ id: 'user-register.register.password2.identical' }));
                     }
-                    
+
                   }
                 },
               ]}
@@ -227,21 +235,43 @@ class Login extends Component<RegisterProps & LoginState & ConnectState> {
                 }
               }}
             />
+            <Form.Item>
+              {this.props.form.getFieldDecorator('isAgree', {
+                initialValue: false,
+                rules: [
+                  {
+                    validator: async (rule, value, callback) => {
+                      if (!value) {
+                        callback('please agree the protocol before registering!');
+                      } else {
+                        callback();
+                      }
+                    }
+                  },
+                ],
+              })(
+                <Checkbox>
+                  I have read the <a href="http://www.baidu.com" target='blank'>User License Agreement</a>
+                </Checkbox>,
+              )}
+            </Form.Item>
           </Tab>
           {
-            (currentUser && Object.keys(currentUser).length > 0 && !currentUser.userName) ? <Alert message={`${formatMessage({id: 'user-register.register.password.need.register'})}${formatMessage({id: 'common.platform.name'})}`} type="success" /> : <></>
+            (currentUser && Object.keys(currentUser).length > 0 && !currentUser.userName) ? <Alert message={`${formatMessage({ id: 'user-register.register.password.need.register' })}${formatMessage({ id: 'common.platform.name' })}`} type="success" /> : <></>
           }
           <Submit loading={submitting}>
             <FormattedMessage id="user-register.register.register" />
           </Submit>
           <div className={styles.other}>
-            <FormattedMessage id="user-register.register.sign-up-with" />
             {
-              authMethods.includes('wechat') && 
-                <Icon onClick={() => this.toLogin('wechat')} type="wechat" className={styles.icon} theme="outlined" />
+              authMethods.length > 0 && <FormattedMessage id="user-register.register.sign-up-with" />
             }
             {
-              authMethods.includes('microsoft') && <IconMicrosoft style={{marginLeft: '15px'}} onClick={() => this.toLogin('microsoft')} />
+              authMethods.includes('wechat') &&
+              <Icon onClick={() => this.toLogin('wechat')} type="wechat" className={styles.icon} theme="outlined" />
+            }
+            {
+              authMethods.includes('microsoft') && <IconMicrosoft style={{ marginLeft: '15px' }} onClick={() => this.toLogin('microsoft')} />
             }
             <Link className={styles.register} to="/user/login">
               <FormattedMessage id="user-register.register.signin" />
@@ -258,4 +288,4 @@ export default connect(({ login, loading, user, config }: ConnectState) => ({
   submitting: loading.effects['login/login'],
   currentUser: user.currentUser,
   config
-}))(Login);
+}))(Form.create<FormComponentProps>()(Login));

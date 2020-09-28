@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
 import { Link } from 'umi';
@@ -8,18 +8,15 @@ import { FormComponentProps } from '@ant-design/compatible/lib/form';
 import { DownOutlined, UsergroupAddOutlined, UserDeleteOutlined, ExclamationCircleOutlined  } from '@ant-design/icons';
 import { ColumnProps } from 'antd/es/table';
 import { ClickParam } from 'antd/lib/menu';
-
 import { ConnectProps, ConnectState } from '@/models/connect';
 import { formatMessage } from 'umi-plugin-react/locale';
 import { IUsers } from '@/models/users';
-
 import SelectRole from '@/components/Relate/SelectRole'
-
-import { removeUsers, addUsersToGroups, getUserRolesById, getUserGroups } from '@/services/users';
-import { addRoleToUsers, editRoleToUsers } from '@/services/roles';
+import { removeUsers, addUsersToGroups, getUserRolesById, getUserGroups, editVC } from '@/services/users';
+import { editRoleToUsers } from '@/services/roles';
 import SelectGroup from '../../../../components/Relate/SelectGroup';
-
-import styles from './index.less'
+import styles from './index.less';
+import VCTable from '../components/VCTable';
 
 interface IFetchUserParam {
   pageNo: number;
@@ -32,9 +29,8 @@ const { confirm } = Modal;
 const { Search } = Input;
 
 const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props) => {
-  const { dispatch, users, form, groups, config, user } = props;
+  const { dispatch, users, groups, config } = props;
   const { adminUsers } = config;
-  const { currentUser } = user;
   const { list, pageNo, pageSize, total } = users || {};
   const { list: groupList } = groups;
   if (list.length > 50) {
@@ -52,7 +48,9 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
   const [currentUserRoles, setCurrentUserRoles] = useState<number[]>([]);
   const [userGroupId, setUserGroupId] = useState<number[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const currentRole = currentUser?.currentRole;
+  const [vcModal, setVcModal] = useState(false);
+  const vcTableRef = useRef();
+
   const fetchUsers = async (params: IFetchUserParam) => {
     setTableLoading(true);
     await dispatch({
@@ -124,13 +122,26 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
         message.error(formatMessage({id: 'users.message.loading.error'}));
       })
   }
+
+  const addVCForUser = (userId: number) => {
+    setCurrentHandleUserId(userId);
+    setVcModal(true);
+  }
+
+  const addToGroup = async (userId?: number) => {
+    if (userId) {
+      await fetchUserGroups(userId);
+    }
+    setAddGroupModalVisible(true);
+  }
+
   const columns: ColumnProps<IUsers>[] = [
     {
       title: formatMessage({id: 'users.userName'}),
       dataIndex: 'userName',
       render(_text, item) {
         return (
-          <Link to={"/admin/user/detail/" + item.id}>{item.userName}</Link>
+          <Link to={`/admin/user/detail/${  item.id}`}>{item.userName}</Link>
         )
       }
     },
@@ -139,7 +150,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       dataIndex: 'nickName',
       render(_text, item) {
         return (
-          <Link to={"/admin/user/detail/" + item.id}>{item.nickName}</Link>
+          <Link to={`/admin/user/detail/${  item.id}`}>{item.nickName}</Link>
         )
       }
     },
@@ -170,7 +181,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       render(_text, item): React.ReactNode {
         return (
           <div style={{display: 'flex', justifyContent: 'space-around'}}>
-            <Dropdown
+            {!adminUsers.includes(item.userName) ? <Dropdown
               overlay={
               <Menu>
                 {!adminUsers.includes(item.userName) && <Menu.Item onClick={() => addRolesForUser(item.id)} key="0">
@@ -178,6 +189,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
                 <Menu.Item onClick={async () => {await addToGroup(item.id);setCurrentHandleUserId(item.id)}} key="1">
                   { formatMessage({id: 'users.add.to.group'}) }
                 </Menu.Item>
+                {!adminUsers.includes(item.userName) && config.enableVC && <Menu.Item onClick={() => addVCForUser(item.id)} key="0">Related to VC</Menu.Item>}
                 {!adminUsers.includes(item.userName) && <Menu.Item onClick={() => {setCurrentHandleUserId(item.id);removeUser(item.id)}} key="2">
                 {formatMessage({id: 'users.delete'})}</Menu.Item>}
               </Menu>}
@@ -185,7 +197,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
             <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
                 {formatMessage({id: 'users.more'})} <DownOutlined />
               </a>
-            </Dropdown>
+            </Dropdown> :<div>-</div>}
           </div>
         )
       }
@@ -229,12 +241,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       }
     })
   }
-  const addToGroup = async (userId?: number) => {
-    if (userId) {
-      await fetchUserGroups(userId);
-    }
-    setAddGroupModalVisible(true);
-  }
+  
   const removeUser = (userId?: number) => {
     
     confirm({
@@ -288,6 +295,17 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       setAddRoleForUserModalVisible(false);
     }
   }
+
+  const confirmAddVCToUser = async () => {
+    const { selectVcList } = vcTableRef.current!;
+    const res = await editVC({ userId: currentHandleUserId, vcList: selectVcList });
+    if (res.success) {
+      message.success('Success edit VC');
+      setCurrentHandleUserId(0);
+      setVcModal(false);
+    }
+  }
+
   return (
     <PageHeaderWrapper>
       <div className={styles.top}>
@@ -380,6 +398,17 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
         }
 
       </Modal>
+
+      {vcModal && <Modal
+        title="Related to VC"
+        visible={vcModal}
+        onOk={confirmAddVCToUser}
+        onCancel={() => setVcModal(false)}
+        destroyOnClose
+        width="60%"
+      >
+        <VCTable currentHandleUserId={currentHandleUserId} ref={vcTableRef}  />
+      </Modal>}
       
     </PageHeaderWrapper>
   )

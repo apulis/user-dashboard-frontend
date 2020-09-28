@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { Input, Checkbox, Tree, Button, message } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Input, Tree, Button, message } from 'antd';
 import { Form } from '@ant-design/compatible'
 import { connect } from 'dva';
 import router from 'umi/router';
@@ -11,11 +11,8 @@ import { ConnectState, ConnectProps } from '@/models/connect';
 import { createRole } from '@/services/roles';
 import { TreeNodeNormal, AntTreeNodeCheckedEvent } from 'antd/lib/tree/Tree';
 import { textPattern } from '@/utils/validates';
-import { format } from 'prettier';
-import { lang } from 'moment';
 
 const FormItem = Form.Item;
-const { TreeNode } = Tree;
 
 type TypeKeys = string[];
 

@@ -82,3 +82,18 @@ export async function getRoleGroup(roleId: number) {
 export async function fetchUsersForRole(roleId: number) {
   return await request('/user-role/user-by-roleId/' + roleId)
 }
+
+export async function getRoleInfo(roleId: number) {
+  return await request('/role/' + roleId + '/detail');
+}
+
+export async function getRolePermissions(roleId: number) {
+  return await request('/role/' + roleId + '/permission');
+}
+
+export async function editRolePermissions(roleId: number, data: any) {
+  return await request('/role/' + roleId + '/permission', {
+    method: 'PATCH',
+    data: data
+  })
+}

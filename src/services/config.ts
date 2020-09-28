@@ -9,3 +9,7 @@ export async function getOAuth2Methods() {
 export async function getAdminUsers() {
   return await request('/users/adminUsers')
 }
+
+export async function getPlatformConfig() {
+  return await request('/platform-config')
+}

@@ -8,6 +8,7 @@ import { CurrentUser } from '@/models/user';
 import { RouteComponentProps} from 'react-router-dom';
 import H from 'history';
 import { message } from 'antd';
+import { ConfigStateType } from '@/models/config';
 
 interface Location extends H.Location{
   query: {[key: string]: string};
@@ -19,6 +20,7 @@ export interface PageProps extends RouteComponentProps {
 interface SecurityLayoutProps extends ConnectProps {
   loading?: boolean;
   currentUser?: CurrentUser;
+  config?: ConfigStateType;
 }
 
 interface SecurityLayoutState {
@@ -99,7 +101,8 @@ class SecurityLayout extends React.Component<SecurityLayoutProps & SecurityLayou
   }
 }
 
-export default connect(({ user, loading }: ConnectState) => ({
+export default connect(({ user, loading, config }: ConnectState) => ({
   currentUser: user.currentUser,
   loading: loading.models.user,
+  config,
 }))(SecurityLayout);

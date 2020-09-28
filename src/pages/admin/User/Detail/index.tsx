@@ -7,8 +7,11 @@ import { useParams } from 'react-router-dom';
 import { FormComponentProps } from 'antd/lib/form';
 import { formatMessage } from 'umi-plugin-react/locale';
 import { ColumnProps } from 'antd/es/table';
-import { getUserById, resetPassword as apiResetPassword, editUserInfo, removeUserRole, getUserRoleInfo, getUserGroups } from '@/services/users';
-import { removeGroupUser} from '@/services/groups';
+import {
+  getUserById, resetPassword as apiResetPassword, editUserInfo, removeUserRole, getUserRoleInfo, getUserGroups,
+  getUserVc
+} from '@/services/users';
+import { removeGroupUser } from '@/services/groups';
 import { ConnectState, ConnectProps } from '@/models/connect';
 import { IRoleListItem } from '@/models/roles';
 import { IUsers } from '@/models/users';
@@ -18,17 +21,20 @@ import styles from './index.less';
 
 const FormItem = Form.Item;
 
-const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form, users, groups, config, user }) => {
+const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form, config, user }) => {
   const { id } = useParams();
   const { currentUser } = user;
   const { adminUsers } = config;
   const { getFieldDecorator, validateFields } = form;
   const userId = Number(id);
-  const [userInfo, setUserInfo] = useState<IUsers>({userName: '', nickName: '', id: 0});
+  const [userInfo, setUserInfo] = useState<IUsers>({ userName: '', nickName: '', id: 0 });
   const [roleInfo, setRoleInfo] = useState<IRoleListItem[]>([]);
   const [groupInfo, setGroupInfo] = useState<IGroup[]>([]);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [pageParmas, setPageParmas] = useState({ pageNum: 1, pageSize: 10 });
+  const [userVcList, setUserVcList] = useState([]);
+  const [vcTotal, setVcTotal] = useState(0);
   const fetchUserById = async () => {
     if (isNaN(userId)) return;
     const res = await getUserById(userId);
@@ -97,6 +103,15 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
       }
     })
   }
+  const fetchUserVcList = async () => {
+    const res = await getUserVc(userId, pageParmas);
+    const { success, list, total } = res;
+    if (success) {
+      setUserVcList(list);
+      setVcTotal(total);
+    }
+  }
+
   useEffect(() => {
     if (isNaN(Number(id))) {
       router.push('/admin/user/list')
@@ -109,12 +124,16 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
     fetchUserGroups();
   }, [])
 
+  useEffect(() => {
+    fetchUserVcList();
+  }, [pageParmas])
+
   const resetPassword = () => {
     setModalVisible(true);
   }
 
   const confirmEditPassword = () => {
-    validateFields(['newPassword'], async (err, result) => {
+    validateFields(['newPassword', 'confirmNewPassword'], async (err, result) => {
       if (err) return;
       const { newPassword } = result;
       const res = await apiResetPassword(id, newPassword);
@@ -141,11 +160,11 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
                     textPattern
                   ]
                 })(
-                    <Input />
-                  )
+                  <Input />
+                )
               }
             </FormItem>
-            
+
           )
         }
         return (
@@ -165,9 +184,9 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
                   rules: [userNamePattern, { min: 4, message: formatMessage({id: 'users.add.form.userName.min'}) },
                   { max: 20, message: formatMessage({id: 'users.add.form.userName.max'}) }]
                 })(
-                    <Input disabled />
-                  )
-                }
+                  <Input disabled />
+                )
+              }
             </FormItem>
           )
         }
@@ -187,11 +206,11 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
                   initialValue: item.phone || '',
                   rules: [mobilePattern]
                 })(
-                    <Input />
-                  )
+                  <Input />
+                )
               }
             </FormItem>
-            
+
           )
         }
         return (
@@ -212,11 +231,11 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
                     { pattern: emailReg, message: formatMessage({id: 'users.add.form.email.pattern'})}
                   ]
                 })(
-                    <Input />
-                  )
-              } 
+                  <Input />
+                )
+              }
             </FormItem>
-            
+
           )
         }
         return (
@@ -231,11 +250,11 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
           return (
             <FormItem>
               {getFieldDecorator('note', {
-                  initialValue: item.note || '',
-                  rules: [textPattern]
-                })(<Input />)}
+                initialValue: item.note || '',
+                rules: [textPattern]
+              })(<Input />)}
             </FormItem>
-            
+
           )
         }
         return (
@@ -276,7 +295,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
       }
     }
   ]
-  
+
   const userRoleColumns: ColumnProps<IRoleListItem>[] = [
     {
       title: formatMessage({id: 'users.detail.role.name'}),
@@ -310,7 +329,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
       }
     },
   ]
-  
+
   const userGroupColumns: ColumnProps<IGroup>[] = [
     {
       title: formatMessage({id: 'users.detail.group.name'}),
@@ -334,6 +353,44 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
     }
   ]
 
+  const getDeviceTypeContent = (v: string, isNum?: boolean, isMetadata?: boolean) => {
+    const val = JSON.parse(v);
+    const keys = Object.keys(val);
+    let content = null;
+    if (keys.length) {
+      isNum ? content = keys.map(i => <p>{isMetadata ? val[i].user_quota : val[i]}</p>) : content = keys.map(i => <p>{i}</p>)
+    }
+    return content;
+  }
+
+  const vcListColumns = [
+    {
+      title: 'VCName',
+      dataIndex: 'vcName',
+    },
+    {
+      title: 'DeviceType',
+      dataIndex: 'quota',
+      render: (i: string) => getDeviceTypeContent(i)
+    },
+    {
+      title: 'DeviceNumber',
+      dataIndex: 'quota',
+      render: (i: string) => getDeviceTypeContent(i, true)
+    },
+    {
+      title: 'MaxAvailable',
+      dataIndex: 'metadata',
+      render: (i: string) => getDeviceTypeContent(i, true, true)
+    }
+  ]
+
+  
+
+  const pageParmasChange = (page: any, count: any) => {
+    setPageParmas({ pageNum: page, pageSize: count });
+  };
+
   return (
     <div className={styles.detailWrap}>
       <PageHeader
@@ -347,6 +404,19 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
         columns={userInfoColumns}
         title={() => (<h1>{formatMessage({id: 'users.detail.title.userInfo'})}</h1>)}
         dataSource={[userInfo]}
+        pagination={false}
+      />
+
+      <Table
+        columns={vcListColumns}
+        title={() => <h1>User VC Resources</h1>}
+        dataSource={userVcList}
+        pagination={{
+          total: vcTotal,
+          onChange: pageParmasChange,
+          current: pageParmas.pageNum,
+          pageSize: pageParmas.pageSize
+        }}
       />
 
       <Table
@@ -360,12 +430,13 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
         title={() => <h1>{formatMessage({id: 'users.detail.title.group'})}</h1>}
         dataSource={groupInfo}
       />
+
       {
         modalVisible && <Modal
           visible={modalVisible}
-          onCancel={() => {setModalVisible(false)}}
+          onCancel={() => { setModalVisible(false) }}
           onOk={confirmEditPassword}
-        
+
         >
           <FormItem label={formatMessage({id: 'users.detail.form.newPassword'})}>
             {
@@ -385,7 +456,30 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
                   }
                 ]
               })(
-                <Input />
+                <Input type = 'password'/>
+              )
+            }
+          </FormItem>
+          <FormItem label="Confirm password" hasFeedback>
+            {
+              getFieldDecorator('confirmNewPassword', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please confirm your password!',
+                  },
+                  {
+                    validator: async (rule, value, callback) => {
+                      if (value && value !== form.getFieldValue('newPassword')) {
+                        callback('Two passwords that you enter is inconsistent!');
+                      } else {
+                        callback();
+                      }
+                    }
+                  }
+                ]
+              })(
+                <Input  type = 'password'/>
               )
             }
           </FormItem>
