@@ -56,9 +56,9 @@ const UserLayout: React.FC<UserLayoutProps & PageProps & ConnectState> = props =
       const redirectPath = location?.pathname;
       const routerBase = window.routerBase;
       if (routerBase.includes(redirectPath) || redirectPath?.includes(routerBase)) {
-        history && history.push('/');
+        history.push('/');
       } else {
-        history && history.push(location!.pathname);
+        history.push(location!.pathname);
       }
     }
   }, [])
