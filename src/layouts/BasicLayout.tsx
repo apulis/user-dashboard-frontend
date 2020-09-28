@@ -106,7 +106,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
   return (
     <ProLayout
       logo={logo}
-      menuHeaderRender={(logoDom, titleDom) => (
+      menuHeaderRender={() => (
         <Link to="/">
           {/* {logoDom} */}
           {/* {titleDom} */}
