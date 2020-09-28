@@ -13,6 +13,7 @@ export interface CommonLayoutProps extends ProLayoutProps {
 }
 
 const CommonLayout: React.FC<CommonLayoutProps> = ({ dispatch, config, children }) => {
+
   useEffect(() => {
     dispatch({
       type: 'config/fetchPlatformConfig'
@@ -23,10 +24,8 @@ const CommonLayout: React.FC<CommonLayoutProps> = ({ dispatch, config, children 
       <PageLoading />
     )
   }
-  return <>{children}</> 
-  
+  return <>{children}</>;
 
 }
-
-
+  
 export default connect(({ config }: ConnectState) => ({ config }))(CommonLayout);
