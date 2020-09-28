@@ -1,9 +1,8 @@
 import { ConnectState } from '@/models/connect';
-import { PageLoading } from '@ant-design/pro-layout';
 import { connect } from 'dva';
 import React, { useEffect } from 'react';
 import { Dispatch } from 'redux';
-import { BasicLayoutProps as ProLayoutProps } from '@ant-design/pro-layout';
+import { BasicLayoutProps as ProLayoutProps, PageLoading } from '@ant-design/pro-layout';
 import { ConfigStateType } from '@/models/config';
 
 
