@@ -8,13 +8,13 @@ import classNames from 'classnames';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
 import { setI18n, getI18n } from '@/utils/utils';
-import { ConnectProps } from '@/models/connect';
+import { ConnectProps, ConnectState } from '@/models/connect';
 import { connect } from 'dva';
 
 interface SelectLangProps {
   className?: string;
 }
-const SelectLang: React.FC<SelectLangProps & ConnectProps> = props => {
+const SelectLang: React.FC<SelectLangProps & ConnectProps & ConnectState> = props => {
   const { className } = props;
   const selectedLang = getI18n();
   const changeLang = ({ key }: ClickParam): void => {
@@ -47,13 +47,16 @@ const SelectLang: React.FC<SelectLangProps & ConnectProps> = props => {
       ))}
     </Menu>
   );
-  return (
-    <HeaderDropdown overlay={langMenu} placement="bottomRight">
-      <span className={classNames(styles.dropDown, className)}>
-        <GlobalOutlined title={formatMessage({ id: 'navBar.lang' })} />
-      </span>
-    </HeaderDropdown>
-  );
+  if (props.config.i18n === true) {
+    return (
+      <HeaderDropdown overlay={langMenu} placement="bottomRight">
+        <span className={classNames(styles.dropDown, className)}>
+          <GlobalOutlined title={formatMessage({ id: 'navBar.lang' })} />
+        </span>
+      </HeaderDropdown>
+    );
+  }
+  return null;
 };
 
-export default connect()(SelectLang);
+export default connect(({ config }: ConnectState) => ({ config }))(SelectLang);

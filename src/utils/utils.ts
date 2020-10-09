@@ -90,6 +90,7 @@ export function setI18n(lang: string) {
 }
 
 export function getI18n() {
+  console.log(123, window.g_app)
   // return localStorage.language || localStorage.umi_locale || navigator.language || 'zh-CN';
   return 'zh-CN';
 }
