@@ -24,6 +24,8 @@ export default {
   'users.delete.current.user': '删除当前用户',
   'user.placeholder.search.users': '搜索用户',
   'user.items.per.page': '每页数量',
+  'user.items.add.to.group': '添加到组',
+  'user.items.related.to.vc': '关联 VC',
   'users.has.active.job': '有正在运行的 job，不能被删除',
   
   // Add
@@ -96,4 +98,16 @@ export default {
   'users.detail.form.newPassword.required': '新密码是必填的',
   'users.detail.form.newPassword.min': '新密码不能少于 6 个字符',
   'users.detail.form.newPassword.max': '新密码不能少于 20 个字符',
+  'users.detail.form.confirm.password': '确认密码',
+  'users.detail.form.confirm.password.required': '请填写确认密码',
+  'users.detail.form.confirm.password.error': '2次输入的密码不一致',
+
+  // VC
+  'user.vc.VCName': 'VC 名称',
+  'user.vc.UserCount': '用户数量',
+  'user.vc.DeviceType': '设备类型',
+  'user.vc.DeviceCount': '设备数量',
+  'user.vc.MaxAvailable': '最大可用',
+  'user.vc.search.vc': '搜索 VC 名称',
+  'user.vc.detail.title': '用户 VC 资源'
 }

@@ -25,6 +25,8 @@ export default {
   'users.delete.current.user': 'Delete Current User', 
   'user.placeholder.search.users': 'Search users',
   'user.items.per.page': 'Items per page:',
+  'user.items.add.to.group': 'Add to groups',
+  'user.items.related.to.vc': 'Related to VC',
   'users.has.active.job': ' has active job, please confirm!',
   // Add
   'users.add.message.maximum': 'Maximum user is 10',
@@ -95,5 +97,14 @@ export default {
   'users.detail.form.newPassword.required': 'New password is required',
   'users.detail.form.newPassword.min': 'New password must be at least 6 characters',
   'users.detail.form.newPassword.max': 'New password cannot be longer than 20 characters',
-  
+  'users.detail.form.confirm.password': 'Confirm password',
+  'users.detail.form.confirm.password.required': 'Please confirm your password!',
+  'users.detail.form.confirm.password.error': 'Two passwords that you enter is inconsistent!',
+  // VC
+  'user.vc.VCName': 'VCName',
+  'user.vc.UserCount': 'User Count',
+  'user.vc.DeviceType': 'DeviceType',
+  'user.vc.DeviceCount': 'DeviceCount',
+  'user.vc.MaxAvailable': 'MaxAvailable',
+  'user.vc.search.vc': 'search VCName',
 }

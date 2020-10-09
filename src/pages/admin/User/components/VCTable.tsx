@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useImperativeHandle, forwardRef } from 'react';
 import { Table, Input } from 'antd';
 import { getVcList, getUserVc } from '@/services/users';
+import { formatMessage } from 'umi-plugin-react/locale';
+import { format } from 'prettier';
 
 const { Search } = Input;
 
@@ -41,25 +43,25 @@ const VCTable = (props: any, ref: any) => {
 
   const columns = [
     {
-      title: 'VCName',
+      title: formatMessage({id: 'user.vc.VCName'}),
       dataIndex: 'vcName',
     },
     {
-      title: 'UserNumber',
+      title: formatMessage({id: 'user.vc.UserCount'}),
       dataIndex: 'userNum'
     },
     {
-      title: 'DeviceType',
+      title: formatMessage({id: 'user.vc.DeviceType'}),
       dataIndex: 'quota',
       render: (i: string) => getDeviceTypeContent(i)
     },
     {
-      title: 'DeviceNumber',
+      title: formatMessage({id: 'user.vc.DeviceCount'}),
       dataIndex: 'quota',
       render: (i: string) => getDeviceTypeContent(i, true)
     },
     {
-      title: 'MaxAvailable',
+      title: formatMessage({id: 'user.vc.MaxAvailable'}),
       dataIndex: 'metadata',
       render: (i: string) => getDeviceTypeContent(i, true, true)
     }
@@ -91,7 +93,7 @@ const VCTable = (props: any, ref: any) => {
   return (
     <div>
       <Search
-        placeholder="search VCName"
+        placeholder={formatMessage({id: 'user.vc.search.vc'})}
         onSearch={onSearch}
         style={{ width: 200 }}
       />

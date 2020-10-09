@@ -365,21 +365,21 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
 
   const vcListColumns = [
     {
-      title: 'VCName',
+      title: formatMessage({id: 'user.vc.VCName'}),
       dataIndex: 'vcName',
     },
     {
-      title: 'DeviceType',
+      title: formatMessage({id: 'user.vc.DeviceType'}),
       dataIndex: 'quota',
       render: (i: string) => getDeviceTypeContent(i)
     },
     {
-      title: 'DeviceNumber',
+      title: formatMessage({id: 'user.vc.DeviceCount'}),
       dataIndex: 'quota',
       render: (i: string) => getDeviceTypeContent(i, true)
     },
     {
-      title: 'MaxAvailable',
+      title: formatMessage({id: 'user.vc.MaxAvailable'}),
       dataIndex: 'metadata',
       render: (i: string) => getDeviceTypeContent(i, true, true)
     }
@@ -409,7 +409,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
 
       <Table
         columns={vcListColumns}
-        title={() => <h1>User VC Resources</h1>}
+        title={() => <h1>{formatMessage({id: 'user.vc.detail.title'})}</h1>}
         dataSource={userVcList}
         pagination={{
           total: vcTotal,
@@ -460,18 +460,18 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
               )
             }
           </FormItem>
-          <FormItem label="Confirm password" hasFeedback>
+          <FormItem label={formatMessage({id: 'users.detail.form.confirm.password'})} hasFeedback>
             {
               getFieldDecorator('confirmNewPassword', {
                 rules: [
                   {
                     required: true,
-                    message: 'Please confirm your password!',
+                    message: formatMessage({id: 'users.detail.form.confirm.password.required'}),
                   },
                   {
                     validator: async (rule, value, callback) => {
                       if (value && value !== form.getFieldValue('newPassword')) {
-                        callback('Two passwords that you enter is inconsistent!');
+                        callback(formatMessage({id: 'users.detail.form.confirm.password.error'}));
                       } else {
                         callback();
                       }

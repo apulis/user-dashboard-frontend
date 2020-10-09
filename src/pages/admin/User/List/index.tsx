@@ -189,7 +189,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
                 <Menu.Item onClick={async () => {await addToGroup(item.id);setCurrentHandleUserId(item.id)}} key="1">
                   { formatMessage({id: 'users.add.to.group'}) }
                 </Menu.Item>
-                {!adminUsers.includes(item.userName) && config.enableVC && <Menu.Item onClick={() => addVCForUser(item.id)} key="0">Related to VC</Menu.Item>}
+              {!adminUsers.includes(item.userName) && config.enableVC && <Menu.Item onClick={() => addVCForUser(item.id)} key="0">{formatMessage({ id: 'user.items.related.to.vc' })}</Menu.Item>}
                 {!adminUsers.includes(item.userName) && <Menu.Item onClick={() => {setCurrentHandleUserId(item.id);removeUser(item.id)}} key="2">
                 {formatMessage({id: 'users.delete'})}</Menu.Item>}
               </Menu>}
@@ -371,7 +371,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
         visible={addGroupModalVisible}
         onCancel={() => setAddGroupModalVisible(false)}
         onOk={onConfirmAddGroup}
-        title="Add to group"
+        title={formatMessage({id: 'user.items.add.to.group'})}
         width="65%"
       >
         {
@@ -400,7 +400,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       </Modal>
 
       {vcModal && <Modal
-        title="Related to VC"
+        title={formatMessage({id: 'user.items.related.to.vc'})}
         visible={vcModal}
         onOk={confirmAddVCToUser}
         onCancel={() => setVcModal(false)}
