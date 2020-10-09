@@ -12,4 +12,8 @@ export default {
   'account.info.not.bound': '未绑定',
   'account.info.to.bind': '去绑定',
   'account.info.signout': '注销',
+  'account.info.success.unbind.wechat': '成功解绑微信账户',
+  'account.info.error.unbind.wechat': '解绑微信账户失败',
+  'account.info.success.unbind.microsoft': '成功解绑微软账户',
+  'account.info.error.unbind.microsoft': '解绑微软账户失败',
 }

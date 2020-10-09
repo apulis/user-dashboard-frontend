@@ -11,4 +11,9 @@ export default {
   'account.info.not.bound': 'Not Bound',
   'account.info.to.bind': 'To Bind',
   'account.info.signout': 'Sign out',
+  'account.info.success.unbind.wechat': 'Success unbind wechat account!',
+  'account.info.error.unbind.wechat': 'Error unbind wechat account!',
+  'account.info.success.unbind.microsoft': 'Success unbind microsoft account!',
+  'account.info.error.unbind.microsoft': 'Error unbind microsoft account!',
+  
 }

@@ -19,9 +19,9 @@ const Info: React.FC<ConnectProps & ConnectState> = ({ user, dispatch, config })
   }, [])
   useEffect(() => {
     if (localStorage.bindType) {
-      if (currentUser.wechatId) {
+      if (localStorage.bindType === 'wechat' && currentUser.wechatId) {
         message.success(formatMessage({ id: 'account.info.message.success.bind.wechat' }));
-      } else if (currentUser.microsoftId) {
+      } else if (localStorage.bindType === 'microsoft' && currentUser.microsoftId) {
         message.success(formatMessage({ id: 'account.info.message.success.bind.microsoft' }));
       }
       delete localStorage.bindType;
@@ -53,24 +53,24 @@ const Info: React.FC<ConnectProps & ConnectState> = ({ user, dispatch, config })
   const unBindMicrosoft = async () => {
     const data = await unbindMicrosoft(id)
     if (data.success) {
-      message.success(`Success unBind microsoft account!`);
+      message.success(formatMessage({id: 'account.info.success.unbind.microsoft'}));
       dispatch({
         type: 'user/fetchCurrent',
       })
     } else {
-      message.error(`Error unBind microsoft account!`);
+      message.error(formatMessage({id: 'account.info.error.unbind.microsoft'}));
     }
   }
 
   const unBindWechat = async () => {
     const data = await unbindWechat(id)
     if (data.success) {
-      message.success(`Success unBind wechat account!`);
+      message.success(formatMessage({id: 'account.info.success.unbind.wechat'}));
       dispatch({
         type: 'user/fetchCurrent',
       })
     } else {
-      message.error(`Error unBind wechat account!`);
+      message.error(formatMessage({id: 'account.info.error.unbind.wechat'}));
     }
   }
   return (
