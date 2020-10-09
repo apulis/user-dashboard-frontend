@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'dva';
 import { Descriptions, message } from 'antd';
 import { ConnectState, ConnectProps } from '@/models/connect';
+import { formatMessage } from 'umi-plugin-react/locale';
 import { unbindMicrosoft, unbindWechat } from '@/services/unbind'
 
 const Info: React.FC<ConnectProps & ConnectState> = ({ user, dispatch, config }) => {
@@ -19,9 +20,9 @@ const Info: React.FC<ConnectProps & ConnectState> = ({ user, dispatch, config })
   useEffect(() => {
     if (localStorage.bindType) {
       if (currentUser.wechatId) {
-        message.success(`Success bind wechat account!`);
+        message.success(formatMessage({ id: 'account.info.message.success.bind.wechat' }));
       } else if (currentUser.microsoftId) {
-        message.success(`Success bind microsoft account!`);
+        message.success(formatMessage({ id: 'account.info.message.success.bind.microsoft' }));
       }
       delete localStorage.bindType;
     }
@@ -74,26 +75,43 @@ const Info: React.FC<ConnectProps & ConnectState> = ({ user, dispatch, config })
   }
   return (
     <>
-      <Descriptions title="Account Info" layout="vertical" bordered>
-        <Descriptions.Item label="User Id">{currentUser.id}</Descriptions.Item>
-        <Descriptions.Item label="Username">{currentUser.userName}</Descriptions.Item>
-        <Descriptions.Item label="Nickname">{currentUser.nickName || '-'}</Descriptions.Item>
-        <Descriptions.Item label="Current Role">{currentUser.currentRole.join(',')}</Descriptions.Item>
-        <Descriptions.Item label="Phone">{currentUser.phone || '-'}</Descriptions.Item>
-        <Descriptions.Item label="Email">{currentUser.email || '-'}</Descriptions.Item>
+      <Descriptions title={formatMessage({ id: 'account.info.title.account.info' })} layout="vertical" bordered>
+        <Descriptions.Item label={formatMessage({ id: 'account.info.userId' })}>{currentUser.id}</Descriptions.Item>
+        <Descriptions.Item label={formatMessage({ id: 'users.userName' })}>{currentUser.userName}</Descriptions.Item>
+        <Descriptions.Item label={formatMessage({ id: 'users.nickName' })}>{currentUser.nickName || '-'}</Descriptions.Item>
+        <Descriptions.Item label={formatMessage({ id: 'account.info.current.role' })}>{currentUser.currentRole.join(',')}</Descriptions.Item>
+        <Descriptions.Item label={formatMessage({ id: 'users.phone' })}>{currentUser.phone || '-'}</Descriptions.Item>
+        <Descriptions.Item label={formatMessage({ id: 'users.email' })}>{currentUser.email || '-'}</Descriptions.Item>
       </Descriptions>
-      <Descriptions title="Login Methods" layout="vertical" bordered style={{ marginTop: '35px' }}>
+      <Descriptions title={formatMessage({ id: 'account.info.login.methods' })} layout="vertical" bordered style={{ marginTop: '35px' }}>
         {
-          authMethods.includes('wechat') && <Descriptions.Item label="Wechat account">
+          authMethods.includes('wechat') && <Descriptions.Item label={formatMessage({ id: 'account.info.method.wechat.account' })}>
             {
-              currentUser.wechatId ? <><span>Bound status</span><a onClick={unBindWechat} style={{ marginLeft: '15px' }}>unBind</a></> : <><span>Not Bound status</span><a onClick={bindWechat} style={{ marginLeft: '15px' }}>To Bind</a></>
+              currentUser.wechatId ?
+                <>
+                  <span>Bound status</span>
+                  <a onClick={unBindWechat} style={{ marginLeft: '15px' }}>unBind</a>
+                </>
+                :
+                <>
+                  <span>{formatMessage({ id: 'account.info.not.bound' })}</span>
+                  <a onClick={bindWechat} style={{ marginLeft: '15px' }}>{formatMessage({ id: 'account.info.to.bind' })}</a>
+                </>
             }
           </Descriptions.Item>
         }
         {
-          authMethods.includes('microsoft') && <Descriptions.Item label="Microsoft account">
+          authMethods.includes('microsoft') && <Descriptions.Item label={formatMessage({ id: 'account.info.method.microsoft.account' })}>
             {
-              currentUser.microsoftId ? <><span>Bound status</span><a onClick={unBindMicrosoft} style={{ marginLeft: '15px' }}>unBind</a></> : <><span>Not Bound status</span><a onClick={bindMicrosoft} style={{ marginLeft: '15px' }}>To Bind</a></>
+              currentUser.microsoftId ?
+                <>
+                  <span>Bound status</span>
+                  <a onClick={unBindMicrosoft} style={{ marginLeft: '15px' }}>unBind
+              </a>
+                </> : <>
+                  <span>{formatMessage({ id: 'account.info.not.bound' })}</span>
+                  <a onClick={bindMicrosoft} style={{ marginLeft: '15px' }}>{formatMessage({ id: 'account.info.to.bind' })}</a>
+                </>
             }
           </Descriptions.Item>
         }

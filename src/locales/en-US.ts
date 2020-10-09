@@ -4,6 +4,14 @@ import menu from './en-US/menu';
 import pwa from './en-US/pwa';
 import settingDrawer from './en-US/settingDrawer';
 import settings from './en-US/settings';
+import index from './en-US/index';
+import users from './en-US/users';
+import groups from './en-US/groups';
+import roles from './en-US/roles';
+import account from './en-US/account';
+import common from './en-US/common';
+import request from './en-US/request';
+import validates from './en-US/validates';
 
 export default {
   'navBar.lang': 'Languages',
@@ -19,4 +27,12 @@ export default {
   ...settings,
   ...pwa,
   ...component,
+  ...index,
+  ...users,
+  ...groups,
+  ...roles,
+  ...account,
+  ...common,
+  ...request,
+  ...validates,
 };

@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import { Form } from '@ant-design/compatible';
 import { Checkbox, Input, Row, Col } from 'antd';
 import { debounce } from 'lodash';
+import { formatMessage } from 'umi-plugin-react/locale';
 
 import { FormComponentProps } from '@ant-design/compatible/lib/form';
 
@@ -70,9 +71,9 @@ const SelectGroup: React.FC<ISearchGroupProps & FormComponentProps & ConnectProp
         <Col span={11}>
           <div className={styles.container}>
             <div className="ant-modal-title">
-              Select Groups ( total: {currentGroupList.length} )
+              {formatMessage({id: 'component.select.group.select.groups'})} ( {formatMessage({id: 'component.select.group.total'})}: {currentGroupList.length} )
             </div>
-            <Search placeholder="search groups" onChange={(e) => onSearch(e.target.value)} style={{marginTop: '10px'}} />
+            <Search placeholder={formatMessage({id: 'component.select.group.search.groups'})} onChange={(e) => onSearch(e.target.value)} style={{marginTop: '10px'}} />
             <Checkbox.Group className={styles.checkbox} defaultValue={defaultSelected} onChange={onCheckboxSelect} style={{marginTop: '10px'}}>
               {
                 currentGroupList.map((g) => (
@@ -82,7 +83,9 @@ const SelectGroup: React.FC<ISearchGroupProps & FormComponentProps & ConnectProp
                 ))
               }
               {
-                currentGroupList.length === 0 && <div>No availble groups</div>
+                currentGroupList.length === 0 && <div>
+                  {formatMessage({id: 'component.select.group.no.availble'})}
+                </div>
               }
             </Checkbox.Group>
           </div>
@@ -90,7 +93,7 @@ const SelectGroup: React.FC<ISearchGroupProps & FormComponentProps & ConnectProp
         <Col span={11} offset={2}>
           <div className={styles.container}>
             <div className="ant-modal-title">
-              Selected: {}
+              {formatMessage({id: 'component.select.group.selected'})} 
             </div>
             {
               selectedGroup.map((g) => (

@@ -1,4 +1,4 @@
-import { Alert, Icon, message, Form } from 'antd';
+import { Alert, Icon, message, Form, Checkbox } from 'antd';
 import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
 import React, { Component } from 'react';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
@@ -7,16 +7,15 @@ import { FormComponentProps } from 'antd/es/form';
 import { Link, router } from 'umi';
 import { connect } from 'dva';
 import { StateType } from '@/models/login';
-import LoginComponents from './components/Login';
-import styles from './style.less';
 import { SignUpParamsType, signUp } from '@/services/register';
 import { ConnectState } from '@/models/connect';
 import IconMicrosoft from '@/components/Icon/IconMicrosoft';
 import { CurrentUser } from '@/models/user';
 import { textPattern, userNamePattern } from '@/utils/validates';
 import { userLogout } from '@/services/login';
-import { Checkbox } from 'antd';
 import { ConfigStateType } from '@/models/config';
+import LoginComponents from './components/Login';
+import styles from './style.less';
 
 const { Tab, UserName, Password, NickName, Submit } = LoginComponents;
 
@@ -74,13 +73,11 @@ class Login extends Component<RegisterProps & LoginState & ConnectState & FormCo
     });
   };
 
-  
+
 
   handleSubmit = async (err: unknown, values: SignUpParamsType) => {
-    // 单独校验是否同意用户手册
-    this.props.form.validateFields(['isAgree'], async(error) => {
-      if(!error){
-        // 校验成功，提交表单
+    this.props.form.validateFields(['isAgree'], async (error) => {
+      if (!error) {
         if (!err) {
           const { userName, password, nickName } = values;
           const submitData: SignUpParamsType = { userName, password, nickName };
@@ -94,13 +91,13 @@ class Login extends Component<RegisterProps & LoginState & ConnectState & FormCo
             // 防止绑定后第二次再去绑定
             await userLogout()
             delete localStorage.token;
-            this.props.dispatch({
-              type: 'user/fetchCurrent',
-            })
-            message.success('Success Create Account');
+            // this.props.dispatch({
+            //   type: 'user/fetchCurrent',
+            // })
+            message.success(formatMessage({ id: 'user-register.register.success.create.account' }));
             router.push('/user/login');
           } else if (res.duplicate) {
-            message.error(`Username ${userName} is in use, please try another`);
+            message.error(`${formatMessage({ id: 'users.userName' })} ${userName} ${formatMessage({ id: 'user-register.register.in.use' })}`);
           }
         }
       }
@@ -138,7 +135,7 @@ class Login extends Component<RegisterProps & LoginState & ConnectState & FormCo
         <LoginComponents
           defaultActiveKey={type}
           onTabChange={this.onTabChange}
-          onSubmit={(err, values) => {this.handleSubmit(err, values)}}
+          onSubmit={(err, values) => { this.handleSubmit(err, values) }}
           onCreate={(form?: FormComponentProps['form']) => {
             this.loginForm = form;
           }}
@@ -148,24 +145,24 @@ class Login extends Component<RegisterProps & LoginState & ConnectState & FormCo
               loginType === 'account' &&
               !submitting &&
               this.renderMessage(
-                formatMessage({ id: 'user-login.login.message-invalid-credentials' }),
+                formatMessage({ id: 'user-register.login.message-invalid-credentials' }),
               )}
             <UserName
               name="userName"
-              placeholder={`${formatMessage({ id: 'user-login.login.userName' })}`}
+              placeholder={`${formatMessage({ id: 'user-register.login.userName' })}`}
               defaultValue={defaultUserName}
               rules={[
                 {
                   required: true,
-                  message: formatMessage({ id: 'user-login.userName.required' }),
+                  message: formatMessage({ id: 'users.add.form.userName.required' }),
                 },
                 {
                   min: 4,
-                  message: 'Need at lease 4 letters'
+                  message: formatMessage({ id: 'users.add.form.userName.min' })
                 },
                 {
                   max: 20,
-                  message: 'Cannot be longer than 20 characters'
+                  message: formatMessage({ id: 'users.add.form.userName.max' })
                 },
                 userNamePattern
               ]}
@@ -182,26 +179,26 @@ class Login extends Component<RegisterProps & LoginState & ConnectState & FormCo
                 },
                 {
                   max: 20,
-                  message: 'Cannot be longer than 20 characters'
+                  message: formatMessage({ id: 'users.add.form.nickName.max' })
                 },
                 textPattern
               ]}
             />
             <Password
               name="password"
-              placeholder={`${formatMessage({ id: 'user-login.login.password' })}`}
+              placeholder={`${formatMessage({ id: 'user-register.login.password' })}`}
               rules={[
                 {
                   required: true,
-                  message: formatMessage({ id: 'user-login.password.required' }),
+                  message: formatMessage({ id: 'user-register.password.required' }),
                 },
                 {
                   min: 6,
-                  message: 'Need at lease 6 letters'
+                  message: formatMessage({ id: 'users.add.form.password.min' })
                 },
                 {
                   max: 20,
-                  message: 'Cannot be longer than 20 characters'
+                  message: formatMessage({ id: 'users.add.form.password.max' })
                 }
               ]}
               onPressEnter={e => {
@@ -213,7 +210,7 @@ class Login extends Component<RegisterProps & LoginState & ConnectState & FormCo
             />
             <Password
               name="password2"
-              placeholder={`${formatMessage({ id: 'user-login.login.password2' })}`}
+              placeholder={`${formatMessage({ id: 'user-register.register.password2' })}`}
               rules={[
                 {
                   validator: async (rule, value, callback) => {
@@ -225,7 +222,7 @@ class Login extends Component<RegisterProps & LoginState & ConnectState & FormCo
                     const values = await this.loginForm?.getFieldsValue();
                     if (!values) return;
                     if (values.password !== values.password2) {
-                      callback('Password inconsistent');
+                      callback(formatMessage({ id: 'user-register.register.password2.identical' }));
                     }
 
                   }
@@ -244,13 +241,13 @@ class Login extends Component<RegisterProps & LoginState & ConnectState & FormCo
                 rules: [
                   {
                     validator: async (rule, value, callback) => {
-                    if (!value) {
-                      callback('please agree the protocol before registering!');
-                    } else {
-                      callback();
+                      if (!value) {
+                        callback('please agree the protocol before registering!');
+                      } else {
+                        callback();
+                      }
                     }
-                  }
-                },
+                  },
                 ],
               })(
                 <Checkbox>
@@ -260,7 +257,7 @@ class Login extends Component<RegisterProps & LoginState & ConnectState & FormCo
             </Form.Item>
           </Tab>
           {
-            (currentUser && Object.keys(currentUser).length > 0 && !currentUser.userName) ? <Alert message={`You have joined, Now need to register for ${config.platformName}`} type="success" /> : <></>
+            (currentUser && Object.keys(currentUser).length > 0 && !currentUser.userName) ? <Alert message={`${formatMessage({ id: 'user-register.register.password.need.register' })}${formatMessage({ id: 'common.platform.name' })}`} type="success" /> : <></>
           }
           <Submit loading={submitting}>
             <FormattedMessage id="user-register.register.register" />

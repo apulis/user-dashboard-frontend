@@ -5,4 +5,9 @@ module.exports = {
     page: true,
     REACT_APP_ENV: true,
   },
+  rules: {
+    "no-console": "off",
+    "no-shadow": "off",
+    "prefer-destructuring": "off"
+  }
 };

@@ -5,6 +5,7 @@ import { PageHeader, Table, Input, message, Modal } from 'antd';
 import { router } from 'umi';
 import { useParams } from 'react-router-dom';
 import { FormComponentProps } from 'antd/lib/form';
+import { formatMessage } from 'umi-plugin-react/locale';
 import { ColumnProps } from 'antd/es/table';
 import {
   getUserById, resetPassword as apiResetPassword, editUserInfo, removeUserRole, getUserRoleInfo, getUserGroups,
@@ -20,11 +21,10 @@ import styles from './index.less';
 
 const FormItem = Form.Item;
 
-const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form, users, groups, config, user }) => {
+const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form, config, user }) => {
   const { id } = useParams();
   const { currentUser } = user;
   const { adminUsers } = config;
-  debugger
   const { getFieldDecorator, validateFields } = form;
   const userId = Number(id);
   const [userInfo, setUserInfo] = useState<IUsers>({ userName: '', nickName: '', id: 0 });
@@ -36,10 +36,8 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
   const [userVcList, setUserVcList] = useState([]);
   const [vcTotal, setVcTotal] = useState(0);
   const fetchUserById = async () => {
-    debugger
     if (isNaN(userId)) return;
     const res = await getUserById(userId);
-    debugger
     if (res.success) {
       setUserInfo(res.user);
     }
@@ -64,7 +62,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
   const saveEditing = () => {
     validateFields(async (err, values) => {
       if (err) return;
-      const cancel = message.loading('Submiting');
+      const cancel = message.loading(formatMessage({id: 'users.message.submitting'}));
       for (const key in values) {
         if (!values[key]) {
           values[key] = '';
@@ -73,7 +71,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
       const res = await editUserInfo(userId, values);
       cancel();
       if (res.success) {
-        message.success('success edit');
+        message.success(formatMessage({id: 'users.message.edit.role.success'}));
         fetchUserById();
       }
       setIsEditing(false);
@@ -81,26 +79,26 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
   }
   const removeRoleForUser = (roleId: number, roleName: string) => {
     Modal.confirm({
-      title: `Will delete ${roleName} for current user`,
+      title: `${formatMessage({id: 'users.detail.remove.title1'})} ${roleName} ${formatMessage({id: 'users.detail.remove.title2'})}`,
       async onOk() {
         const res = await removeUserRole(userId, roleId);
         if (res.success) {
           fetchUserById();
           fetchUserRoles();
-          message.success(`Success delete ${roleName} `)
+          message.success(`${formatMessage({id: 'users.detail.message.success.delete'})} ${roleName} `)
         }
       }
     })
   }
   const removeGroupForUser = (groupId: number, groupName: string) => {
     Modal.confirm({
-      title: `Will delete ${groupName} for current user`,
+      title: `${formatMessage({id: 'users.detail.remove.title1'})} ${groupName} ${formatMessage({id: 'users.detail.remove.title2'})}`,
       async onOk() {
         const res = await removeGroupUser(groupId, userId);
         if (res.success) {
           fetchUserById();
           fetchUserGroups();
-          message.success(`Success delete ${groupName} `)
+          message.success(`${formatMessage({id: 'users.detail.message.success.delete'})} ${groupName} `)
         }
       }
     })
@@ -140,7 +138,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
       const { newPassword } = result;
       const res = await apiResetPassword(id, newPassword);
       if (res.success) {
-        message.success('Success reset password');
+        message.success(formatMessage({id: 'users.detail.message.success.reset.password'}));
         setModalVisible(false);
       }
     });
@@ -148,7 +146,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
 
   const userInfoColumns: ColumnProps<IUsers>[] = [
     {
-      title: 'Nickname',
+      title: formatMessage({id: 'users.nickName'}),
       render(_text, item) {
         if (isEditing) {
           return (
@@ -157,8 +155,8 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
                 getFieldDecorator('nickName', {
                   initialValue: item.nickName,
                   rules: [
-                    { required: true, message: 'Nickname is required' },
-                    { max: 20, message: 'Nickname cannot be longer than 20 characters' },
+                    { required: true, message: formatMessage({id: 'users.add.form.nickName.required'}) },
+                    { max: 20, message: formatMessage({id: 'users.add.form.nickName.max'}) },
                     textPattern
                   ]
                 })(
@@ -175,7 +173,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
       }
     },
     {
-      title: 'Username',
+      title: formatMessage({id: 'users.userName'}),
       render(_text, item) {
         if (isEditing) {
           return (
@@ -183,8 +181,8 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
               {
                 getFieldDecorator('userName', {
                   initialValue: item.userName,
-                  rules: [userNamePattern, { min: 4, message: 'Nickname need at least 4 characters' },
-                    { max: 20, message: 'Nickname cannot be longer than 20 characters' }]
+                  rules: [userNamePattern, { min: 4, message: formatMessage({id: 'users.add.form.userName.min'}) },
+                  { max: 20, message: formatMessage({id: 'users.add.form.userName.max'}) }]
                 })(
                   <Input disabled />
                 )
@@ -198,7 +196,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
       }
     },
     {
-      title: 'Phone',
+      title: formatMessage({id: 'users.phone'}),
       render(_text, item) {
         if (isEditing) {
           return (
@@ -221,7 +219,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
       }
     },
     {
-      title: 'Email',
+      title: formatMessage({id: 'users.email'}),
       render(_text, item) {
         if (isEditing) {
           return (
@@ -230,7 +228,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
                 getFieldDecorator('email', {
                   initialValue: item.email || '',
                   rules: [
-                    { pattern: emailReg, message: 'please check email format' }
+                    { pattern: emailReg, message: formatMessage({id: 'users.add.form.email.pattern'})}
                   ]
                 })(
                   <Input />
@@ -246,7 +244,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
       }
     },
     {
-      title: 'Description',
+      title: formatMessage({id: 'users.description'}),
       render(_text, item) {
         if (isEditing) {
           return (
@@ -265,7 +263,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
       }
     },
     {
-      title: 'Action',
+      title: formatMessage({id: 'users.detail.user.action'}),
       align: 'center',
       render() {
         if (adminUsers.includes(userInfo.userName)) {
@@ -274,19 +272,24 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
         if (isEditing) {
           return (
             <>
-              <a onClick={saveEditing} style={{ marginRight: 10 }}>SAVE</a>
-              <a onClick={() => setIsEditing(false)}>CANCEL</a>
+              <a onClick={saveEditing} style={{ marginRight: 10 }}>
+                {formatMessage({id: 'users.detail.save'})}
+              </a>
+              <a onClick={() => setIsEditing(false)}>
+                {formatMessage({id: 'users.detail.cancel'})}
+              </a>
             </>
           )
         }
         const currentRole = currentUser?.currentRole;
         return (
           <div>
-            <a style={{ marginRight: '15px' }} onClick={editCurrentUser}>Edit</a>
-            {
-              currentRole.includes('System Admin') &&
-              <a onClick={resetPassword}>Reset password</a>
-            }
+            <a style={{marginRight: '15px'}} onClick={editCurrentUser}>
+              {formatMessage({id: 'users.detail.edit'})}
+            </a>
+            <a onClick={resetPassword}>
+              {formatMessage({id: 'users.detail.reset.password'})}
+            </a>
           </div>
         )
       }
@@ -295,31 +298,33 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
 
   const userRoleColumns: ColumnProps<IRoleListItem>[] = [
     {
-      title: 'Role Name',
+      title: formatMessage({id: 'users.detail.role.name'}),
       dataIndex: 'name',
       key: 'name',
     },
     {
-      title: 'Description',
+      title: formatMessage({id: 'users.detail.role.description'}),
       dataIndex: 'note',
       key: 'note',
     },
     {
-      title: 'Role Type',
+      title: formatMessage({id: 'users.detail.role.type'}),
       render(_text, item) {
         return (
-          <div>{item.isPreset ? 'Preset Role' : 'Custom Role'}</div>
+        <div>{item.isPreset ? formatMessage({id: 'users.detail.role.preset'}) : formatMessage({id: 'users.detail.role.custom'})}</div>
         )
       }
     },
     {
-      title: 'Action',
+      title: formatMessage({id: 'users.detail.role.action'}),
       render(_text, item) {
         if (adminUsers.includes(userInfo.userName)) {
           return <div>-</div>;
         }
         return (
-          <a onClick={() => removeRoleForUser(item.id, item.name)}>Remove</a>
+          <a onClick={() => removeRoleForUser(item.id, item.name)}>
+            {formatMessage({id: 'users.detail.role.remove'})}
+          </a>
         )
       }
     },
@@ -327,24 +332,36 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
 
   const userGroupColumns: ColumnProps<IGroup>[] = [
     {
-      title: 'Group Name',
+      title: formatMessage({id: 'users.detail.group.name'}),
       dataIndex: 'name',
       key: 'name',
     },
     {
-      title: 'Description',
+      title: formatMessage({id: 'users.detail.group.note'}),
       dataIndex: 'note',
       key: 'note',
     },
     {
-      title: 'Action',
+      title: formatMessage({id: 'users.detail.group.action'}),
       render(_text, item) {
         return (
-          <a onClick={() => removeGroupForUser(item.id, item.name)}>Remove</a>
+          <a onClick={() => removeGroupForUser(item.id, item.name)}>
+            {formatMessage({id: 'users.detail.group.remove'})}
+          </a>
         )
       }
     }
   ]
+
+  const getDeviceTypeContent = (v: string, isNum?: boolean, isMetadata?: boolean) => {
+    const val = JSON.parse(v);
+    const keys = Object.keys(val);
+    let content = null;
+    if (keys.length) {
+      isNum ? content = keys.map(i => <p>{isMetadata ? val[i].user_quota : val[i]}</p>) : content = keys.map(i => <p>{i}</p>)
+    }
+    return content;
+  }
 
   const vcListColumns = [
     {
@@ -368,15 +385,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
     }
   ]
 
-  const getDeviceTypeContent = (v: string, isNum?: boolean, isMetadata?: boolean) => {
-    const val = JSON.parse(v);
-    const keys = Object.keys(val);
-    let content = null;
-    if (keys.length) {
-      isNum ? content = keys.map(i => <p>{isMetadata ? val[i].user_quota : val[i]}</p>) : content = keys.map(i => <p>{i}</p>)
-    }
-    return content;
-  }
+  
 
   const pageParmasChange = (page: any, count: any) => {
     setPageParmas({ pageNum: page, pageSize: count });
@@ -387,13 +396,13 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
       <PageHeader
         className="site-page-header"
         onBack={() => router.push('/admin/user/list')}
-        title="User Detail"
+        title={formatMessage({id: 'users.detail.title'})}
         subTitle=""
       />
 
       <Table
         columns={userInfoColumns}
-        title={() => (<h1>User Info</h1>)}
+        title={() => (<h1>{formatMessage({id: 'users.detail.title.userInfo'})}</h1>)}
         dataSource={[userInfo]}
         pagination={false}
       />
@@ -412,13 +421,13 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
 
       <Table
         columns={userRoleColumns}
-        title={() => <h1>User Roles</h1>}
+        title={() => <h1>{formatMessage({id: 'users.detail.title.role'})}</h1>}
         dataSource={roleInfo}
       />
 
       <Table
         columns={userGroupColumns}
-        title={() => <h1>User Groups</h1>}
+        title={() => <h1>{formatMessage({id: 'users.detail.title.group'})}</h1>}
         dataSource={groupInfo}
       />
 
@@ -429,21 +438,21 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
           onOk={confirmEditPassword}
 
         >
-          <FormItem label="New password">
+          <FormItem label={formatMessage({id: 'users.detail.form.newPassword'})}>
             {
               getFieldDecorator('newPassword', {
                 rules: [
                   {
                     required: true,
-                    message: 'New password is required',
+                    message: formatMessage({id: 'users.detail.form.newPassword.required'}),
                   },
                   {
                     min: 6,
-                    message: 'New password must be at least 6 characters',
+                    message: formatMessage({id: 'users.detail.form.newPassword.min'}),
                   },
                   {
                     max: 20,
-                    message: 'New password cannot be longer than 20 characters',
+                    message: formatMessage({id: 'users.detail.form.newPassword.max'}),
                   }
                 ]
               })(

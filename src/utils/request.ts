@@ -5,29 +5,35 @@
 import { extend } from 'umi-request';
 import { notification } from 'antd';
 import { router } from 'umi';
+import { formatMessage } from 'umi-plugin-react/locale';
 
-const codeMessage = {
-  200: 'The server successfully returned the requested data',
-  201: 'New or modified data was successful.',
-  202: 'A request has been queued in the background (asynchronous task).',
-  204: 'Data deleted successfully.',
-  400: 'There was an error in the request, and the server did not create or modify data.',
-  401: 'Does not have permission.',
-  403: 'You are authorized, but access is prohibited.',
-  404: 'The request was made for a record that does not exist, and the server did not operate',
-  406: 'The requested type is not available.',
-  410: 'The requested resource is permanently deleted and is no longer available.',
-  422: 'When creating an object, a validation error occurred.',
-  500: 'A server error occurred. Please check the server.',
-  502: 'Gateway error.',
-  503: 'Service is unavailable, server is temporarily overloaded or maintained。',
-  504: 'Gateway timed out.',
-};
+let codeMessage: undefined | {[props: string]: string} = undefined;
+
+console.log('codeMessage', codeMessage)
 
 /**
  * 异常处理程序
  */
 const errorHandler = (error: { response: Response }): Response => {
+  if (!codeMessage) {
+    codeMessage = {
+      200: formatMessage({id: 'request.code.200'}),
+      201: formatMessage({id: 'request.code.201'}),
+      202: formatMessage({id: 'request.code.202'}),
+      204: formatMessage({id: 'request.code.204'}),
+      400: formatMessage({id: 'request.code.400'}),
+      401: formatMessage({id: 'request.code.401'}),
+      403: formatMessage({id: 'request.code.403'}),
+      404: formatMessage({id: 'request.code.404'}),
+      406: formatMessage({id: 'request.code.406'}),
+      410: formatMessage({id: 'request.code.410'}),
+      422: formatMessage({id: 'request.code.422'}),
+      500: formatMessage({id: 'request.code.500'}),
+      502: formatMessage({id: 'request.code.502'}),
+      503: formatMessage({id: 'request.code.503'}),
+      504: formatMessage({id: 'request.code.504'}),
+    }
+  }
   const { response } = error;
   if (response && response.status) {
     const errorText = codeMessage[response.status] || response.statusText;
@@ -57,8 +63,8 @@ const errorHandler = (error: { response: Response }): Response => {
     
   } else if (!response) {
     notification.error({
-      description: 'Network anomalies, please try again later',
-      message: 'Network anomalies',
+      description: formatMessage({id: 'request.error.desc'}),
+      message: formatMessage({id: 'request.error.message'}),
     });
   }
   return response || {};

@@ -1,32 +1,39 @@
 import { GlobalOutlined } from '@ant-design/icons';
 import { Menu } from 'antd';
-import { formatMessage, getLocale, setLocale } from 'umi-plugin-react/locale';
+import { formatMessage } from 'umi-plugin-react/locale';
 
 import { ClickParam } from 'antd/es/menu';
 import React from 'react';
 import classNames from 'classnames';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
+import { setI18n, getI18n } from '@/utils/utils';
+import { ConnectProps } from '@/models/connect';
+import { connect } from 'dva';
 
 interface SelectLangProps {
   className?: string;
 }
-const SelectLang: React.FC<SelectLangProps> = props => {
+const SelectLang: React.FC<SelectLangProps & ConnectProps> = props => {
   const { className } = props;
-  const selectedLang = getLocale();
-  const changeLang = ({ key }: ClickParam): void => setLocale(key);
+  const selectedLang = getI18n();
+  const changeLang = ({ key }: ClickParam): void => {
+    setI18n(key);
+    props.dispatch({
+      type: 'config/setLang',
+      payload: {
+        language: key
+      }
+    })
+  };
   const locales = ['zh-CN', 'en-US'];
   const languageLabels = {
     'zh-CN': '简体中文',
-    'zh-TW': '繁体中文',
     'en-US': 'English',
-    'pt-BR': 'Português',
   };
   const languageIcons = {
     'zh-CN': '🇨🇳',
-    'zh-TW': '🇭🇰',
     'en-US': '🇺🇸',
-    'pt-BR': '🇧🇷',
   };
   const langMenu = (
     <Menu className={styles.menu} selectedKeys={[selectedLang]} onClick={changeLang}>
@@ -49,4 +56,4 @@ const SelectLang: React.FC<SelectLangProps> = props => {
   );
 };
 
-export default SelectLang;
+export default connect()(SelectLang);

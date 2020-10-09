@@ -120,11 +120,11 @@ class Login extends Component<LoginProps & LoginState & ConnectState> {
                 },
                 {
                   min: 4,
-                  message: 'Need at lease 4 letters'
+                  message: formatMessage({id: 'users.add.form.userName.min'})
                 },
                 {
                   max: 20,
-                  message: 'Cannot be longer than 20 characters'
+                  message: formatMessage({id: 'users.add.form.userName.max'})
                 },
                 userNamePattern
               ]}
@@ -139,11 +139,11 @@ class Login extends Component<LoginProps & LoginState & ConnectState> {
                 },
                 {
                   min: 6,
-                  message: 'Need at lease 6 letters'
+                  message: formatMessage({id: 'users.add.form.password.min'})
                 },
                 {
                   max: 20,
-                  message: 'Cannot be longer than 20 characters'
+                  message: formatMessage({id: 'users.add.form.password.max'})
                 }
               ]}
               onPressEnter={e => {

@@ -1,11 +1,13 @@
 import { Reducer } from 'redux';
 import { Effect } from 'dva';
 
+import { setCookieLang } from '@/utils/utils';
 import { getOAuth2Methods, getAdminUsers, getPlatformConfig } from '@/services/config';
 
 export interface ConfigStateType {
   authMethods: string[];
   adminUsers: string[];
+  language: string;
   platformName: string;
   enableVC: boolean;
   i8n: string | boolean;
@@ -17,10 +19,12 @@ export interface ConfigModelType {
   effects: {
     fetchAuthMethods: Effect;
     fetchAdminUsers: Effect;
+    setLang: Effect;
     fetchPlatformConfig: Effect;
   };
   reducers: {
     save: Reducer;
+    saveLang: Reducer;
   };
 }
 
@@ -29,6 +33,7 @@ const ConfigModel: ConfigModelType = {
   state: {
     authMethods: [],
     adminUsers: [],
+    language: '',
     platformName: '',
     enableVC: true,
     i8n: true,
@@ -56,6 +61,15 @@ const ConfigModel: ConfigModelType = {
         })
       }
     },
+    * setLang({ payload }, { call, put }) {
+      yield call(setCookieLang, payload.language);
+      yield put({
+        type: 'saveLang',
+        payload: {
+          language: payload.language,
+        }
+      })
+    },
     * fetchPlatformConfig({ payload }, { call, put }) {
       const res = yield call(getPlatformConfig);
       if (res.success) {
@@ -70,7 +84,7 @@ const ConfigModel: ConfigModelType = {
       }
     }
   },
-  
+
   reducers: {
     save(state = {}, { payload }) {
       return {
@@ -78,6 +92,12 @@ const ConfigModel: ConfigModelType = {
         ...payload,
       }
     },
+    saveLang(state, { payload }) {
+      return {
+        ...state,
+        language: payload.language
+      }
+    }
   },
 };
 export default ConfigModel;

@@ -6,12 +6,12 @@ import { Row, Col, message } from 'antd';
 import { formatMessage } from 'umi-plugin-react/locale';
 
 import { ConnectProps, ConnectState } from '@/models/connect';
-import styles from './UserLayout.less';
 import image1 from '@/assets/image1.jpeg';
 import image2 from '@/assets/image2.jpeg';
 import image3 from '@/assets/image3.jpeg';
-import { PageProps } from './SecurityLayout';
 import SelectLang from '@/components/SelectLang';
+import { PageProps } from './SecurityLayout';
+import styles from './UserLayout.less';
 
 export interface UserLayoutProps extends ConnectProps {
   breadcrumbNameMap: { [path: string]: MenuDataItem };
@@ -53,12 +53,12 @@ const UserLayout: React.FC<UserLayoutProps & PageProps & ConnectState> = props =
     }
     if (error) {
       message.error(error);
-      let redirectPath = location?.pathname;
+      const redirectPath = location?.pathname;
       const routerBase = window.routerBase;
       if (routerBase.includes(redirectPath) || redirectPath?.includes(routerBase)) {
-        history && history.push('/');
+        history.push('/');
       } else {
-        history && history.push(location!.pathname);
+        history.push(location!.pathname);
       }
     }
   }, [])

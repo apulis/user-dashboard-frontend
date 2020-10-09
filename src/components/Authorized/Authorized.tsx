@@ -1,7 +1,8 @@
 import React from 'react';
 import { Result } from 'antd';
-import check, { IAuthorityType } from './CheckPermissions';
+import { formatMessage } from 'umi-plugin-react/locale';
 
+import check, { IAuthorityType } from './CheckPermissions';
 import AuthorizedRoute from './AuthorizedRoute';
 import Secured from './Secured';
 
@@ -23,7 +24,7 @@ const Authorized: React.FunctionComponent<AuthorizedProps> = ({
     <Result
       status="403"
       title=""
-      subTitle={<><p>Sorry, you are not authorized to access this page.</p><p>Please contact the administrator to add permissions</p></>}
+      subTitle={<><p>{formatMessage({id: 'common.page.403.title1'})}</p><p>{formatMessage({id: 'common.page.403.title2'})}</p></>}
     />
   ),
 }) => {

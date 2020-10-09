@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Table, Input, Pagination, message, Modal, Dropdown, Menu } from 'antd';
+import { Button, Input, message, Modal, Pagination, Table } from 'antd';
 import { Form } from '@ant-design/compatible';
 import { connect } from 'dva';
-import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { ConnectState, ConnectProps } from '@/models/connect';
 import { FormComponentProps } from '@ant-design/compatible/es/form';
+import { ColumnProps } from 'antd/es/table';
+import { formatMessage } from 'umi-plugin-react/locale';
+
+import { addRoleToGroups, addRoleToUsers, getRoleGroup, removeRoles, fetchUsersForRole  } from '@/services/roles';
+import { IRoleListItem } from '@/models/roles';
+import { PageHeaderWrapper } from '@ant-design/pro-layout';
+
 import styles from './index.less';
 import { Link } from 'umi';
-import { ColumnProps } from 'antd/es/table';
 import SelectGroup from '@/components/Relate/SelectGroup';
-import SelectUser from "@/components/Relate/SelectUser";
-import { addRoleToGroups, addRoleToUsers } from '@/services/roles';
-import { getRoleGroup } from '@/services/roles';
-import { removeRoles, fetchUsersForRole } from '@/services/roles';
-import { IRoleListItem } from '@/models/roles';
-import { DownOutlined } from '@ant-design/icons';
+import SelectUser from '@/components/Relate/SelectUser';
 
-const { Search } = Input;
+const { Search } = Input;  
 
 const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }) => {
   const [selectRowKeys, setSelectRowKeys] = useState<string[] | number[]>([]);
@@ -31,6 +31,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
   const [selectedRoleGroup, setSelectedRoleGroup] = useState<number[]>([]);
   const [pageCurrent, setPageCurrent] = useState<number>(1);
   const [selectedRoleUser, setSelectedRoleUser] = useState<number[]>([]);
+
   const addRoleToUser = async (roleId: number) => {
     const res = await fetchUsersForRole(roleId);
     if (res.success === true) {
@@ -39,59 +40,71 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
     setCurrentHandleRoleId(roleId);
     setAddUserModalVisible(true);
   }
+
+  const fetchRoleGroups = async (roleId: number) => {
+    const res = await getRoleGroup(roleId);
+    if (res.success) {
+      const { list } = res;
+      await setSelectedRoleGroup(list);
+    }
+  }
+
   const addRoleToGroup = async (roleId: number) => {
     setSelectedRoleGroup([]);
     await fetchRoleGroups(roleId);
     setCurrentHandleRoleId(roleId);
     setAddGroupModalVisible(true);
   }
+
   const clearSelect = () => {
     setSelectRowKeys([]);
     setSelectRows([]);
   }
+
   const { list: groupList } = groups;
   const columns: ColumnProps<IRoleListItem>[] = [
     {
-      title: 'Role Name',
-      render: item => <Link to={"/admin/role/detail/" + item.id}>{item.name}</Link>
+      title: formatMessage({id: 'roles.list.name'}),
+      dataIndex: 'name',
+      key: 'name',   
     },
     {
-      title: 'Description',
+      title: formatMessage({id: 'roles.list.description'}),
       dataIndex: 'note',
       key: 'note',   
     },
     {
-      title: 'Type',
+      title: formatMessage({id: 'roles.list.type'}),
       dataIndex: 'type',
       align: 'center',
       render(_text, item) {
         return (
-          <div>{item.isPreset ? 'Preset Role' : 'Custom Role'}</div>
+          <div>{item.isPreset ? formatMessage({id: 'roles.list.type.preset'}) : formatMessage({id: 'roles.list.type.custom'})}</div>
         )
       } 
     },
     {
-      title: 'Action',
+      title: formatMessage({id: 'roles.list.action'}),
       align: 'center',
       width: '320px',
       render(_text, item) {
         return (
           <div style={{display: 'flex', justifyContent: 'space-around'}}>
-            <Dropdown
-              overlay={
-              <Menu>
-                <Menu.Item onClick={() => addRoleToUser(item.id)} key="1">Related To User</Menu.Item>
-                <Menu.Item onClick={() => addRoleToGroup(item.id)} key="2">Related To Group</Menu.Item>
-                {item.isPreset === 0 && <Menu.Item onClick={() => removeCurrentSelectedRole(item.id)} key="3">Delete</Menu.Item>}
-              </Menu>}
-            >
-              <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>More <DownOutlined /></a>
-            </Dropdown>
+            <a onClick={() => addRoleToUser(item.id)}>
+              {formatMessage({id: 'roles.list.relate.to.user'})}
+            </a>
+            <a onClick={() => addRoleToGroup(item.id)}>
+              {formatMessage({id: 'roles.list.relate.to.group'})}
+            </a>
+            {item.isPreset === 0 && <a style={{ color: 'red' }} onClick={() => removeCurrentSelectedRole(item.id)}>
+                {formatMessage({id: 'roles.list.delete'})}
+              </a>}
           </div>
         )
       }
     },
   ]
+
   const { list, total } = roles;
   const cancelRelate = () => {
     setCurrentHandleRoleId(0);
@@ -100,17 +113,11 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
     setSelectedGroupId([]);
     setSelectedUserId([]);
   }
-  const fetchRoleGroups = async (roleId: number) => {
-    const res = await getRoleGroup(roleId);
-    if (res.success) {
-      const { list } = res;
-      await setSelectedRoleGroup(list);
-    }
-  }
+  
   const removeCurrentSelectedRole = async (currentRole?: number) => {
     let tempRoleList;
     Modal.confirm({
-      title: 'Will delete current selected role?',
+      title: formatMessage({id: 'roles.list.modal.confim.delete.role'}),
       async onOk() {
         let res;
         if (typeof currentRole === 'number') {
@@ -122,7 +129,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
           res = await removeRoles(currentRemoveUserRoleNames)
         }
         if (res.success === true) {
-          message.success(`Success`);
+          message.success(formatMessage({id: 'roles.list.message.success'}));
           clearSelect();
           if (tempRoleList.length === list.length) {
             // 删掉最后一页的全部内容
@@ -171,14 +178,14 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
     }
     const res = await addRoleToGroups([currentHandleRoleId], selectedGroupId);
     if (res.success === true) {
-      message.success('Success');
+      message.success(formatMessage({id: 'roles.list.message.success'}));
       setAddGroupModalVisible(false);
     }
   }
   const confirmRelateUser = async () => {
     const res = await addRoleToUsers(selectedUserId, [currentHandleRoleId]);
     if (res.success === true) {
-      message.success('Success');
+      message.success(formatMessage({id: 'roles.list.message.success'}));
       setAddUserModalVisible(false);
     }
   }
@@ -194,11 +201,15 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
       <div className={styles.top}>
         <div className={styles.left}>
           <Link to="/admin/role/add">
-            <Button style={{marginRight: '20px'}} type="primary">Create Role</Button>
+            <Button style={{marginRight: '20px'}} type="primary">
+              {formatMessage({id: 'roles.list.create.role'})}
+            </Button>
           </Link>
-          <Button onClick={() => removeCurrentSelectedRole()} disabled={buttonDisabled}>Delete Current Role</Button>
+          <Button onClick={() => removeCurrentSelectedRole()} disabled={buttonDisabled}>
+            { formatMessage({id: 'roles.list.delete.current.role'}) }
+          </Button>
         </div>
-        <Search onSearch={onSearchRoles} placeholder="search roles" style={{width: '200px' }}/>
+        <Search onSearch={onSearchRoles} placeholder={formatMessage({id: 'roles.list.search.role'})} style={{width: '200px' }}/>
       </div>
       <Table
         style={{marginTop: '20px'}}
@@ -206,11 +217,9 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
           type: "checkbox",
           onChange: onRowSelection,
           selectedRowKeys: selectRowKeys,
-          getCheckboxProps: (record) => {
-            return {
+          getCheckboxProps: record => ({
               disabled: record.isPreset === 1,
-            }
-          }
+            })
         }}
         rowKey="id"
         columns={columns}
@@ -233,7 +242,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
         <SelectGroup
           groupList={groupList}
           defaultSelected={selectedRoleGroup}
-          onChange={(selectedGroupId) => setSelectedGroupId(selectedGroupId)}
+          onChange={selectedGroupId => setSelectedGroupId(selectedGroupId)}
         />
       </Modal>
       }
@@ -246,7 +255,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, roles, groups }
       >
         <SelectUser
           defaultSelected={selectedRoleUser}
-          onChange={(selectedUserId) => setSelectedUserId(selectedUserId)}
+          onChange={selectedUserId => setSelectedUserId(selectedUserId)}
         />
       </Modal> 
       }

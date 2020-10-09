@@ -71,4 +71,5 @@ export default {
   'user-login.option.B': '同事乙',
   'user-login.option.C': '同事丙',
   'user-login.navBar.lang': '语言',
+  'user-login.message.incorrent.userName.or.password': '用户名或密码不正确'
 };

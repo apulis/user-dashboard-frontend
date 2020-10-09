@@ -8,9 +8,8 @@ import ProLayout, {
   MenuDataItem,
   BasicLayoutProps as ProLayoutProps,
   Settings,
-  PageLoading
 } from '@ant-design/pro-layout';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link, Route } from 'umi';
 import { Dispatch } from 'redux';
 import { connect } from 'dva';
@@ -28,7 +27,7 @@ const noMatch = (
   <Result
     status="403"
     title=""
-    subTitle={<><p>Sorry, you are not authorized to access this page.</p><p>Please contact the administrator to add permissions</p></>}
+    subTitle={<><p>{formatMessage({id: 'common.page.403.title1'})}</p><p>{formatMessage({id: 'common.page.403.title2'})}</p></>}
     // extra={
     //   <Button type="primary">
     //     <Link to="/user/login">Go Login</Link>
@@ -66,25 +65,22 @@ const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
     return Authorized.check(item.authority, localItem, null) as MenuDataItem;
   });
 
-const footerRender = (platformName: string) => {
-
-  return (
-    <>
-      <div
-        style={{
-          marginTop: '100px',
-          paddingBottom: 40,
-          textAlign: 'center',
-          position: 'absolute',
-          bottom: 0,
-          width: '100%'
-        }}
-      >
-        {platformName}
-      </div>
-    </>
-  );
-};
+const footerRender = (platformName: string) => (
+  <>
+    <div
+      style={{
+        marginTop: '100px',
+        paddingBottom: 40,
+        textAlign: 'center',
+        position: 'absolute',
+        bottom: 0,
+        width: '100%'
+      }}
+    >
+      {platformName}
+    </div>
+  </>
+);
 
 const BasicLayout: React.FC<BasicLayoutProps> = props => {
   const { dispatch, children, settings, location = { pathname: '/' } } = props;
