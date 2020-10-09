@@ -59,7 +59,6 @@ const ConfigModel: ConfigModelType = {
     * fetchPlatformConfig({ payload }, { call, put }) {
       const res = yield call(getPlatformConfig);
       if (res.success) {
-        console.log(123123, res)
         yield put({
           type: 'save',
           payload: {
