@@ -75,4 +75,5 @@ export default {
   'user-login.option.B': 'Colleague B',
   'user-login.option.C': 'Colleague C',
   'user-login.navBar.lang': 'Languages',
+  'user-login.message.incorrent.userName.or.password': 'Incorrect username or password.'
 };

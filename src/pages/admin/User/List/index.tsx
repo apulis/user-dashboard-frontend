@@ -9,6 +9,7 @@ import { DownOutlined, UsergroupAddOutlined, UserDeleteOutlined, ExclamationCirc
 import { ColumnProps } from 'antd/es/table';
 import { ClickParam } from 'antd/lib/menu';
 import { ConnectProps, ConnectState } from '@/models/connect';
+import { formatMessage } from 'umi-plugin-react/locale';
 import { IUsers } from '@/models/users';
 import SelectRole from '@/components/Relate/SelectRole'
 import { removeUsers, addUsersToGroups, getUserRolesById, getUserGroups, editVC } from '@/services/users';
@@ -87,7 +88,9 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
           tag = true;
         }
         if (res.success) {
-          message.success('Success Delete')
+          message.success(formatMessage({
+            id: 'users.message.success.delete.user'
+          }))
           let page = tag ? pageNo - 1 : pageNo;
           if (page <= 0) page = 1;
           fetchUsers({
@@ -96,14 +99,15 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
           })
           clearRowSelection();
           setCurrentHandleUserId(0);
-        } else if (res.success === false) {
-          message.warn(res.message);
+        } else if (res.success === false && res.activeJobUserName) {
+          const activeJobUserName: string[] = res.activeJobUserName;
+          message.warn(activeJobUserName.join(', ') + formatMessage({id: 'users.has.active.job'}));
         }
       })
   }
   const addRolesForUser = (userId: number) => {
     setCurrentHandleUserId(userId);
-    const cancel = message.loading('loading...');
+    const cancel = message.loading(formatMessage({id: 'users.message.submitting'}));
     getUserRolesById(userId)
       .then(res => {
         if (res.success) {
@@ -115,7 +119,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       })
       .catch(error => {
         cancel();
-        message.error('loading roles error');
+        message.error(formatMessage({id: 'users.message.loading.error'}));
       })
   }
 
@@ -124,27 +128,34 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
     setVcModal(true);
   }
 
+  const addToGroup = async (userId?: number) => {
+    if (userId) {
+      await fetchUserGroups(userId);
+    }
+    setAddGroupModalVisible(true);
+  }
+
   const columns: ColumnProps<IUsers>[] = [
     {
-      title: 'Username',
+      title: formatMessage({id: 'users.userName'}),
       dataIndex: 'userName',
       render(_text, item) {
         return (
-          <Link to={"/admin/user/detail/" + item.id}>{item.userName}</Link>
+          <Link to={`/admin/user/detail/${  item.id}`}>{item.userName}</Link>
         )
       }
     },
     {
-      title: 'Nickname',
+      title: formatMessage({id: 'users.nickName'}),
       dataIndex: 'nickName',
       render(_text, item) {
         return (
-          <Link to={"/admin/user/detail/" + item.id}>{item.nickName}</Link>
+          <Link to={`/admin/user/detail/${  item.id}`}>{item.nickName}</Link>
         )
       }
     },
     {
-      title: 'Phone',
+      title: formatMessage({id: 'users.phone'}),
       dataIndex: 'phone',
       key: 'phone',
       render(text) {
@@ -154,7 +165,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       }
     },
     {
-      title: 'Email',
+      title: formatMessage({id: 'users.email'}),
       dataIndex: 'email',
       key: 'email',
       render(text) {
@@ -164,7 +175,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       }
     },
     {
-      title: 'Action',
+      title: formatMessage({id: 'users.action'}),
       width: '250px',
       align: 'center',
       render(_text, item): React.ReactNode {
@@ -173,14 +184,18 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
             {!adminUsers.includes(item.userName) ? <Dropdown
               overlay={
               <Menu>
-                {!adminUsers.includes(item.userName) && <Menu.Item onClick={() => addRolesForUser(item.id)} key="0">Edit Role</Menu.Item>}
-                {!adminUsers.includes(item.userName) && <Menu.Item onClick={async () => {await addToGroup(item.id);setCurrentHandleUserId(item.id)}} key="1">Add To User Group</Menu.Item>}
-                {!adminUsers.includes(item.userName) && <Menu.Item onClick={() => addVCForUser(item.id)} key="0">Related to VC</Menu.Item>}
-                {!adminUsers.includes(item.userName) && <Menu.Item onClick={() => {setCurrentHandleUserId(item.id);removeUser(item.id)}} key="2">Delete</Menu.Item>}
+                {!adminUsers.includes(item.userName) && <Menu.Item onClick={() => addRolesForUser(item.id)} key="0">
+                  {formatMessage({id: 'users.role.edit'})}</Menu.Item>}
+                <Menu.Item onClick={async () => {await addToGroup(item.id);setCurrentHandleUserId(item.id)}} key="1">
+                  { formatMessage({id: 'users.add.to.group'}) }
+                </Menu.Item>
+              {!adminUsers.includes(item.userName) && config.enableVC && <Menu.Item onClick={() => addVCForUser(item.id)} key="0">{formatMessage({ id: 'user.items.related.to.vc' })}</Menu.Item>}
+                {!adminUsers.includes(item.userName) && <Menu.Item onClick={() => {setCurrentHandleUserId(item.id);removeUser(item.id)}} key="2">
+                {formatMessage({id: 'users.delete'})}</Menu.Item>}
               </Menu>}
             >
             <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                More <DownOutlined />
+                {formatMessage({id: 'users.more'})} <DownOutlined />
               </a>
             </Dropdown> :<div>-</div>}
           </div>
@@ -226,20 +241,15 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       }
     })
   }
-  const addToGroup = async (userId?: number) => {
-    if (userId) {
-      await fetchUserGroups(userId);
-    }
-    setAddGroupModalVisible(true);
-  }
+  
   const removeUser = (userId?: number) => {
     
     confirm({
-      title: 'Are you sure you want to delete selected item(s)?',
+      title: formatMessage({id: 'users.confirm.delete.title'}),
       icon: <ExclamationCircleOutlined />,
-      content: 'Selected users will be disabled',
-      okText: 'OK',
-      cancelText: 'CANCEL',
+      content: formatMessage({id: 'users.confirm.delete.content'}),
+      okText: formatMessage({id: 'users.confirm.delete.ok'}),
+      cancelText: formatMessage({id: 'users.confirm.delete.cancel'}),
       onOk() {
         starRemoveUsers(userId);
       },
@@ -261,18 +271,6 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
   const onSelectedGroupChange = (selectedGroupId: number[]) => {
     setSelectedGroupId(selectedGroupId);
   }
-  const menu = (
-    <Menu onClick={handleMenuClick}>
-      <Menu.Item key="1" onClick={() => addToGroup()}>
-        <UsergroupAddOutlined />
-        Add To Group
-      </Menu.Item>
-      <Menu.Item key="2" disabled={!!selectRows.find(val => adminUsers.includes(val.userName))} onClick={() => removeUser()}>
-        <UserDeleteOutlined />
-        Delete Current User
-      </Menu.Item>
-    </Menu>
-  )
   const onConfirmAddGroup = async () => {
     let selectedUserIds: number[];
     if (currentHandleUserId) {
@@ -280,18 +278,18 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
     } else {
       selectedUserIds = selectRows.map(val => val.id);
     }
-    const cancel = message.loading('Submitting');
+    const cancel = message.loading(formatMessage({id: 'users.message.submitting'}));
     const res = await addUsersToGroups(selectedUserIds, selectedGroupId);
     cancel();
     if (res.success === true) {
-      message.success('Success!')
+      message.success(formatMessage({id: 'users.message.success'}))
       setAddGroupModalVisible(false);
     }
   };
   const confirmAddRoleToUser = async () => {
     const res = await editRoleToUsers(currentHandleUserId, selectedRoleIds);
     if (res.success) {
-      message.success('Success edit role');
+      message.success(formatMessage({id: 'users.message.edit.role.success'}));
       setCurrentHandleUserId(0);
       setCurrentUserRoles([]);
       setAddRoleForUserModalVisible(false);
@@ -313,10 +311,10 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       <div className={styles.top}>
         <div className={styles.left}>
           <Link to="/admin/user/add">
-            <Button type="primary">Create User</Button>
+            <Button type="primary">{formatMessage({id: 'users.create.user'})}</Button>
           </Link>
-          <Button type="primary" disabled={selectRows.length === 0} onClick={() => addToGroup()} style={{ margin: '0 20px' }}>Add To Group</Button>
-          <Button disabled={!!selectRows.find(val => adminUsers.includes(val.userName)) || selectRowKeys.length === 0} onClick={() => removeUser()}>Delete Current User</Button>
+          <Button type="primary" disabled={selectRows.length === 0} onClick={() => addToGroup()} style={{ margin: '0 20px' }}>{formatMessage({id: 'users.add.to.group'})}</Button>
+          <Button disabled={!!selectRows.find(val => adminUsers.includes(val.userName)) || selectRowKeys.length === 0} onClick={() => removeUser()}>{formatMessage({id: 'users.delete.current.user'})}</Button>
           {/* <Dropdown disabled={selectRows.length === 0} overlay={menu}>
             <Button style={{marginLeft: '15px'}}>
               Actions <DownOutlined />
@@ -325,7 +323,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
         </div>
         
         <Search
-          placeholder="search users"
+          placeholder={formatMessage({id: 'user.placeholder.search.users'})}
           onSearch={onSearch}
           style={{ width: 200 }}
         />
@@ -350,7 +348,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
         loading={tableLoading}
       />
       <div className={styles.bottom}>
-        <div style={{ height: '24px', marginRight: '10px' }}>Items per page:</div>
+      <div style={{ height: '24px', marginRight: '10px' }}>{formatMessage({id: 'user.items.per.page'})}</div>
         <Select
           style={{ width: 100, marginRight: '20px' }}
           onChange={onPageSizeChange}
@@ -373,7 +371,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
         visible={addGroupModalVisible}
         onCancel={() => setAddGroupModalVisible(false)}
         onOk={onConfirmAddGroup}
-        title="Add to group"
+        title={formatMessage({id: 'user.items.add.to.group'})}
         width="65%"
       >
         {
@@ -402,7 +400,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       </Modal>
 
       {vcModal && <Modal
-        title="Related to VC"
+        title={formatMessage({id: 'user.items.related.to.vc'})}
         visible={vcModal}
         onOk={confirmAddVCToUser}
         onCancel={() => setVcModal(false)}

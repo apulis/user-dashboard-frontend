@@ -4,7 +4,7 @@ import { Input, Button, Col, Row, message, Breadcrumb, Checkbox, Table } from 'a
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { FormComponentProps } from '@ant-design/compatible/es/form';
 import { connect } from 'dva';
-import throttle from 'lodash/throttle';
+import { formatMessage } from 'umi-plugin-react/locale';
 import router from 'umi/router';
 import { ConnectProps, ConnectState } from '@/models/connect';
 import { validateUniqueUserName, emailReg, mobilePattern, textPattern, userNamePattern } from '@/utils/validates';
@@ -88,20 +88,20 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
 
 
   const submitUser = async (userMessage: IUserMessage[], userRole: number[]) => {
-    const hide = message.loading('Submiting...');
+    const hide = message.loading(formatMessage({id: 'users.message.submitting'}));
     const res = await createUsers({
       userMessage,
       userRole,
     });
     if (res.success === true) {
       hide();
-      message.success('Success create users');
+      message.success(formatMessage({id: 'users.add.message.success.create.user'}));
       router.push('/admin/user/list');
       return;
     } else if (res.success === false) {
       if (res.conflictedUserName && res.conflictedUserName.length > 0) {
         res.conflictedUserName.forEach((dpc: any) => {
-          message.error(`User ${dpc.userName} is already existed!`);
+          message.error(`${formatMessage({id: 'users.add.message.user'})} ${dpc.userName} ${formatMessage({id: 'users.add.message.already.existed'})}`);
         })
       }
     }
@@ -132,7 +132,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
   const removeUser = (createTime: number) => {
     const currentFormUserMessage: IUserMessage[] = getFieldsValue().userMessage;
     if (currentFormUserMessage.length === 1) {
-      message.warn('Should keep at least one user');
+      message.warn(formatMessage({id: 'users.add.message.keep.one.user'}));
       return;
     }
     currentFormUserMessage.forEach((item, index) => {
@@ -146,7 +146,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
   }
   const addUser = () => {
     if (userMessage.length >= 10) {
-      message.warn('maximum user is 10');
+      message.warn(formatMessage({id: 'users.add.message.maximum'}));
       return;
     }
     setUserMessage([...userMessage].concat(newUser()))
@@ -159,7 +159,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
   }
   const removeSelectRole = (id: number) => {
     if (selectedUserRole.length <= 1) {
-      message.warn('Need at least one role');
+      message.warn(formatMessage({id: 'users.add.message.need.one.role'}));
       return;
     }
     const s = selectedUserRole.filter(s => s !== id);
@@ -167,28 +167,28 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
   }
   const userRoleColumn: ColumnProps<IRoleListItem>[] = [
     {
-      title: 'Role',
+      title: formatMessage({id: 'users.add.userRole.role'}),
       key: 'name',
       dataIndex: 'name',
     },
     {
-      title: 'Description',
+      title: formatMessage({id: 'users.add.userRole.description'}),
       key: 'note',
       dataIndex: 'note',
     },
     {
-      title: 'Type',
+      title: formatMessage({id: 'users.add.userRole.type'}),
       render(_text, item) {
         return (
-          item.isPreset ? 'Preset': 'Custom'
+          item.isPreset ? formatMessage({id: 'users.add.userRole.type.preset'}): formatMessage({id: 'users.add.userRole.type.custom'})
         )
       }
     },
     {
-      title: 'Action',
+      title: formatMessage({id: 'users.add.userRole.action'}),
       render(_text, item) {
         return (
-          <a onClick={() => removeSelectRole(item.id)}>Remove</a>
+          <a onClick={() => removeSelectRole(item.id)}>{formatMessage({id: 'users.add.userRole.remove'})}</a>
         )
       }
     },
@@ -214,31 +214,31 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
     <div className={styles.add}>
       <Breadcrumb style={{marginBottom: '16px'}}>
         { step >= 1 && <Breadcrumb.Item>
-          1. User Info
+          1. {formatMessage({id: 'users.add.steps.userInfo'})}
         </Breadcrumb.Item> }
         { step >= 2 && <Breadcrumb.Item>
-          2. Role
+          2. {formatMessage({id: 'users.add.steps.role'})}
         </Breadcrumb.Item> }
         { step >= 3 && <Breadcrumb.Item>
-          3. Preview
+          3. {formatMessage({id: 'users.add.steps.preview'})}
         </Breadcrumb.Item> }
       </Breadcrumb>
       { step === 1 && <div className="step-1">
         <Row>
           <Col span={4}>
-            Nickname *
+            {formatMessage({id: 'users.nickName'})} *
           </Col>
           <Col span={4}>
-            Username *
+            {formatMessage({id: 'users.userName'})} *
           </Col>
           <Col span={4}>
-            Phone
+            {formatMessage({id: 'users.phone'})}
           </Col>
           <Col span={4}>
-            Email
+            {formatMessage({id: 'users.email'})}
           </Col>
           <Col span={4}>
-          Description
+            {formatMessage({id: 'users.description'})}
           </Col>
         </Row>
         {
@@ -250,11 +250,11 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
                     {getFieldDecorator(`userMessage[${index}].nickName`, {
                       initialValue: userMessage[index].nickName,
                       rules: [
-                        { required: true, message: 'Nickname is required'},
-                        { max: 20, message: 'Nickname cannot be longer than 20 characters' },
+                        { required: true, message: formatMessage({id: 'users.add.form.nickName.required'})},
+                        { max: 20, message: formatMessage({id: 'users.add.form.nickName.max'}) },
                         textPattern
                       ],
-                    })(<Input placeholder="Nickname" />)}
+                    })(<Input placeholder={formatMessage({id: 'users.nickName'})} />)}
                   </FormItem>
                 </Col>
                 <Col span={4}>
@@ -262,9 +262,9 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
                     {getFieldDecorator(`userMessage[${index}].userName`, {
                       initialValue: userMessage[index].userName,
                       rules: [
-                        { required: true, message: 'Username is required'},
-                        { min: 4, message: 'Username need at least 4 characters' },
-                        { max: 20, message: 'Username cannot be longer than 20 characters' },
+                        { required: true, message: formatMessage({id: 'users.add.form.userName.required'})},
+                        { min: 4, message: formatMessage({id: 'users.add.form.userName.min'}) },
+                        { max: 20, message: formatMessage({id: 'users.add.form.userName.max'}) },
                         userNamePattern,
                         { validator: (...args) => {
                             const newArgs = args.slice(0, 4);
@@ -272,7 +272,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
                           }
                         }
                       ],
-                    })(<Input placeholder="Username" />)}
+                    })(<Input placeholder={formatMessage({id: 'users.userName'})} />)}
                   </FormItem>
                 </Col>
                 <Col span={4}>
@@ -280,7 +280,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
                     {getFieldDecorator(`userMessage[${index}].phone`, {
                       initialValue: userMessage[index].phone,
                       rules: [mobilePattern]
-                    })(<Input placeholder="Phone" />)}
+                    })(<Input placeholder={formatMessage({id: 'users.phone'})} />)}
                   </FormItem>
                 </Col>
                 <Col span={4}>
@@ -288,10 +288,10 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
                     {getFieldDecorator(`userMessage[${index}].email`, {
                       initialValue: userMessage[index].email,
                       rules: [
-                        { pattern: emailReg, message: 'please check email format' },
-                        { max: 50, message: 'Email cannot be longer than 50 character' }
+                        { pattern: emailReg, message: formatMessage({id: 'users.add.form.email.pattern'}) },
+                        { max: 50, message: formatMessage({id: 'users.add.form.email.max'}) }
                       ]
-                    })(<Input placeholder="Email" />)}
+                    })(<Input placeholder={formatMessage({id: 'users.email'})} />)}
                   </FormItem>
                 </Col>
                 <Col span={4}>
@@ -300,17 +300,17 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
                       initialValue: userMessage[index].note,
                       rules: [textPattern, {
                         max: 50,
-                        message: 'Description cannot be longer than 50 character'
+                        message: formatMessage({id: 'users.add.form.note.max'})
                       }]
-                    })(<Input placeholder="Description" />)}
+                    })(<Input placeholder={formatMessage({id: 'users.description'})} />)}
                   </FormItem>
                 </Col>
-                <Col style={{marginTop: '8px'}} span={2}><a onClick={() => removeUser(user.createTime) }>Remove</a></Col>
+                  <Col style={{marginTop: '8px'}} span={2}><a onClick={() => removeUser(user.createTime) }>{formatMessage({id: 'users.add.form.removeUser'})}</a></Col>
               </Row>
             </div>
           ))
         }
-        <Button onClick={addUser}>Add User</Button><span style={{display: 'inline-block', marginLeft: '10px', marginTop: '20px'}}>maximum is 10</span>
+        <Button onClick={addUser}>{formatMessage({id: 'users.add.addUser'})}</Button><span style={{display: 'inline-block', marginLeft: '10px', marginTop: '20px'}}>{formatMessage({id: 'users.add.maximum'})}</span>
       </div> }
       { step === 2 &&
         <div className="step-2">
@@ -319,7 +319,7 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
               getFieldDecorator('role', {
                 initialValue: selectedUserRole,
                 rules: [
-                  { required: true, message: 'Need choose at least one role' }
+                  { required: true, message: formatMessage({id: 'users.add.role.form.required'}) }
                 ]
               })(<Checkbox.Group style={{ width: '100%'}}>
               <Row>
@@ -339,13 +339,13 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
       {
         step === 3 &&
         <div className="step-3">
-          <h2>User Info</h2>
+          <h2>{formatMessage({id: 'users.add.step3.title1'})}</h2>
           <EditTable 
             dataSource={userMessage}
             onChange={onEditTableDataChange}
             onStatusChange={onEditTableStatusChange}
           />
-          <h2 style={{marginTop: '50px'}}>User Role</h2>
+          <h2 style={{marginTop: '50px'}}>{formatMessage({id: 'users.add.step3.title2'})}</h2>
           <Table
             style={{marginTop: '20px'}}
             columns={userRoleColumn}
@@ -357,9 +357,11 @@ const Add: React.FC<FormComponentProps & ConnectProps & ConnectState> = props =>
       <div style={{marginTop: '40px'}}>
         {
           step !== 1 &&
-          <Button disabled={isEditingTableEditing} onClick={toPrevious} style={{ marginRight: '20px' }}>Previous</Button>
+          <Button disabled={isEditingTableEditing} onClick={toPrevious} style={{ marginRight: '20px' }}>{formatMessage({id: 'users.add.previous'})}</Button>
         }
-        <Button disabled={isEditingTableEditing} onClick={submit} type="primary">{step === 3 ? 'Submit' : 'Next'}</Button>
+        <Button disabled={isEditingTableEditing} onClick={submit} type="primary">
+          {step === 3 ? formatMessage({id: 'users.add.button.submit'}) : formatMessage({id: 'users.add.button.next'})}
+          </Button>
       </div>
     </div>
     </PageHeaderWrapper>

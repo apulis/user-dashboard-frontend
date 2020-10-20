@@ -6,6 +6,7 @@ import { connect } from 'dva';
 import moment from 'moment';
 import { Link } from 'umi';
 import { FormComponentProps } from 'antd/lib/form';
+import { formatMessage } from 'umi-plugin-react/locale';
 
 import { ColumnProps } from 'antd/es/table';
 
@@ -57,14 +58,14 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, groups }) => {
   }, []);
   const removeGroups = (groupName: string[], groupId: number[]) => {
     Modal.confirm({
-      title: `Will delete group: ${groupName.join(', ')}`,
+      title: `${formatMessage({id: 'groups.list.modal.wiil.delete.group'})} ${groupName.join(', ')}`,
       onCancel() {
 
       },
       async onOk() {
         const res = await removeGroup(groupId);
         if (res.success) {
-          message.success(`Success delete group: ${groupName.join(', ')}`);
+          message.success(`${formatMessage({id: 'groups.list.modal.success.delete.group'})} ${groupName.join(', ')}`);
           fetchUsers();
         }
       }
@@ -72,7 +73,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, groups }) => {
   }
   const columns: ColumnProps<IGroup>[] = [
     {
-      title: 'Group Name',
+      title: formatMessage({id: 'groups.list.group.name'}),
       render(_text, item) {
         return (
         <Link to={'/admin/group/detail/' + item.id}>{item.name}</Link>
@@ -80,12 +81,12 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, groups }) => {
       }
     },
     {
-      title: 'Description',
+      title: formatMessage({id: 'groups.list.note'}),
       key: 'note',
       dataIndex: 'note',
     },
     {
-      title: 'Create Time',
+      title: formatMessage({id: 'groups.list.createTime'}),
       key: 'createTime',
       dataIndex: 'createTime',
       render(_text, item) {
@@ -100,15 +101,15 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, groups }) => {
       }
     },
     {
-      title: 'Actions',
+      title: formatMessage({id: 'groups.list.actions'}),
       render(_text, item): React.ReactNode {
         return (
           <div>
             <a onClick={() => addUserToCurrentGroups(item.id)} style={{marginRight: '18px', marginLeft: '-20px'}}>
-              Add Users
+              {formatMessage({id: 'groups.list.add.users'})}
             </a>
             <a onClick={() => removeGroups([item.name], [item.id])} style={{ color: 'red' }}>
-              Delete
+              {formatMessage({id: 'groups.list.delete'})}
             </a>
           </div>
         )
@@ -147,7 +148,7 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, groups }) => {
     }
     if (res.success === true) {
       setCurrentGroupId(0);
-      message.success('Success!')
+      message.success(formatMessage({id: 'groups.add.message.success'}))
       setAddGroupModalVisible(false);
     }
   }
@@ -159,12 +160,16 @@ const List: React.FC<ConnectProps & ConnectState> = ({ dispatch, groups }) => {
       <div className={styles.top}>
         <div className={styles.left}>
           <Link to="/admin/group/add">
-            <Button type="primary">Create Group</Button>
+            <Button type="primary">
+              {formatMessage({id: 'groups.list.add'})}
+            </Button>
           </Link>
-          <Button onClick={() => addUserToCurrentGroups()} disabled={selectedRows.length === 0} style={{marginLeft: '20px'}}>Add Users</Button>
+          <Button onClick={() => addUserToCurrentGroups()} disabled={selectedRows.length === 0} style={{marginLeft: '20px'}}>
+            { formatMessage({id: 'groups.list.add.users'}) }
+          </Button>
         </div>
         <Search
-          placeholder="search groups"
+          placeholder={formatMessage({id: 'groups.list.search.groups'})}
           onSearch={onSearch}
           style={{ width: 200 }}
         />

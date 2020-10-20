@@ -11,7 +11,7 @@ import styles from './index.less';
 
 const RoleDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = ({ form, dispatch, roles }) => {
   const [buttonLoading, setButtonLoading] = useState<boolean>(false);
-  const [roleInfo, setRoleInfo] = useState({});
+  const [roleInfo, setRoleInfo] = useState({ isPreset: 1 });
   const [rolePermissions, setRolePermissions] = useState([]);
   const { permissions } = roles;
   const { id } = useParams();
@@ -105,6 +105,7 @@ const RoleDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
         checkedKeys={rolePermissions}
         treeData={treeData}
         defaultExpandAll
+        disabled={Boolean(roleInfo.isPreset)}
       />
       <Button style={{marginTop: '20px'}} type="primary" loading={buttonLoading} onClick={submit}>Submit</Button>
     </div>

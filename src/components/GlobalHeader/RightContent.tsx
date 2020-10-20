@@ -1,18 +1,19 @@
-import { Tooltip, Button } from 'antd';
+import { Button } from 'antd';
 import React from 'react';
 import { connect } from 'dva';
-import { formatMessage } from 'umi-plugin-react/locale';
 import { ConnectProps, ConnectState } from '@/models/connect';
 
 import Avatar from './AvatarDropdown';
-import HeaderSearch from '../HeaderSearch';
-import SelectLang from '../SelectLang';
 import styles from './index.less';
+import { ConfigStateType } from '@/models/config';
+import SelectLang from '../SelectLang';
+
 
 export type SiderTheme = 'light' | 'dark';
 export interface GlobalHeaderRightProps extends ConnectProps {
   theme?: SiderTheme;
   layout: 'sidemenu' | 'topmenu';
+  config: ConfigStateType;
 }
 
 const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
@@ -27,7 +28,7 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
 
   return (
     <div className={className} style={{marginRight: '30px'}}>
-      {hasDL && <Button type="primary" href="/" style={{marginRight: '20px'}}>Apulis Platform</Button>}
+      {hasDL && <Button type="primary" href="/" style={{marginRight: '20px'}}>{props.config.platformName}</Button>}
       {/* <HeaderSearch
         className={`${styles.action} ${styles.search}`}
         placeholder={formatMessage({
@@ -53,12 +54,13 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
         }}
       /> */}
       <Avatar />
-      {/* <SelectLang className={styles.action} /> */}
+      <SelectLang className={styles.action} />
     </div>
   );
 };
 
-export default connect(({ settings }: ConnectState) => ({
+export default connect(({ settings, config }: ConnectState) => ({
   theme: settings.navTheme,
   layout: settings.layout,
+  config: config
 }))(GlobalHeaderRight);

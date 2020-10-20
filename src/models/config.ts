@@ -1,11 +1,16 @@
 import { Reducer } from 'redux';
 import { Effect } from 'dva';
 
-import { getOAuth2Methods, getAdminUsers } from '@/services/config';
+import { setCookieLang, setI18n } from '@/utils/utils';
+import { getOAuth2Methods, getAdminUsers, getPlatformConfig } from '@/services/config';
 
 export interface ConfigStateType {
   authMethods: string[];
   adminUsers: string[];
+  language: string;
+  platformName: string;
+  enableVC: boolean;
+  i18n: string | boolean;
 }
 
 export interface ConfigModelType {
@@ -14,9 +19,12 @@ export interface ConfigModelType {
   effects: {
     fetchAuthMethods: Effect;
     fetchAdminUsers: Effect;
+    setLang: Effect;
+    fetchPlatformConfig: Effect;
   };
   reducers: {
     save: Reducer;
+    saveLang: Reducer;
   };
 }
 
@@ -25,6 +33,10 @@ const ConfigModel: ConfigModelType = {
   state: {
     authMethods: [],
     adminUsers: [],
+    language: '',
+    platformName: '',
+    enableVC: true,
+    i18n: true,
   },
   effects: {
     * fetchAuthMethods({ payload }, { call, put }) {
@@ -48,9 +60,41 @@ const ConfigModel: ConfigModelType = {
           }
         })
       }
+    },
+    * setLang({ payload }, { call, put }) {
+      yield call(setCookieLang, payload.language);
+      yield put({
+        type: 'saveLang',
+        payload: {
+          language: payload.language,
+        }
+      })
+    },
+    * fetchPlatformConfig({ payload }, { call, put }) {
+      const res = yield call(getPlatformConfig);
+      if (res.success) {
+        if (typeof res.i18n === 'string') {
+          setI18n(res.i18n);
+          yield call(setCookieLang, res.i18n);
+          yield put({
+            type: 'saveLang',
+            payload: {
+              language: res.i18n,
+            }
+          })
+        }
+        yield put({
+          type: 'save',
+          payload: {
+            platformName: res.platformName,
+            i18n: res.i18n,
+            enableVC: res.enableVC,
+          }
+        })
+      }
     }
   },
-  
+
   reducers: {
     save(state = {}, { payload }) {
       return {
@@ -58,6 +102,12 @@ const ConfigModel: ConfigModelType = {
         ...payload,
       }
     },
+    saveLang(state, { payload }) {
+      return {
+        ...state,
+        language: payload.language
+      }
+    }
   },
 };
 export default ConfigModel;

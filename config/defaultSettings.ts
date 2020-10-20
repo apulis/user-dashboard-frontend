@@ -55,7 +55,7 @@ export default {
   menu: {
     locale: true,
   },
-  title: 'Apulis User Dashboard',
+  title: '用户管理',
   pwa: false,
   iconfontUrl: '',
 } as DefaultSettings;

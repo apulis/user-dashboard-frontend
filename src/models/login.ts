@@ -7,6 +7,7 @@ import { logInWithAccount, userLogout } from '@/services/login';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 import { message } from 'antd';
+import { formatMessage } from 'umi-plugin-react/locale';
 
 export interface StateType {
   status?: 'ok' | 'error' | 401;
@@ -76,7 +77,7 @@ const Model: LoginModelType = {
           payload: response,
         });
         if (response.status === 401) {
-          message.error('Incorrect username or password.');
+          message.error(formatMessage({id: 'user-login.message.incorrent.userName.or.password'}));
         }
       }
     },

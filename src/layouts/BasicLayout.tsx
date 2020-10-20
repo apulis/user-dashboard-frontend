@@ -8,28 +8,26 @@ import ProLayout, {
   MenuDataItem,
   BasicLayoutProps as ProLayoutProps,
   Settings,
-  DefaultFooter,
 } from '@ant-design/pro-layout';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link, Route } from 'umi';
 import { Dispatch } from 'redux';
 import { connect } from 'dva';
-import { GithubOutlined } from '@ant-design/icons';
-import { Result, Button } from 'antd';
+import { Result } from 'antd';
 import { formatMessage } from 'umi-plugin-react/locale';
 import { getRouteAuthority } from '@/utils/utils';
 
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import { ConnectState } from '@/models/connect';
-import { isAntDesignPro, getAuthorityFromRouter } from '@/utils/utils';
 import logo from '../assets/logo.svg';
+import { ConfigStateType } from '@/models/config';
 
 const noMatch = (
   <Result
     status="403"
     title=""
-    subTitle={<><p>Sorry, you are not authorized to access this page.</p><p>Please contact the administrator to add permissions</p></>}
+    subTitle={<><p>{formatMessage({id: 'common.page.403.title1'})}</p><p>{formatMessage({id: 'common.page.403.title2'})}</p></>}
     // extra={
     //   <Button type="primary">
     //     <Link to="/user/login">Go Login</Link>
@@ -47,6 +45,7 @@ export interface BasicLayoutProps extends ProLayoutProps {
   };
   settings: Settings;
   dispatch: Dispatch;
+  config: ConfigStateType;
 }
 export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
   breadcrumbNameMap: {
@@ -66,25 +65,22 @@ const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
     return Authorized.check(item.authority, localItem, null) as MenuDataItem;
   });
 
-const footerRender: BasicLayoutProps['footerRender'] = () => {
-
-  return (
-    <>
-      <div
-        style={{
-          marginTop: '100px',
-          paddingBottom: 40,
-          textAlign: 'center',
-          position: 'absolute',
-          bottom: 0,
-          width: '100%'
-        }}
-      >
-        Apulis Platform
-      </div>
-    </>
-  );
-};
+const footerRender = (platformName: string) => (
+  <>
+    <div
+      style={{
+        marginTop: '100px',
+        paddingBottom: 40,
+        textAlign: 'center',
+        position: 'absolute',
+        bottom: 0,
+        width: '100%'
+      }}
+    >
+      {platformName}
+    </div>
+  </>
+);
 
 const BasicLayout: React.FC<BasicLayoutProps> = props => {
   const { dispatch, children, settings, location = { pathname: '/' } } = props;
@@ -106,7 +102,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
   return (
     <ProLayout
       logo={logo}
-      menuHeaderRender={(logoDom, titleDom) => (
+      menuHeaderRender={() => (
         <Link to="/">
           {/* {logoDom} */}
           {/* {titleDom} */}
@@ -137,7 +133,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
           <span>{route.breadcrumbName}</span>
         );
       }}
-      footerRender={footerRender}
+      footerRender={() => footerRender(props.config.platformName)}
       menuDataRender={menuDataRender}
       formatMessage={formatMessage}
       rightContentRender={() => <RightContent />}
@@ -152,7 +148,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
   );
 };
 
-export default connect(({ global, settings }: ConnectState) => ({
+export default connect(({ global, settings, config }: ConnectState) => ({
   collapsed: global.collapsed,
   settings,
+  config
 }))(BasicLayout);

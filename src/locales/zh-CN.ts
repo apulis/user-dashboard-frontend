@@ -4,6 +4,14 @@ import menu from './zh-CN/menu';
 import pwa from './zh-CN/pwa';
 import settingDrawer from './zh-CN/settingDrawer';
 import settings from './zh-CN/settings';
+import index from './zh-CN/index';
+import users from './zh-CN/users';
+import groups from './zh-CN/groups';
+import roles from './zh-CN/roles';
+import account from './zh-CN/account';
+import common from './zh-CN/common';
+import request from './zh-CN/request';
+import validates from './zh-CN/validates';
 
 export default {
   'navBar.lang': '语言',
@@ -19,4 +27,12 @@ export default {
   ...settings,
   ...pwa,
   ...component,
+  ...index,
+  ...users,
+  ...groups,
+  ...roles,
+  ...account,
+  ...common,
+  ...request,
+  ...validates,
 };
