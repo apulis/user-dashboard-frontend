@@ -235,7 +235,7 @@ class Login extends Component<RegisterProps & LoginState & ConnectState & FormCo
                 }
               }}
             />
-            <Form.Item>
+            {/* <Form.Item>
               {this.props.form.getFieldDecorator('isAgree', {
                 initialValue: false,
                 rules: [
@@ -254,7 +254,7 @@ class Login extends Component<RegisterProps & LoginState & ConnectState & FormCo
                   I have read the <a href="http://www.baidu.com" target='blank'>User License Agreement</a>
                 </Checkbox>,
               )}
-            </Form.Item>
+            </Form.Item> */}
           </Tab>
           {
             (currentUser && Object.keys(currentUser).length > 0 && !currentUser.userName) ? <Alert message={`${formatMessage({ id: 'user-register.register.password.need.register' })}${formatMessage({ id: 'common.platform.name' })}`} type="success" /> : <></>
