@@ -115,10 +115,10 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
   return (
     <ProLayout
       logo={logo}
-      menuHeaderRender={() => (
+      menuHeaderRender={(_logoDom, titleDom) => (
         <Link to="/">
           {/* {logoDom} */}
-          {/* {titleDom} */}
+          {titleDom}
         </Link>
       )}
       onCollapse={handleMenuCollapse}
