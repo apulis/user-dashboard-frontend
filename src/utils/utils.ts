@@ -73,6 +73,7 @@ export function initI18n() {
   const language = getI18n();
   if (language !== localStorage.umi_locale || language !== localStorage.language) {
     // 设置项目语言
+    if (!['zh-CN', 'en-US'].includes(language)) return 
     setLocale(language, false);
     // 设置 cookie 以便后台使用
     request(`/language/${language}`)
