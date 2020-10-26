@@ -75,17 +75,18 @@ export function initI18n() {
     // 设置项目语言
     setLocale(language, false);
     // 设置 cookie 以便后台使用
-    request('/language/' + language)
+    request(`/language/${language}`)
   }
 }
 
 export async function setCookieLang(lang: string) {
-  return await request('/language/' + lang);
+  return await request(`/language/${lang}`);
 } 
 
 export function setI18n(lang: string) {
+  if (!['zh-CN', 'en-US'].includes(lang)) return 
   localStorage.language = lang;
-  request('/language/' + lang);
+  request(`/language/${lang}`);
   setLocale(lang, false)
 }
 
