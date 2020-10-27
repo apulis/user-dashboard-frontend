@@ -174,7 +174,7 @@ class Login extends Component<LoginProps & LoginState & ConnectState> {
               authMethods.includes('microsoft') && <IconMicrosoft style={{marginLeft: '15px'}} onClick={() => this.toLogin('microsoft')} />
             }
             {
-              authMethods.includes('saml') && <Icon type="coffee" style={{marginLeft: '15px'}} onClick={() => this.toLogin('yaml')} />
+              authMethods.includes('saml') && <Icon type="coffee" style={{marginLeft: '15px'}} onClick={() => this.toLogin('saml')} />
             }
             <Link className={styles.register} to="/user/register">
               <FormattedMessage id="user-login.login.signup" />
