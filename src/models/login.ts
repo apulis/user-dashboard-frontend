@@ -96,20 +96,23 @@ const Model: LoginModelType = {
         });
       }
     },
-    oauthLogin({payload}, {call, put}) {
+    oauthLogin({ payload }) {
       const { loginType, userId } = payload;
       let { redirect } = getPageQuery();
+      if (loginType === 'saml') {
+        
+        return
+      }
       if (redirect) {
-        redirect = redirect;
         if (/login/.test(redirect as string) || /register/.test(redirect as string)) {
-          redirect = window.location.protocol + '//' + window.location.host + window.routerBase;
+          redirect = `${window.location.protocol  }//${  window.location.host  }${window.routerBase}`;
         }
       } else if (/login/.test(window.location.href) || /resigter/.test(window.location.href)) {
-        redirect = window.location.protocol + '//' + window.location.host + window.routerBase;
+        redirect = `${window.location.protocol  }//${  window.location.host  }${window.routerBase}`;
       } else {
         redirect = window.location.href;
       }
-      let redirectURI = '/custom-user-dashboard-backend/auth/' + loginType + '?to=' + redirect
+      let redirectURI = `/custom-user-dashboard-backend/auth/${  loginType  }?to=${  redirect}`
       if (userId) {
         redirectURI += `&userId=${userId}`
       }

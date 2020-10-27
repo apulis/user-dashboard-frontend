@@ -2,14 +2,14 @@
 import request from '@/utils/request';
 
 
-export async function getOAuth2Methods() {
-  return await request('/auth/oauth2-methods')
+export function getOAuth2Methods() {
+  return request('/auth/methods')
 }
 
-export async function getAdminUsers() {
-  return await request('/users/adminUsers')
+export function getAdminUsers() {
+  return request('/users/adminUsers')
 }
 
 export async function getPlatformConfig() {
-  return await request('/platform-config')
+  return request('/platform-config')
 }
