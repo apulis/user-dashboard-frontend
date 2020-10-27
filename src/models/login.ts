@@ -100,7 +100,7 @@ const Model: LoginModelType = {
       const { loginType, userId } = payload;
       let { redirect } = getPageQuery();
       if (loginType === 'saml') {
-        
+        window.location.href = '/ai_arts/saml_login';
         return
       }
       if (redirect) {
