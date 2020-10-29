@@ -73,19 +73,21 @@ export function initI18n() {
   const language = getI18n();
   if (language !== localStorage.umi_locale || language !== localStorage.language) {
     // 设置项目语言
+    if (!['zh-CN', 'en-US'].includes(language)) return 
     setLocale(language, false);
     // 设置 cookie 以便后台使用
-    request('/language/' + language)
+    request(`/language/${language}`)
   }
 }
 
 export async function setCookieLang(lang: string) {
-  return await request('/language/' + lang);
+  return await request(`/language/${lang}`);
 } 
 
 export function setI18n(lang: string) {
+  if (!['zh-CN', 'en-US'].includes(lang)) return 
   localStorage.language = lang;
-  request('/language/' + lang);
+  request(`/language/${lang}`);
   setLocale(lang, false)
 }
 

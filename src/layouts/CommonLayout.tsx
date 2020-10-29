@@ -1,4 +1,4 @@
-import { ConnectState } from '@/models/connect';
+import { ConnectState, SettingModelState } from '@/models/connect';
 import { connect } from 'dva';
 import React, { useEffect } from 'react';
 import { Dispatch } from 'redux';
@@ -9,15 +9,28 @@ import { ConfigStateType } from '@/models/config';
 export interface CommonLayoutProps extends ProLayoutProps {
   dispatch: Dispatch;
   config: ConfigStateType;
+  settings: SettingModelState;
 }
 
-const CommonLayout: React.FC<CommonLayoutProps> = ({ dispatch, config, children }) => {
+const CommonLayout: React.FC<CommonLayoutProps> = ({ dispatch, config, children, settings }) => {
 
   useEffect(() => {
     dispatch({
       type: 'config/fetchPlatformConfig'
     })
   }, [])
+
+  useEffect(() => {
+    
+    dispatch({
+      type: 'settings/changeSetting',
+      payload: {
+        ...settings,
+        title: config.platformName
+      }
+    })
+    
+  }, [config])
   if (!config.platformName) {
     return (
       <PageLoading />
@@ -27,4 +40,4 @@ const CommonLayout: React.FC<CommonLayoutProps> = ({ dispatch, config, children 
 
 }
   
-export default connect(({ config }: ConnectState) => ({ config }))(CommonLayout);
+export default connect(({ config, settings }: ConnectState) => ({ config, settings }))(CommonLayout);

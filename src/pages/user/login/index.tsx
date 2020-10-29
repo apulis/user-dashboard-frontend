@@ -72,6 +72,7 @@ class Login extends Component<LoginProps & LoginState & ConnectState> {
   renderMessage = (content: string) => (
     <Alert style={{ marginBottom: 24 }} message={content} type="error" showIcon />
   );
+
   toLogin = (loginType: string) => {
     const { dispatch } = this.props;
     dispatch({
@@ -90,9 +91,10 @@ class Login extends Component<LoginProps & LoginState & ConnectState> {
 
   render() {
     const authMethods = this.props.config.authMethods;
+    console.log('authMethods', authMethods)
     const { userLogin = {}, submitting } = this.props;
     const { status, type: loginType } = userLogin;
-    const { type, autoLogin } = this.state;
+    const { type } = this.state;
     return (
       <div className={styles.main}>
         <LoginComponents
@@ -163,13 +165,18 @@ class Login extends Component<LoginProps & LoginState & ConnectState> {
             <FormattedMessage id="user-login.login.login" />
           </Submit>
           <div className={styles.other}>
-            <FormattedMessage id="user-login.login.sign-in-with" />
+            {
+              authMethods.length > 0 && <FormattedMessage id="user-login.login.sign-in-with" />
+            }
             {
               authMethods.includes('wechat') && 
                 <Icon onClick={() => this.toLogin('wechat')} type="wechat" className={styles.icon} theme="outlined" />
             }
             {
               authMethods.includes('microsoft') && <IconMicrosoft style={{marginLeft: '15px'}} onClick={() => this.toLogin('microsoft')} />
+            }
+            {
+              authMethods.includes('saml') && <Icon type="coffee" style={{marginLeft: '15px'}} onClick={() => this.toLogin('saml')} />
             }
             <Link className={styles.register} to="/user/register">
               <FormattedMessage id="user-login.login.signup" />

@@ -9,7 +9,7 @@ import ProLayout, {
   BasicLayoutProps as ProLayoutProps,
   Settings,
 } from '@ant-design/pro-layout';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, Route } from 'umi';
 import { Dispatch } from 'redux';
 import { connect } from 'dva';
@@ -22,6 +22,7 @@ import RightContent from '@/components/GlobalHeader/RightContent';
 import { ConnectState } from '@/models/connect';
 import logo from '../assets/logo.svg';
 import { ConfigStateType } from '@/models/config';
+import config from 'config/config';
 
 const noMatch = (
   <Result
@@ -83,7 +84,7 @@ const footerRender = (platformName: string) => (
 );
 
 const BasicLayout: React.FC<BasicLayoutProps> = props => {
-  const { dispatch, children, settings, location = { pathname: '/' } } = props;
+  const { dispatch, children, settings, location = { pathname: '/' }, config } = props;
 
   /**
    * init variables
@@ -102,10 +103,10 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
   return (
     <ProLayout
       logo={logo}
-      menuHeaderRender={() => (
+      menuHeaderRender={(_logoDom, titleDom) => (
         <Link to="/">
           {/* {logoDom} */}
-          {/* {titleDom} */}
+          {titleDom}
         </Link>
       )}
       onCollapse={handleMenuCollapse}

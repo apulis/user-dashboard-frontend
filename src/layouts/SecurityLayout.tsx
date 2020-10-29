@@ -64,6 +64,7 @@ class SecurityLayout extends React.Component<SecurityLayoutProps & SecurityLayou
     }
 
   }
+
   componentDidMount() {
     this.setState({
       isReady: true,
