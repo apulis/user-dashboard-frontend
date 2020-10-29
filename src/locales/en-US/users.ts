@@ -21,7 +21,7 @@ export default {
   'users.confirm.delete.content': 'Selected users will be disabled',
   'users.confirm.delete.ok': 'Ok',
   'users.confirm.delete.cancel': 'Cancel',
-  'users.create.user': 'Create User',
+  'users.create.user': 'Creation User',
   'users.delete.current.user': 'Delete Current User', 
   'user.placeholder.search.users': 'Search users',
   'user.items.per.page': 'Items per page:',
