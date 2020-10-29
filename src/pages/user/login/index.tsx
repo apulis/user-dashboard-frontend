@@ -165,7 +165,9 @@ class Login extends Component<LoginProps & LoginState & ConnectState> {
             <FormattedMessage id="user-login.login.login" />
           </Submit>
           <div className={styles.other}>
-            <FormattedMessage id="user-login.login.sign-in-with" />
+            {
+              authMethods.length > 0 && <FormattedMessage id="user-login.login.sign-in-with" />
+            }
             {
               authMethods.includes('wechat') && 
                 <Icon onClick={() => this.toLogin('wechat')} type="wechat" className={styles.icon} theme="outlined" />
