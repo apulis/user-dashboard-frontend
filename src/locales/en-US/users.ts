@@ -28,6 +28,7 @@ export default {
   'user.items.add.to.group': 'Add to groups',
   'user.items.related.to.vc': 'Related to VC',
   'users.has.active.job': ' has active job, please confirm!',
+  'user.password': 'Password',
   // Add
   'users.add.message.maximum': 'Maximum user is 10',
   'users.add.message.success.create.user': 'Success create users',
