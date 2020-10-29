@@ -100,18 +100,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
   // get children authority
   const authorized = getRouteAuthority(location.pathname || '/', props.route.routes as Route[]) || '';
 
-  useEffect(() => {
-    
-    dispatch({
-      type: 'settings/changeSetting',
-      payload: {
-        ...settings,
-        title: config.platformName
-      }
-    })
-    
-  }, [props.config])
-
   return (
     <ProLayout
       logo={logo}
