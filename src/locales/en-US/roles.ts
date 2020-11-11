@@ -6,7 +6,7 @@ export default {
   'roles.list.type': 'Type',
   'roles.list.type.preset': 'Preset Role',
   'roles.list.type.custom': 'Custom Role',
-  'roles.list.action': 'Action',
+  'roles.list.action': 'Operation',
   'roles.list.relate.to.user': 'Related To User',
   'roles.list.relate.to.group': 'Related To Group',
   'roles.list.delete': 'Delete',
