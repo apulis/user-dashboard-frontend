@@ -124,9 +124,13 @@ export async function getUserVc(userId: number, params: any) {
   });
 }
 
-export async function editVC(data: any) {
-  return await request(`/vc`, {
+export function editVC(data: any, confirmed?: true) {
+  let path = '/vc';
+  if (confirmed) {
+    path += '?confirmed=true'
+  }
+  return request(path, {
     method: 'PATCH',
-    data: data
+    data
   })
-}
+} 

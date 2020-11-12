@@ -103,11 +103,16 @@ export default {
   'users.detail.form.confirm.password.error': '2次输入的密码不一致',
 
   // VC
-  'user.vc.VCName': 'VC 名称',
+  'user.vc.VCName': '虚拟集群名称',
   'user.vc.UserCount': '用户数量',
   'user.vc.DeviceType': '设备类型',
   'user.vc.DeviceCount': '设备数量',
-  'user.vc.MaxAvailable': '最大可用',
+  'user.vc.MaxAvailable': '用户最大可用',
   'user.vc.search.vc': '搜索 VC 名称',
-  'user.vc.detail.title': '用户 VC 资源'
+  'user.vc.detail.title': '用户 VC 资源',
+  'user.vc.modify.message.success': '成功修改虚拟集群',
+  'users.vc.modify.confirm.title': '当前去除的虚拟集群有正在运行的 Job',
+  'users.vc.modify.desc.title': '确认后将会停止这些任务',
+  'users.vc.modify.confirm.content.jobName': '任务名称：',
+  'users.vc.modify.confirm.content.jobId': '任务ID：',
 }

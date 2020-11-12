@@ -104,8 +104,14 @@ export default {
   // VC
   'user.vc.VCName': 'VCName',
   'user.vc.UserCount': 'User Count',
-  'user.vc.DeviceType': 'DeviceType',
-  'user.vc.DeviceCount': 'DeviceCount',
-  'user.vc.MaxAvailable': 'MaxAvailable',
-  'user.vc.search.vc': 'search VCName',
+  'user.vc.DeviceType': 'Device Type',
+  'user.vc.DeviceCount': 'Device Count',
+  'user.vc.MaxAvailable': 'Max Available Per User',
+  'user.vc.search.vc': 'search vitual clsuter name',
+  //
+  'user.vc.modify.message.success': 'Success modify virtual cluster',
+  'users.vc.modify.confirm.title': 'There are active jobs in current deleted virtual cluster',
+  'users.vc.modify.desc.title': 'These jobs will be killed when click Confirm',
+  'users.vc.modify.confirm.content.jobName': 'Job Name:',
+  'users.vc.modify.confirm.content.jobId': 'Job ID:',
 }
