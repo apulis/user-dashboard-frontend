@@ -266,9 +266,6 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
       title: formatMessage({id: 'users.detail.user.action'}),
       align: 'center',
       render() {
-        if (adminUsers.includes(userInfo.userName)) {
-          return <div>-</div>;
-        }
         if (isEditing) {
           return (
             <>
