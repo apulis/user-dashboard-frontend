@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'dva';
 import { Form } from '@ant-design/compatible';
-import { PageHeader, Table, Input, message, Modal } from 'antd';
+import { PageHeader, Table, Input, message, Modal, InputNumber } from 'antd';
 import { router } from 'umi';
 import { useParams } from 'react-router-dom';
 import { FormComponentProps } from 'antd/lib/form';
@@ -71,7 +71,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
       const res = await editUserInfo(userId, values);
       cancel();
       if (res.success) {
-        message.success(formatMessage({id: 'users.message.edit.role.success'}));
+        message.success(formatMessage({id: 'users.message.edit.user.success'}));
         fetchUserById();
       }
       setIsEditing(false);
@@ -215,6 +215,28 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
         }
         return (
           <div>{item.phone || '-'}</div>
+        )
+      }
+    },
+    {
+      title: formatMessage({id: 'users.jobMaxTimeSecond'}),
+      render(_text, item) {
+        if (isEditing) {
+          return (
+            <FormItem>
+              {
+                getFieldDecorator('jobMaxTimeSecond', {
+                  initialValue: item.jobMaxTimeSecond || '',
+                })(
+                  <InputNumber precision={0} />
+                )
+              }
+            </FormItem>
+
+          )
+        }
+        return (
+          <div>{item.jobMaxTimeSecond || '-'}</div>
         )
       }
     },

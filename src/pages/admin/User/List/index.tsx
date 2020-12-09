@@ -168,6 +168,18 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       title: formatMessage({ id: 'users.email' }),
       dataIndex: 'email',
       key: 'email',
+      align: 'center',  
+      render(text) {
+        return (
+          text ? text : '-'
+        )
+      }
+    },
+    
+    {
+      title: formatMessage({ id: 'users.jobMaxTimeSecond' }),
+      dataIndex: 'jobMaxTimeSecond',
+      key: 'jobMaxTimeSecond',
       render(text) {
         return (
           text ? text : '-'

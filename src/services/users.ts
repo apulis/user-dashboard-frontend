@@ -63,11 +63,12 @@ export interface IEditUserInfo {
   phone: string;
   note: string;
   email: string;
+  jobMaxTimeSecond: number;
 }
 
 export async function editUserInfo(id: number, userInfo: IEditUserInfo) {
   return await request('/users/' + id, {
-    method: 'PATCh',
+    method: 'PATCH',
     data: userInfo
   })
 }

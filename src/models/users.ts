@@ -11,6 +11,7 @@ export interface IUsers {
   email?: string;
   note?: string;
   id: number;
+  jobMaxTimeSecond?: number;
 }
 
 export interface UsersStateType {
