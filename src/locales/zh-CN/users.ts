@@ -11,7 +11,7 @@ export default {
   'users.nickName': '昵称',
   'users.phone': '电话',
   'users.email': '电子邮件',
-  'users.jobMaxTimeSecond': 'Job 最大运行时长/分钟',
+  'users.jobMaxTimeSecond': 'Job 最大运行时长/秒',
   'users.description': '描述',
   'users.action': '操作',
   'users.role.edit': '编辑角色',
