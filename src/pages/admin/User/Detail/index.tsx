@@ -68,6 +68,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
           values[key] = '';
         }
       }
+      values.jobMaxTimeSecond = values.jobMaxTimeSecond * 3600;
       const res = await editUserInfo(userId, values);
       cancel();
       if (res.success) {
@@ -226,7 +227,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
             <FormItem>
               {
                 getFieldDecorator('jobMaxTimeSecond', {
-                  initialValue: item.jobMaxTimeSecond || '',
+                  initialValue: (item.jobMaxTimeSecond || 0) / 3600 || undefined,
                 })(
                   <InputNumber precision={0} />
                 )

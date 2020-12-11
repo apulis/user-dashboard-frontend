@@ -12,7 +12,7 @@ export default {
   'users.nickName': 'Nickname',
   'users.phone': 'Phone',
   'users.email': 'Email',
-  'users.jobMaxTimeSecond': 'Max Job Running Time/Seconds',
+  'users.jobMaxTimeSecond': 'Max Job Running Time/Hours',
   'users.description': 'Description',
   'users.action': 'Operation',
   'users.role.edit': 'Edit Role',
