@@ -237,7 +237,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
           )
         }
         return (
-          <div>{item.jobMaxTimeSecond || '-'}</div>
+          <div>{Math.floor((item.jobMaxTimeSecond || 0) / 3600) || '-'}</div>
         )
       }
     },
