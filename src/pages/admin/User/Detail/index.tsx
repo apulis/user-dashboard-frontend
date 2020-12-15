@@ -229,7 +229,7 @@ const UserDetail: React.FC<FormComponentProps & ConnectProps & ConnectState> = (
                 getFieldDecorator('jobMaxTimeSecond', {
                   initialValue: (item.jobMaxTimeSecond || 0) / 3600 || undefined,
                 })(
-                  <InputNumber precision={0} />
+                  <InputNumber precision={0} min={1} />
                 )
               }
             </FormItem>
