@@ -181,9 +181,10 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
       dataIndex: 'jobMaxTimeSecond',
       key: 'jobMaxTimeSecond',
       render(text) {
-        return (
-          text ? text : '-'
-        )
+        if (text) {
+          return Math.floor(text || 0) / 3600;
+        }
+        return '-'
       }
     },
     {
