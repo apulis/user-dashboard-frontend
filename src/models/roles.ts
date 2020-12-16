@@ -64,8 +64,9 @@ const RolesModel: RolesModelType = {
         })
       }
     },
-    * fetchAllPermissions({ payload = {} }, { call, put }) {
-      const res = yield call(getAllPermissions);
+    * fetchAllPermissions({ payload = {} }, { call, put, select }) {
+      const { language } = yield select((state) => state.config);
+      const res = yield call(getAllPermissions, language);
       if (res.success) {
         yield put({
           type: 'savePermissions',

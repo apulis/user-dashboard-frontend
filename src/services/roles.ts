@@ -69,8 +69,8 @@ export async function getRolesCount() {
 }
 
 
-export async function getAllPermissions() {
-  return await request('/permission/all');
+export async function getAllPermissions(lang: string) {
+  return await request('/permission/all/' + lang);
 }
 
 
