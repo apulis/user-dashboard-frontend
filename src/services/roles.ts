@@ -69,8 +69,8 @@ export async function getRolesCount() {
 }
 
 
-export async function getAllPermissions(lang: string) {
-  return await request('/permission/all/' + lang);
+export function getAllPermissions(lang: string) {
+  return request(`/permission/all/${ lang || localStorage.language || localStorage.umi_locale || navigator.language }`);
 }
 
 
