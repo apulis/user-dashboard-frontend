@@ -70,7 +70,10 @@ export async function getRolesCount() {
 
 
 export function getAllPermissions(lang: string) {
-  return request(`/permission/all/${ lang || localStorage.language || localStorage.umi_locale || navigator.language }`);
+  if (!['zh-CN', 'en-US'].includes(lang)) {
+    lang = localStorage.language || localStorage.umi_locale || navigator.language;
+  }
+  return request(`/permission/all/${lang}`);
 }
 
 
