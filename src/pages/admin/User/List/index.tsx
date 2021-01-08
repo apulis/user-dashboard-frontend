@@ -366,6 +366,7 @@ const List: React.FC<FormComponentProps & ConnectProps & ConnectState> = (props)
         <Search
           placeholder={formatMessage({ id: 'user.placeholder.search.users' })}
           onSearch={onSearch}
+          onChange={(e) => setSearch(e.target.value)}
           style={{ width: 200 }}
         />
       </div>
