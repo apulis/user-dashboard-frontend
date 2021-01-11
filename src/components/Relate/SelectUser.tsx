@@ -13,6 +13,7 @@ import { ConnectProps, ConnectState } from '@/models/connect';
 import styles from './index.less';
 import { CheckboxValueType } from 'antd/lib/checkbox/Group';
 import { IUsers } from '@/models/users';
+import { Empty } from 'antd';
 
 interface ISearchUserProps {
   onChange?: (selectedUserId: number[]) => void;
@@ -96,7 +97,7 @@ const SelectUser: React.FC<ISearchUserProps & FormComponentProps & ConnectProps 
             </div>
             <Search placeholder={formatMessage({id: 'component.select.user.search.users'})} onChange={(e) => onSearch(e.target.value)} style={{marginTop: '10px', width: '260px'}} />
             {
-              userList.length !== 0 && <Checkbox.Group defaultValue={defaultSelected} onChange={onCheckboxSelect} style={{marginTop: '10px', width: '100%'}}>
+              userList.length !== 0 ? <Checkbox.Group defaultValue={defaultSelected} onChange={onCheckboxSelect} style={{marginTop: '10px', width: '100%'}}>
                 <List
                   width={260}
                   height={260}
@@ -107,9 +108,12 @@ const SelectUser: React.FC<ISearchUserProps & FormComponentProps & ConnectProps 
                   rowRenderer={rowRenderer}
                 />
               </Checkbox.Group>
-            }
-            {
-              userList.length === 0 &&  <Spin className="demo-loading" style={{marginLeft: '30px', marginTop: '30px'}} />
+              :
+                  <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} style={{marginTop: '30px', marginLeft: '-30px'}}   description={
+                    <span>
+                     没有数据
+                    </span>
+                  }></Empty>
             }
           </div>
         {/* </Col> */}
@@ -119,11 +123,11 @@ const SelectUser: React.FC<ISearchUserProps & FormComponentProps & ConnectProps 
               {formatMessage({id: 'component.select.user.selected'})}
             </div>
             <div style={{width: '100%', height: '320px', overflow: 'auto'}}>
-              {
-                selectedUsers.map(u => (
-                  <div style={{paddingTop: '5px'}}>{u.userName}</div>
-                ))
-              }
+             {
+                  userList.length !== 0 && selectedUsers.map(u => (
+                    <div style={{paddingTop: '5px'}}>{u.userName}</div>
+                  ))
+             }
             </div>
             
           </div>
