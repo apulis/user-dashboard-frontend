@@ -6,7 +6,7 @@ buildPlugin ( {
         [
             'compileContainer': '',
             'preBuild':[],
-            'imageName': 'apulistech/user_fronted',
+            'imageName': 'apulistech/custom-user-dashboard-frontend',
             'directory': '.',
             'dockerfilePath': '',
             'arch': ['amd64','arm64']
